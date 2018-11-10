@@ -54,15 +54,12 @@ class LoginController: UITabBarController {
                 print(error)
                 return
             }
-            
             //successfully logged in our user
             // print("successfully logged in our user")
             self.dismiss(animated: true, completion: nil)
-            
         })
         
     }
-    
     
     @objc func handleRegister() {
         guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
@@ -79,6 +76,9 @@ class LoginController: UITabBarController {
                 print("error \(error!.localizedDescription)")
                 return
             }
+//            guard let uid = user?.user.uid else {
+//                return
+//            }
             // guard let user = authResult?.user else { return }
             
             //successfully authenticated user
@@ -94,7 +94,7 @@ class LoginController: UITabBarController {
                     return
                 }
                 self.dismiss(animated: true, completion: nil)
-                //print("Saved user successfully into Firebase db")
+                print("Saved user successfully into Firebase db")
                 
             })
             
@@ -284,6 +284,38 @@ extension UIColor {
     
     convenience init(r: CGFloat, g: CGFloat, b: CGFloat) {
         self.init(red: r/255, green: g/255, blue: b/255, alpha: 1)
+    }
+    
+}
+
+extension UIView {
+    func anchor(top: NSLayoutYAxisAnchor?, left: NSLayoutXAxisAnchor?, bottom: NSLayoutYAxisAnchor?, right: NSLayoutXAxisAnchor?,  paddingTop: CGFloat, paddingLeft: CGFloat, paddingBottom: CGFloat, paddingRight: CGFloat, width: CGFloat, height: CGFloat) {
+        
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        if let top = top {
+            self.topAnchor.constraint(equalTo: top, constant: paddingTop).isActive = true
+        }
+        
+        if let left = left {
+            self.leftAnchor.constraint(equalTo: left, constant: paddingLeft).isActive = true
+        }
+        
+        if let bottom = bottom {
+            bottomAnchor.constraint(equalTo: bottom, constant: paddingBottom).isActive = true
+        }
+        
+        if let right = right {
+            rightAnchor.constraint(equalTo: right, constant: -paddingRight).isActive = true
+        }
+        
+        if width != 0 {
+            widthAnchor.constraint(equalToConstant: width).isActive = true
+        }
+        
+        if height != 0 {
+            heightAnchor.constraint(equalToConstant: height).isActive = true
+        }
     }
     
 }

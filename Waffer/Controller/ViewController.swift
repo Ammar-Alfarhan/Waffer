@@ -12,9 +12,10 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBarItems()
-        
-        
+        setupTopNavigationBarItems()
+       // setupBottomNavigationBarItems()
+//        let customTabBarController = CustomTabBarController()
+//        present(customTabBarController, animated: true, completion: nil)
         // user is not logged in
         if Auth.auth().currentUser?.uid == nil {
             perform(#selector(handleLogout), with: nil, afterDelay: 0)
@@ -24,7 +25,7 @@ class ViewController: UITableViewController {
     
     
     
-    func setupNavigationBarItems() {
+    func setupTopNavigationBarItems() {
         
         let logoutBarButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         navigationItem.leftBarButtonItem = logoutBarButton
@@ -51,6 +52,20 @@ class ViewController: UITableViewController {
         let loginController = LoginController()
         present(loginController, animated: true, completion: nil)
     }
+    
+//    func setupBottomNavigationBarItems()
+//    {
+//        let navigationController = UINavigationController(rootViewController: ViewController())
+//        navigationController.title = "Home"
+//        navigationController.tabBarItem.image = UIImage(named: "home")
+//
+//        let cameraController = CameraViewController()
+//        let secondNavigationController = UINavigationController(rootViewController: cameraController)
+//        secondNavigationController.title = "Camera"
+//        secondNavigationController.tabBarItem.image = UIImage(named: "camera")
+//
+//
+//    }
     
     
     

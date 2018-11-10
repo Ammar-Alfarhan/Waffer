@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Waffer
 //
-//  Created by Ammar Alfarhan on 10/22/18.
-//  Copyright © 2018 Ammar Alfarhan. All rights reserved.
+//  Created by Batool Alsmael on 10/22/18.
+//  Copyright © 2018 Batool Alsumaeel. All rights reserved.
 //
 
 import UIKit
@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
+        window?.rootViewController = CustomTabBarController()
         
-        window?.rootViewController = UINavigationController(rootViewController: ViewController())
         return true
     }
 
