@@ -138,6 +138,8 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         txt.font =  UIFont.systemFont(ofSize: 15)
         txt.layer.masksToBounds = true
         
+        
+        
         return txt
     }()
     
@@ -154,6 +156,8 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         let tf = UITextField()
         tf.placeholder="        $$$"
         tf.backgroundColor = UIColor.white
+        //tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
+        tf.borderStyle = .roundedRect
         tf.layer.cornerRadius = 5
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf

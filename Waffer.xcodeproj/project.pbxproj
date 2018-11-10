@@ -10,6 +10,7 @@
 		896F0AC683E47CEE0800C7AD /* Pods_Waffer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C16380B7A05A43BEE9E643 /* Pods_Waffer.framework */; };
 		A4387D1F21953EAC008FE9BC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4387D1E21953EAC008FE9BC /* Post.swift */; };
 		A4387D21219542DD008FE9BC /* UserProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */; };
+		A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */; };
 		A445E361218A138700125F69 /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A445E360218A138700125F69 /* PreviewPhotoContainerView.swift */; };
 		A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */; };
 		A4AF9C72218020EF001B527B /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C71218020EF001B527B /* CameraViewController.swift */; };
@@ -30,6 +31,7 @@
 		6090E237292391A518ED78E6 /* Pods-Waffer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Waffer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Waffer/Pods-Waffer.release.xcconfig"; sourceTree = "<group>"; };
 		A4387D1E21953EAC008FE9BC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePhotoCell.swift; sourceTree = "<group>"; };
+		A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
 		A445E360218A138700125F69 /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
 		A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		A4AF9C71218020EF001B527B /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				C5595B922184DDBE002E3A19 /* UserProfileController.swift */,
+				A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */,
 				C5595B962184FF2E002E3A19 /* UserProfileHeader.swift */,
 				A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */,
 			);
@@ -289,6 +292,7 @@
 				C5595B8F217EAAE6002E3A19 /* LoginController.swift in Sources */,
 				A445E361218A138700125F69 /* PreviewPhotoContainerView.swift in Sources */,
 				C5595B932184DDBE002E3A19 /* UserProfileController.swift in Sources */,
+				A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */,
 				A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */,
 				C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */,
 				A4387D21219542DD008FE9BC /* UserProfilePhotoCell.swift in Sources */,
