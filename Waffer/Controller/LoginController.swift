@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import FirebaseAuth
 class LoginController: UITabBarController {
-    
+
     let inputContainerView: UIView =
     {
         let view = UIView()
