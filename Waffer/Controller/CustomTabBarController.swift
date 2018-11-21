@@ -11,7 +11,9 @@ import UIKit
 
 class CustomTabBarController: UITabBarController{
     override func viewDidLoad() {
-        let navigationController = UINavigationController(rootViewController: ViewController())
+       let layout = UICollectionViewFlowLayout()
+        let homeController = HomeController(collectionViewLayout: layout)
+        let navigationController = UINavigationController(rootViewController: homeController)
         navigationController.title = "Home"
         navigationController.tabBarItem.image = UIImage(named: "home")
         
@@ -20,7 +22,7 @@ class CustomTabBarController: UITabBarController{
         secondNavigationController.title = "Camera"
         secondNavigationController.tabBarItem.image = UIImage(named: "camera")
         
-        let layout = UICollectionViewFlowLayout()
+        
         let userProfileController = UserProfileController(collectionViewLayout: layout)
         let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
         

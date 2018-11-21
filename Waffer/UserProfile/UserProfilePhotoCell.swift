@@ -34,7 +34,7 @@ class UserProfilePhotoCell: UICollectionViewCell {
     
     let photoImageView: UIImageView = {
         let iv = UIImageView()
-        iv.backgroundColor = .red
+        iv.backgroundColor = .white
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         return iv

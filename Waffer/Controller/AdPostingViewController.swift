@@ -8,7 +8,9 @@
 
 import UIKit
 import Firebase
-
+import FirebaseAuth
+import FirebaseStorage
+import FirebaseDatabase
 class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
 //    var selectedImage: UIImage? {
@@ -66,17 +68,17 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         // view.addSubview(picker)
         view.addSubview(inputContainerView)
         setupInputContainerView()
-        adsImageView.image = postedImage
+        // adsImageView.image = postedImage
         
-        view.addSubview(adsImageView)
-        view.addSubview(categoryLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(textView)
+        //view.addSubview(adsImageView)
+        //view.addSubview(categoryLabel)
+        //view.addSubview(descriptionLabel)
+        //view.addSubview(textView)
         view.addSubview(priceLabel)
         view.addSubview(priceTextField)
         view.addSubview(postButton)
         setupDescriptionItems()
-        setupAdsImageView()
+        //  setupAdsImageView()
         
         
     }
@@ -100,29 +102,29 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     
-    let adsImageView : UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "plus_photo")
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+//    let adsImageView : UIImageView = {
+//        let imageView = UIImageView()
+//        imageView.image = UIImage(named: "plus_photo")
+//        imageView.contentMode = .scaleAspectFit
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        return imageView
+//    }()
     
     
     let categoryLabel : UILabel = {
         let l = UILabel()
-        l.text = "Category: "
-        l.font =  UIFont.systemFont(ofSize: 15)
-        l.textColor = UIColor.white
+        l.text = "  Category: "
+        l.font =  UIFont.boldSystemFont(ofSize: 16.0)
+        l.textColor = UIColor(red: 135/255, green: 0/255, blue: 0/255, alpha: 1)
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
     
     let descriptionLabel : UILabel = {
         let l = UILabel()
-        l.text = "Description: "
-        l.font =  UIFont.systemFont(ofSize: 15)
-        l.textColor = UIColor.white
+        l.text = "  Description: "
+        l.font =  UIFont.boldSystemFont(ofSize: 16.0)
+        l.textColor = UIColor(red: 135/255, green: 0/255, blue: 0/255, alpha: 1)
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -131,7 +133,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     let textView : UITextView =
     {
         let txt = UITextView()
-        txt.backgroundColor = UIColor.white
+        txt.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         txt.textAlignment = NSTextAlignment.justified
         txt.translatesAutoresizingMaskIntoConstraints = false
         txt.layer.cornerRadius = 5
@@ -145,9 +147,9 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     let priceLabel : UILabel = {
         let l = UILabel()
-        l.text = "Price: "
-        l.font =  UIFont.systemFont(ofSize: 15)
-        l.textColor = UIColor.white
+        l.text = "   Price: "
+        l.font =  UIFont.boldSystemFont(ofSize: 16.0)
+        l.textColor = UIColor(red: 135/255, green: 0/255, blue: 0/255, alpha: 1)
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
@@ -155,8 +157,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     let priceTextField : UITextField = {
         let tf = UITextField()
         tf.placeholder="        $$$"
-        tf.backgroundColor = UIColor.white
-        //tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
+        tf.backgroundColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
         tf.borderStyle = .roundedRect
         tf.layer.cornerRadius = 5
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -196,47 +197,47 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         inputContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         inputContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         inputContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24).isActive = true
-        inputsContainerViewHeightAnchor = inputContainerView.heightAnchor.constraint(equalToConstant: 75)
+        inputsContainerViewHeightAnchor = inputContainerView.heightAnchor.constraint(equalToConstant: 280)
         inputsContainerViewHeightAnchor?.isActive = true
         inputContainerView.addSubview(picker)
+        inputContainerView.addSubview(categoryLabel)
+        inputContainerView.addSubview(descriptionLabel)
+        inputContainerView.addSubview(textView)
         
     }
     
-    //    var inputsContainerViewHeightAnchor: NSLayoutConstraint?
-    //    var descriptionLabelHeightAnchor: NSLayoutConstraint?
-    //    var descriptionTextFieldHeightAnchor: NSLayoutConstraint?
-    //    var passwordTextFieldHeightAnchor: NSLayoutConstraint?
     
     
-    func setupAdsImageView()
-    {
-        //need x, y, width, height constraints
-        //adsImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        //        adsImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2).isActive = true
-        //        adsImageView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
-        //        adsImageView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
-        adsImageView.bottomAnchor.constraint(equalTo: categoryLabel.topAnchor, constant: -12).isActive = true
-        adsImageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        adsImageView.heightAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        
-        //        adsImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: categoryLabel.topAnchor, right: view.rightAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 8, width:  inputContainerView, height: 0)
-        
-        
-        
-        //        imageView.anchor(top: containerView.topAnchor, left: containerView.leftAnchor, bottom: containerView.bottomAnchor, right: nil, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 0, width: 84, height: 0)
-    }
+    
+    //    func setupAdsImageView()
+    //    {
+    //        //need x, y, width, height constraints
+    //        //adsImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    //        //        adsImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2).isActive = true
+    //        //        adsImageView.rightAnchor.constraint(equalTo:view.rightAnchor).isActive = true
+    //        //        adsImageView.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
+    //        adsImageView.bottomAnchor.constraint(equalTo: categoryLabel.topAnchor, constant: -12).isActive = true
+    //        adsImageView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+    //        adsImageView.heightAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+    //
+    //        //        adsImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: categoryLabel.topAnchor, right: view.rightAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 8, width:  inputContainerView, height: 0)
+    //
+    //
+    //
+    //        //        imageView.anchor(top: containerView.topAnchor, left: containerView.leftAnchor, bottom: containerView.bottomAnchor, right: nil, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 0, width: 84, height: 0)
+    //    }
     func setupDescriptionItems()
     {
         
         
         categoryLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        categoryLabel.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor, constant: -12).isActive = true
+        categoryLabel.bottomAnchor.constraint(equalTo: picker.topAnchor, constant: 25).isActive = true
         categoryLabel.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
         categoryLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         // need x, y, width, height constraints
         descriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
-        descriptionLabel.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant : 5).isActive=true
+        descriptionLabel.topAnchor.constraint(equalTo: picker.bottomAnchor, constant : 5).isActive=true
         descriptionLabel.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive=true
         descriptionLabel.heightAnchor.constraint(equalToConstant: 25).isActive=true
         
@@ -244,8 +245,8 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         // need x, y, width, height constraints
         textView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
         textView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant : 5).isActive=true
-        textView.widthAnchor.constraint(equalTo: descriptionLabel.widthAnchor).isActive=true
-        textView.heightAnchor.constraint(equalToConstant: 85).isActive=true
+        textView.widthAnchor.constraint(equalToConstant: 340).isActive=true
+        textView.heightAnchor.constraint(equalToConstant: 60).isActive=true
         
         // need x, y, width, height constraints
         priceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
@@ -262,8 +263,8 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         // need x, y, width, height constraints
         postButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
-        postButton.topAnchor.constraint(equalTo: priceTextField.bottomAnchor, constant : 10).isActive=true
-        postButton.widthAnchor.constraint(equalTo: priceTextField.widthAnchor).isActive=true
+        postButton.topAnchor.constraint(equalTo: inputContainerView.bottomAnchor, constant : 25).isActive=true
+        postButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive=true
         postButton.heightAnchor.constraint(equalToConstant: 40).isActive=true
         
         
@@ -279,34 +280,34 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         let image = postedImage
         guard let uploadData = image.jpegData(compressionQuality: 0.5) else { return }
         
-       // navigationItem.rightBarButtonItem?.isEnabled = false
+        // navigationItem.rightBarButtonItem?.isEnabled = false
         
         let filename = NSUUID().uuidString
         let storageRef = Storage.storage().reference().child("posts").child(filename)
         storageRef.putData(uploadData, metadata: nil) { (metadata, err) in
-
+            
             if let err = err {
-               // self.navigationItem.rightBarButtonItem?.isEnabled = true
+                // self.navigationItem.rightBarButtonItem?.isEnabled = true
                 print("Failed to upload post image:", err)
                 return
             }
-
+            
             storageRef.downloadURL(completion: { (downloadURL, err) in
                 if let err = err {
                     print("Failed to fetch downloadURL:", err)
                     return
                 }
                 guard let imageUrl = downloadURL?.absoluteString else { return }
-
+                
                 print("Successfully uploaded post image:", imageUrl)
-
+                
                 self.saveToDatabaseWithImageUrl(imageUrl: imageUrl)
             })
         }
     }
     
     fileprivate func saveToDatabaseWithImageUrl(imageUrl: String) {
-       // guard let postImage = selectedImage else { return }
+        // guard let postImage = selectedImage else { return }
         let postImage = postedImage
         guard let caption = textView.text else { return }
         
