@@ -6,13 +6,61 @@
 //  Copyright © 2018 Batool Alsumaeel. All rights reserved.
 //
 
-import Foundation
+
 import UIKit
+import Firebase
 
 class CustomTabBarController: UITabBarController{
     override func viewDidLoad() {
-       let layout = UICollectionViewFlowLayout()
-        let homeController = HomeController(collectionViewLayout: layout)
+        
+//        if Auth.auth().currentUser == nil {
+//            //show if not logged in
+//            DispatchQueue.main.async {
+//                let loginController = LoginController()
+//                let navController = UINavigationController(rootViewController: loginController)
+//                self.present(navController, animated: true, completion: nil)
+//            }
+//
+//            return
+//        }
+//        
+//        let userProfileLayout = UICollectionViewFlowLayout()
+//        let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
+//        let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
+//        //thirdNavigationController.title = "User Profile"
+//        thirdNavigationController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
+//        thirdNavigationController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
+//        
+//        let homeLayout = UICollectionViewFlowLayout()
+//        let homeController = HomeController(collectionViewLayout: homeLayout)
+//        let navigationController = UINavigationController(rootViewController: homeController)
+//        navigationController.title = "Home"
+//        navigationController.tabBarItem.image = UIImage(named: "home")
+//        
+//        let cameraController = CameraTabView()
+//        let secondNavigationController = UINavigationController(rootViewController: cameraController)
+//        secondNavigationController.title = "Camera"
+//        secondNavigationController.tabBarItem.image = UIImage(named: "camera")
+//        
+//        tabBar.tintColor = .black
+//        
+//        viewControllers = [navigationController, secondNavigationController, thirdNavigationController]
+//        
+       setupViewControllers()
+    }
+    
+    
+    func setupViewControllers(){
+        
+        let userProfileLayout = UICollectionViewFlowLayout()
+        let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
+        let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
+        thirdNavigationController.title = "User Profile"
+        thirdNavigationController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
+        thirdNavigationController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
+        
+        let homeLayout = UICollectionViewFlowLayout()
+        let homeController = HomeController(collectionViewLayout: homeLayout)
         let navigationController = UINavigationController(rootViewController: homeController)
         navigationController.title = "Home"
         navigationController.tabBarItem.image = UIImage(named: "home")
@@ -21,23 +69,9 @@ class CustomTabBarController: UITabBarController{
         let secondNavigationController = UINavigationController(rootViewController: cameraController)
         secondNavigationController.title = "Camera"
         secondNavigationController.tabBarItem.image = UIImage(named: "camera")
-        
-        
-        let userProfileController = UserProfileController(collectionViewLayout: layout)
-        let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
-        
-//        let adPost = AdPostingViewController()
-//        let adPostController = UINavigationController(rootViewController: adPost)
-//        adPostController.title = "Post"
-        
-        thirdNavigationController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
-        thirdNavigationController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
-        
+    
         tabBar.tintColor = .black
         
-        viewControllers = [navigationController, secondNavigationController, thirdNavigationController]
-        
+         viewControllers = [navigationController, secondNavigationController, thirdNavigationController]
     }
-    
-    
 }

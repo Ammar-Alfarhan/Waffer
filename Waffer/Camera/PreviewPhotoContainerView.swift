@@ -9,8 +9,6 @@
 import UIKit
 import Photos
 
-
-
 class PreviewPhotoContainerView: UIView  {
     
     var myViewController: AdPostingViewController?

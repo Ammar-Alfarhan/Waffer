@@ -13,6 +13,8 @@ import FirebaseDatabase
 class UserProfileController: UICollectionViewController,  UICollectionViewDelegateFlowLayout {
     
     let cellId = "cellId"
+    
+    let headerId = "headerId"
    
     var userId: String?
     
@@ -21,44 +23,47 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         
         collectionView?.backgroundColor = .white
         
-       navigationItem.title = Auth.auth().currentUser?.uid
+        // user is not logged in
+        if Auth.auth().currentUser?.uid == nil {
+            perform(#selector(handleLogOut), with: nil, afterDelay: 0)
+            handleLogOut()
+        }
         
+       //navigationItem.title = Auth.auth().currentUser?.uid
+        fetchOrderedPosts()
         fetchUser()
         
-        collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerId")
+        collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
         collectionView?.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
         setupLogOutButton()
         
-        fetchPosts()
     }
     
     var posts = [Post]()
-    fileprivate func fetchPosts() {
+    
+    fileprivate func fetchOrderedPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        
+        print("Here:uid=", uid)
         let ref = Database.database().reference().child("posts").child(uid)
         
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            print("value= ",snapshot.value!)
+        //perhaps later on we'll implement some pagination of data
+        ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             
-            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            //print("Here= ",snapshot.value)
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
             
-            dictionaries.forEach({ (key, value) in
-                print("Key \(key), Value: \(value)")
-                
-                guard let dictionary = value as? [String: Any] else { return }
-                let post = Post(dictionary: dictionary)
-                print("post:", post.imageUrl)
-                self.posts.append(post)
-            })
+            guard let user = self.user else { return }
+            
+            let post = Post(user: user, dictionary: dictionary)
+            
+            self.posts.insert(post, at: 0)
             
             self.collectionView?.reloadData()
             
         }) { (err) in
-            print("Faild to fatch posts:", err)
+            print("Failed to fetch ordered posts:", err)
         }
     }
     
@@ -103,6 +108,13 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let presentAdController = PresentAdsController()
+        let ad = UINavigationController(rootViewController: presentAdController)
+        presentAdController.imageUrl = posts[indexPath.row].imageUrl
+        presentAdController.caption = posts[indexPath.row]
+        present(ad, animated: true, completion: nil)
+    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
@@ -118,13 +130,9 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     
     
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "headerId", for: indexPath) as! UserProfileHeader
-        
-        header.backgroundColor = .white
-       // header.user = self.user
-        
-        //not correct
-        //header.addSubview(UIImageView())
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! UserProfileHeader
+
+        header.user = self.user
         
         return header
     }
@@ -132,32 +140,20 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 200)
     }
+
     var user: User?
     fileprivate func fetchUser() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-            //print(snapshot.value ?? "")
-            
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
-            
-            self.user = User(dictionary: dictionary)
+        let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
+        
+        //guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Database.fetchUserWithUID(uid: uid) { (user) in
+            self.user = user
             self.navigationItem.title = self.user?.username
-            
             self.collectionView?.reloadData()
-            
-        }) { (err) in
-            print("Failed to fetch user:", err)
+            self.fetchOrderedPosts()
         }
     }
-}
-
-struct User {
-    let username: String
-    let profileImageUrl: String
-    
-    init(dictionary: [String: Any]) {
-        self.username = dictionary["name"] as? String ?? ""
-        self.profileImageUrl = dictionary["profileImageUrl"]  as? String ?? ""
-    }
+ 
 }

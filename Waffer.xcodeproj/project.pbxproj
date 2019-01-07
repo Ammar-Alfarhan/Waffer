@@ -8,8 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		896F0AC683E47CEE0800C7AD /* Pods_Waffer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C16380B7A05A43BEE9E643 /* Pods_Waffer.framework */; };
+		A40D069121E0639A0035B28E /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D069021E0639A0035B28E /* ChatLogController.swift */; };
 		A4141367219763FC0051A469 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4141366219763FC0051A469 /* HomePostCell.swift */; };
 		A414136A21976C320051A469 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A414136921976C320051A469 /* CustomImageView.swift */; };
+		A41554D521B77FB4000C6471 /* CategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41554D421B77FB4000C6471 /* CategoryFilter.swift */; };
+		A41554D721B79D3C000C6471 /* CategoryFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41554D621B79D3C000C6471 /* CategoryFilterCell.swift */; };
+		A417FFC521AA2B0C00C588B0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A417FFC421AA2B0C00C588B0 /* Extensions.swift */; };
+		A417FFC721AA4A6400C588B0 /* PresentAdsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A417FFC621AA4A6400C588B0 /* PresentAdsController.swift */; };
 		A4387D1F21953EAC008FE9BC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4387D1E21953EAC008FE9BC /* Post.swift */; };
 		A4387D21219542DD008FE9BC /* UserProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */; };
 		A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */; };
@@ -17,6 +22,7 @@
 		A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */; };
 		A4AF9C72218020EF001B527B /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C71218020EF001B527B /* CameraViewController.swift */; };
 		A4AF9C742180FDF4001B527B /* AdPostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */; };
+		A4B1D5C521A5269800D26042 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1D5C421A5269800D26042 /* User.swift */; };
 		C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B79217EA48B002E3A19 /* AppDelegate.swift */; };
 		C5595B7C217EA48B002E3A19 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B7B217EA48B002E3A19 /* HomeController.swift */; };
 		C5595B7F217EA48B002E3A19 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5595B7D217EA48B002E3A19 /* Main.storyboard */; };
@@ -31,8 +37,13 @@
 
 /* Begin PBXFileReference section */
 		6090E237292391A518ED78E6 /* Pods-Waffer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Waffer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Waffer/Pods-Waffer.release.xcconfig"; sourceTree = "<group>"; };
+		A40D069021E0639A0035B28E /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 		A4141366219763FC0051A469 /* HomePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
 		A414136921976C320051A469 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		A41554D421B77FB4000C6471 /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
+		A41554D621B79D3C000C6471 /* CategoryFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilterCell.swift; sourceTree = "<group>"; };
+		A417FFC421AA2B0C00C588B0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		A417FFC621AA4A6400C588B0 /* PresentAdsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentAdsController.swift; sourceTree = "<group>"; };
 		A4387D1E21953EAC008FE9BC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePhotoCell.swift; sourceTree = "<group>"; };
 		A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
@@ -40,6 +51,7 @@
 		A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		A4AF9C71218020EF001B527B /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPostingViewController.swift; sourceTree = "<group>"; };
+		A4B1D5C421A5269800D26042 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		C5595B76217EA48A002E3A19 /* Waffer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waffer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5595B79217EA48B002E3A19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5595B7B217EA48B002E3A19 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -81,6 +93,9 @@
 			children = (
 				C5595B7B217EA48B002E3A19 /* HomeController.swift */,
 				A4141366219763FC0051A469 /* HomePostCell.swift */,
+				A417FFC621AA4A6400C588B0 /* PresentAdsController.swift */,
+				A41554D421B77FB4000C6471 /* CategoryFilter.swift */,
+				A41554D621B79D3C000C6471 /* CategoryFilterCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -89,6 +104,8 @@
 			isa = PBXGroup;
 			children = (
 				A414136921976C320051A469 /* CustomImageView.swift */,
+				A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */,
+				A417FFC421AA2B0C00C588B0 /* Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -97,8 +114,17 @@
 			isa = PBXGroup;
 			children = (
 				A4387D1E21953EAC008FE9BC /* Post.swift */,
+				A4B1D5C421A5269800D26042 /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		A493EA4321DAA15000EF2923 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				A40D069021E0639A0035B28E /* ChatLogController.swift */,
+			);
+			path = Message;
 			sourceTree = "<group>";
 		};
 		C5595B6D217EA48A002E3A19 = {
@@ -122,6 +148,7 @@
 		C5595B78217EA48A002E3A19 /* Waffer */ = {
 			isa = PBXGroup;
 			children = (
+				A493EA4321DAA15000EF2923 /* Message */,
 				A414136821976C040051A469 /* Utils */,
 				A41413632197554A0051A469 /* Home */,
 				A4387D1D21953E8E008FE9BC /* Models */,
@@ -152,7 +179,6 @@
 			isa = PBXGroup;
 			children = (
 				C5595B922184DDBE002E3A19 /* UserProfileController.swift */,
-				A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */,
 				C5595B962184FF2E002E3A19 /* UserProfileHeader.swift */,
 				A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */,
 			);
@@ -308,7 +334,11 @@
 				C5595B9A21892C4D002E3A19 /* CameraTabView.swift in Sources */,
 				A4387D1F21953EAC008FE9BC /* Post.swift in Sources */,
 				C5595B7C217EA48B002E3A19 /* HomeController.swift in Sources */,
+				A40D069121E0639A0035B28E /* ChatLogController.swift in Sources */,
+				A41554D721B79D3C000C6471 /* CategoryFilterCell.swift in Sources */,
 				A4AF9C72218020EF001B527B /* CameraViewController.swift in Sources */,
+				A41554D521B77FB4000C6471 /* CategoryFilter.swift in Sources */,
+				A4B1D5C521A5269800D26042 /* User.swift in Sources */,
 				A414136A21976C320051A469 /* CustomImageView.swift in Sources */,
 				A4AF9C742180FDF4001B527B /* AdPostingViewController.swift in Sources */,
 				C5595B972184FF2E002E3A19 /* UserProfileHeader.swift in Sources */,
@@ -318,6 +348,8 @@
 				A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */,
 				A4141367219763FC0051A469 /* HomePostCell.swift in Sources */,
 				A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */,
+				A417FFC721AA4A6400C588B0 /* PresentAdsController.swift in Sources */,
+				A417FFC521AA2B0C00C588B0 /* Extensions.swift in Sources */,
 				C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */,
 				A4387D21219542DD008FE9BC /* UserProfilePhotoCell.swift in Sources */,
 			);
@@ -466,6 +498,7 @@
 			baseConfigurationReference = C8EB3AC35FE4B06E875C7471 /* Pods-Waffer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 28F6B47AD8;
 				INFOPLIST_FILE = Waffer/Info.plist;
@@ -475,6 +508,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = waffer.Waffer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -485,6 +519,7 @@
 			baseConfigurationReference = 6090E237292391A518ED78E6 /* Pods-Waffer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 28F6B47AD8;
 				INFOPLIST_FILE = Waffer/Info.plist;
@@ -494,6 +529,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = waffer.Waffer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

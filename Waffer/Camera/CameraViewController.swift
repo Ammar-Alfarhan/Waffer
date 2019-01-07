@@ -65,11 +65,11 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate {
         
         let imageData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer!)
         
-        let previewImage = UIImage(data: imageData!)
+        guard let previewImage = UIImage(data: imageData!) else { return }
         
         let containerView = PreviewPhotoContainerView()
         containerView.previewImageView.image = previewImage
-        postedImage = previewImage!
+        postedImage = previewImage//.jpegData(compressionQuality: 0.7)
         view.addSubview(containerView)
         containerView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         
@@ -103,13 +103,6 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate {
         let AdPostingController = AdPostingViewController()
         let adsController = UINavigationController(rootViewController: AdPostingController)
         present(adsController, animated: true, completion: nil)
-        
-        // myViewController?.navigationController?.pushViewController(AdPostingViewController(), animated: true)
-        
-        //let adPost = AdPostingViewController()
-        //performSegue(withIdentifier: "adPost", sender: nil)
-        //presentViewController(adPost, animated: true, completion: nil)
-        //navigationController?.pushViewController(adPost, animated: true, completion: nil)
     }
     
     let output = AVCapturePhotoOutput()
