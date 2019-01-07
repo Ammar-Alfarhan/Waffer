@@ -10,24 +10,61 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
-class ChatLogController: UICollectionViewController, UITextFieldDelegate {
-   
-    var user: User? {
+class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout {
+    
+    var post: Post? {
         didSet{
-            navigationItem.title = user?.username
+            navigationItem.title = post?.user.username
         }
     }
     
-    var post: Post?
+    let cellId = "cellId"
+    
     
     override func viewDidLoad() {
         print(123)
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .red
         
+        collectionView?.register(ChatLogCell.self, forCellWithReuseIdentifier: cellId)
+        
+        collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
         collectionView?.alwaysBounceVertical = true
         collectionView?.keyboardDismissMode = .interactive
         
         //setupInputComponents()
+        fetchMessages()
+    }
+    
+    var messages = [Message]()
+    fileprivate func fetchMessages(){
+        guard let postId = post?.id else { return }
+        let ref = Database.database().reference().child("messages").child(postId)
+        ref.observe(.childAdded, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            
+            let message = Message(dictionary: dictionary)
+//            print(message.message, message.fromId, message.toId)
+            self.messages.append(message)
+            self.collectionView?.reloadData()
+        }) { (err) in
+            print("Fail to fetch messages", err)
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatLogCell
+        
+        cell.message = self.messages[indexPath.item]
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 50)
     }
     
     lazy var inputTextField: UITextField = {
@@ -48,13 +85,13 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate {
     
     @objc func handleSend(){
         guard let text = inputTextField.text else { return }
-        print(text)
         
+        guard let postId = post?.id else { return }
+        print("unwraped postId:", postId)
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let userMessageRef = Database.database().reference().child("messages").child(uid)
+        let userMessageRef = Database.database().reference().child("messages").child(postId)
         let ref = userMessageRef.childByAutoId()
-        guard let toId = user?.uid else { return }
-        //guard let postId = 
+        guard let toId = post?.user.uid else { return }
         let timestamp = NSDate().timeIntervalSince1970
         let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp] as [String : Any]
         ref.updateChildValues(values) { (err, ref) in
@@ -62,10 +99,8 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate {
                 print("Faild to save message to DB:", err)
                 return
             }
-            
             print("Successfully saved message to DB")
         }
-        
         inputTextField.text = ""
     }
     

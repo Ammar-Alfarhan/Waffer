@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		896F0AC683E47CEE0800C7AD /* Pods_Waffer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C16380B7A05A43BEE9E643 /* Pods_Waffer.framework */; };
 		A40D069121E0639A0035B28E /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D069021E0639A0035B28E /* ChatLogController.swift */; };
+		A40D069321E306080035B28E /* ChatLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D069221E306080035B28E /* ChatLogCell.swift */; };
+		A40D069521E30EB50035B28E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D069421E30EB50035B28E /* Message.swift */; };
 		A4141367219763FC0051A469 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4141366219763FC0051A469 /* HomePostCell.swift */; };
 		A414136A21976C320051A469 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A414136921976C320051A469 /* CustomImageView.swift */; };
 		A41554D521B77FB4000C6471 /* CategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41554D421B77FB4000C6471 /* CategoryFilter.swift */; };
@@ -38,6 +40,8 @@
 /* Begin PBXFileReference section */
 		6090E237292391A518ED78E6 /* Pods-Waffer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Waffer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Waffer/Pods-Waffer.release.xcconfig"; sourceTree = "<group>"; };
 		A40D069021E0639A0035B28E /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
+		A40D069221E306080035B28E /* ChatLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogCell.swift; sourceTree = "<group>"; };
+		A40D069421E30EB50035B28E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A4141366219763FC0051A469 /* HomePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
 		A414136921976C320051A469 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		A41554D421B77FB4000C6471 /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
@@ -115,6 +119,7 @@
 			children = (
 				A4387D1E21953EAC008FE9BC /* Post.swift */,
 				A4B1D5C421A5269800D26042 /* User.swift */,
+				A40D069421E30EB50035B28E /* Message.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -123,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				A40D069021E0639A0035B28E /* ChatLogController.swift */,
+				A40D069221E306080035B28E /* ChatLogCell.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -348,7 +354,9 @@
 				A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */,
 				A4141367219763FC0051A469 /* HomePostCell.swift in Sources */,
 				A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */,
+				A40D069521E30EB50035B28E /* Message.swift in Sources */,
 				A417FFC721AA4A6400C588B0 /* PresentAdsController.swift in Sources */,
+				A40D069321E306080035B28E /* ChatLogCell.swift in Sources */,
 				A417FFC521AA2B0C00C588B0 /* Extensions.swift in Sources */,
 				C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */,
 				A4387D21219542DD008FE9BC /* UserProfilePhotoCell.swift in Sources */,

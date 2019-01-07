@@ -91,7 +91,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 
                 guard let dictionary = value as? [String: Any] else { return }
                 
-                let post = Post(user: user, dictionary: dictionary)
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = key
+                
                 self.posts.append(post)
             })
             self.posts.sort(by: { (p1, p2) -> Bool in
@@ -216,6 +218,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         print("From home")
         print(post.descriptionCaption)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
+        chatLogController.post = post
         searchBar.isHidden = true
         navigationController?.pushViewController(chatLogController, animated: true)
         
