@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     let inputContainerView: UIView =
     {
         let view = UIView()
@@ -56,19 +56,20 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
             
             print("Successfully logged back in with user:", user?.user.uid ?? "")
             
-            let homeController = CustomTabBarController()
-            self.present(homeController, animated: true, completion: nil)
+            guard let customTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
             
-            //self.dismiss(animated: true, completion: nil)
+            customTabBarController.setupViewControllers()
+            
+            self.dismiss(animated: true, completion: nil)
             
         })
     }
     
     @objc func handleRegister() {
-        guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
-            print("Form is not valid")
-            return
-        }
+        
+        guard let email = emailTextField.text, !email.isEmpty else { return }
+        guard let name = nameTextField.text, !name.isEmpty else { return }
+        guard let password = passwordTextField.text, !password.isEmpty else { return }
         
         Auth.auth().createUser(withEmail: email, password: password, completion:  { (user, error) in
             
@@ -79,27 +80,7 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
                 print("error \(error!.localizedDescription)")
                 return
             }
-//            guard let uid = user?.user.uid else {
-//                return
-//            }
-            // guard let user = authResult?.user else { return }
             
-            //successfully authenticated user
-           /* guard let uid = Auth.auth().currentUser?.uid else {return}
-            let ref = Database.database().reference()
-            let usersReference = ref.child("users").child(uid)
-            let values = ["name": name, "email": email]
-            //ref.child(usersReference).setValue(values)
-            usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                
-                if err != nil {
-                    print("error \(err!.localizedDescription)")
-                    return
-                }
-                self.dismiss(animated: true, completion: nil)
-                print("Saved user successfully into Firebase db")
-                
-            })*/
             
             guard let image = self.plusPhotoButton.imageView?.image else { return }
             
@@ -194,11 +175,20 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
     
     let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "plus_photo-2").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handlePlusPhoto), for: .touchUpInside)
         return button
     }()
-
+    
+    let profileImageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "wafer")
+        imageView.contentMode = .scaleAspectFill
+        imageView.isHidden = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     @objc func handlePlusPhoto() {
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
@@ -222,13 +212,6 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
         dismiss(animated: true, completion: nil)
     }
     
-//    let profileImageView : UIImageView = {
-//        let imageView = UIImageView()
-//        imageView.image = UIImage(named: "default-user")
-//        imageView.contentMode = .scaleAspectFill
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        return imageView
-//    }()
     lazy var loginRegisterSegmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Login", "Register"])
         sc.translatesAutoresizingMaskIntoConstraints = false
@@ -241,6 +224,21 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
     @objc func handleLoginRegisterChange() {
         let title = loginRegisterSegmentedControl.titleForSegment(at: loginRegisterSegmentedControl.selectedSegmentIndex)
         loginRegisterButton.setTitle(title, for: UIControl.State())
+        
+        
+        if (loginRegisterSegmentedControl.selectedSegmentIndex == 0)
+        {
+            profileImageView.isHidden = false
+            //plusPhotoButton.setImage(#imageLiteral(resourceName: "nothing").withRenderingMode(.alwaysOriginal), for: .normal)
+            plusPhotoButton.isHidden = true
+            
+        }
+        else {
+            profileImageView.isHidden = true
+            plusPhotoButton.isHidden = false
+            plusPhotoButton.setImage(#imageLiteral(resourceName: "plus_photo-2").withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        
         
         // change height of inputContainerView, but how???
         inputsContainerViewHeightAnchor?.constant = loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 100 : 150
@@ -265,27 +263,27 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(r: 0,g: 38,b: 77)
+        view.backgroundColor = UIColor(r: 26,g: 47,b: 101)
         view.addSubview(inputContainerView)
         view.addSubview(loginRegisterButton)
-        //view.addSubview(profileImageView)
+        view.addSubview(profileImageView)
         view.addSubview(plusPhotoButton)
         view.addSubview(loginRegisterSegmentedControl)
         
         setupInputContainerView()
         setuploginRegisterButton()
-        //setupProfileImageView()
+        setupProfileImageView()
         setupPlusimageButton()
         setupLoginRegisterSegmentedControl()
         
-        tabBarController?.tabBar.isHidden = true
+        //tabBarController?.tabBar.isHidden = true
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Hide the tabBar
-        tabBarController?.tabBar.isHidden = true
+        //tabBarController?.tabBar.isHidden = true
         // Hide the Navigation Bar
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -301,20 +299,9 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
         loginRegisterSegmentedControl.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor, multiplier: 1).isActive = true
         loginRegisterSegmentedControl.heightAnchor.constraint(equalToConstant: 36).isActive = true
     }
-//    func setupProfileImageView()
-//    {
-//        //need x, y, width, height constraints
-//        profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        profileImageView.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor, constant: -12).isActive = true
-//        profileImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-//        profileImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-//    }
+    
     
     func setupPlusimageButton() {
-//        plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        plusPhotoButton.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor, constant: -12).isActive = true
-//        plusPhotoButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
-//        plusPhotoButton.heightAnchor.constraint(equalToConstant: 150).isActive = true
         plusPhotoButton.anchor(top: nil, left: nil, bottom: loginRegisterSegmentedControl.topAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: -12, paddingRight: 0, width: 140, height: 140)
         
         plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -368,6 +355,15 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
         passwordTextField.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
         passwordTextFieldHeightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 1/3)
         passwordTextFieldHeightAnchor?.isActive = true
+    }
+    
+    func setupProfileImageView()
+    {
+        //need x, y, width, height constraints
+        profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        profileImageView.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor, constant: -12).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
     }
     
     func setuploginRegisterButton()

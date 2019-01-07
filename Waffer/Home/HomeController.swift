@@ -26,13 +26,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         refreshController.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         collectionView.refreshControl = refreshController
         setupTopNavigationBarItems()
-
-        // user is not logged in
-        if Auth.auth().currentUser?.uid == nil {
-            perform(#selector(handleLogOut), with: nil, afterDelay: 0)
-            handleLogOut()
-        }
-    
+        
+        //        // user is not logged in
+        //        if Auth.auth().currentUser?.uid == nil {
+        //            perform(#selector(handlesignOut), with: nil, afterDelay: 0)
+        //            handlesignOut()
+        //        }
+        
         fetchAllPost()
         
         collectionView?.alwaysBounceVertical = true
@@ -54,15 +54,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var filteredPost = [Post]()
     var posts = [Post]()
-//    var users = [User]()
+    //    var users = [User]()
     fileprivate func fetchPosts() {
         
         let ref = Database.database().reference().child("users")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
-//            print("dictionaries=", dictionaries)
+            //            print("dictionaries=", dictionaries)
             dictionaries.forEach({ (key, value) in
-
+                
                 Database.fetchUserWithUID(uid: key, completion: { (user) in
                     self.fetchPostsWithUser(user: user)
                 })
@@ -86,8 +86,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
             dictionaries.forEach({ (key, value) in
-//                print("Key \(key), Value: \(value)")
-//                print("Post=",dictionaries.values.count)
+                //                print("Key \(key), Value: \(value)")
+                //                print("Post=",dictionaries.values.count)
                 
                 guard let dictionary = value as? [String: Any] else { return }
                 
@@ -104,17 +104,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             print("Faild to fatch posts:", err)
         }
     }
-
+    
     func setupTopNavigationBarItems() {
-
-//        let logoutBarButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
-//        navigationItem.leftBarButtonItem = logoutBarButton
-
+        
+        //        let logoutBarButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+        //        navigationItem.leftBarButtonItem = logoutBarButton
+        
         setupLogOutButton()
         
         //let filterButton = UIButton(type: .system)
         //searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 270, height: 20))
- 
+        
         //filterButton.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
         
         navigationController?.navigationBar.addSubview(searchBar)
@@ -122,9 +122,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let navBar = navigationController?.navigationBar
         
         searchBar.anchor(top: navBar?.topAnchor, left: navBar?.leftAnchor, bottom: navBar?.bottomAnchor, right: navBar?.rightAnchor, paddingTop: 0, paddingLeft: 45, paddingBottom: 0, paddingRight: 50, width: 0, height: 0)
-
+        
         navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: filterButton)]
-
+        
     }
     
     lazy var filterButton: UIButton = {
@@ -177,8 +177,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 //what happens? we need to present some kind of login controller
                 let loginController = LoginController()
                 let navController = UINavigationController(rootViewController: loginController)
-                self.tabBarController?.tabBar.isHidden = true
                 self.present(navController, animated: true, completion: nil)
+                
                 
             } catch let signOutErr {
                 print("Failed to sign out:", signOutErr)
@@ -191,7 +191,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         present(alertController, animated: true, completion: nil)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 40 + 8 + 8 //username + userprofileimage
         height += view.frame.width
@@ -214,14 +214,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func didTapContact(post: Post) {
         print("From home")
-        //print(post.user)
+        print(post.descriptionCaption)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
-        chatLogController.user = post.user
-        chatLogController.post = post
-        print(post)
         searchBar.isHidden = true
         navigationController?.pushViewController(chatLogController, animated: true)
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -232,20 +229,21 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let presentAdController = PresentAdsController()
         let ad = UINavigationController(rootViewController: presentAdController)
-        presentAdController.imageUrl = posts[indexPath.row].imageUrl
-        presentAdController.caption = posts[indexPath.row]
+        presentAdController.imageUrl = filteredPost[indexPath.row].imageUrl
+        presentAdController.caption = filteredPost[indexPath.row]
         present(ad, animated: true, completion: nil)
     }
     
-//    @objc func handleLogout()
-//    {
-//        do {
-//            try Auth.auth().signOut()
-//        } catch let logoutError {
-//            print(logoutError)
-//        }
-//        let loginController = LoginController()
-//        present(loginController, animated: true, completion: nil)
-//    }
+    //    @objc func handlesignOut()
+    //    {
+    //        do {
+    //            try Auth.auth().signOut()
+    //        } catch let logoutError {
+    //            print(logoutError)
+    //        }
+    //        let loginController = LoginController()
+    //        self.tabBarController?.tabBar.isHidden = true
+    //        present(loginController, animated: true, completion: nil)
+    //    }
 }
 
