@@ -13,11 +13,13 @@ struct Message {
     let fromId: String
     let toId: String
     let timestamp: Date
+    let imageUrl: String
     
     init(dictionary: [String: Any]) {
         self.message = dictionary["message"] as? String ?? ""
         self.fromId = dictionary["fromId"] as? String ?? ""
         self.toId = dictionary["toId"] as? String ?? ""
+        self.imageUrl = dictionary["imageUrl"] as? String ?? ""
         
         let secondsFrom1970 = dictionary["timestamp"] as? Double ?? 0
         self.timestamp = Date(timeIntervalSince1970: secondsFrom1970)

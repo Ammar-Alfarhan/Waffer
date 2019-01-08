@@ -88,12 +88,13 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         
         guard let postId = post?.id else { return }
         print("unwraped postId:", postId)
+        guard let imageUrl = post?.imageUrl else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let userMessageRef = Database.database().reference().child("messages").child(postId)
         let ref = userMessageRef.childByAutoId()
         guard let toId = post?.user.uid else { return }
         let timestamp = NSDate().timeIntervalSince1970
-        let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp] as [String : Any]
+        let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp, "imageUrl": imageUrl] as [String : Any]
         ref.updateChildValues(values) { (err, ref) in
             if let err = err {
                 print("Faild to save message to DB:", err)
