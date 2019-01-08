@@ -19,20 +19,17 @@ class MessagesCell: UITableViewCell {
                     
                     if let dictionary = snapshot.value as? [String: AnyObject] {
                         self.textLabel?.text = dictionary["name"] as? String
-                        
-                        //let postId = dictionary[""]
-                        
-                        //guard let profileImageUrl = Post?.user.profileImageUrl else { return }
-                        
-                        //profileImageView.loadImage(urlString: profileImageUrl)
                     }
                     
                 }, withCancel: nil)
             }
+            guard let imageUrl = message?.imageUrl else { return }
+            itemImageView.loadImage(urlString: imageUrl)
             
             detailTextLabel?.text = message?.message
             
-            //timeLabel.text = message?.timestamp as? String
+            let timeAgoDisplay = message?.timestamp.timeAgoDisplay()
+            timeLabel.text = timeAgoDisplay
         }
     }
     
@@ -44,8 +41,8 @@ class MessagesCell: UITableViewCell {
         detailTextLabel?.frame = CGRect(x: 64, y: detailTextLabel!.frame.origin.y + 2, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
     }
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
+    let itemImageView: CustomImageView = {
+        let imageView = CustomImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 24
         imageView.layer.masksToBounds = true
@@ -57,29 +54,30 @@ class MessagesCell: UITableViewCell {
         let label = UILabel()
         label.text = "HH:MM:SS"
         label.font = UIFont.systemFont(ofSize: 13)
-        label.textColor = UIColor.darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.lightGray
+        //label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         
-        addSubview(profileImageView)
+        addSubview(itemImageView)
         addSubview(timeLabel)
         
         //ios 9 constraint anchors
         //need x,y,width,height anchors
-        profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
-        profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant: 48).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        itemImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        itemImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        itemImageView.widthAnchor.constraint(equalToConstant: 48).isActive = true
+        itemImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
         
         //need x,y,width,height anchors
-        timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 18).isActive = true
-        timeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        timeLabel.heightAnchor.constraint(equalTo: textLabel!.heightAnchor).isActive = true
+//        timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+//        timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 18).isActive = true
+//        timeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+//        timeLabel.heightAnchor.constraint(equalTo: textLabel!.heightAnchor).isActive = true
+        timeLabel.anchor(top: topAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 18, paddingLeft: 0, paddingBottom: 0, paddingRight: 10, width: 100, height: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {
