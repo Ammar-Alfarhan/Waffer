@@ -9,8 +9,13 @@
 import UIKit
 import Firebase
 
+protocol UserProfileCellDelegate {
+    func didTapMessages()
+}
+
 class UserProfileHeader: UICollectionViewCell {
     
+    var delegate: UserProfileCellDelegate?
     
     var user: User? {
         didSet {
@@ -27,22 +32,27 @@ class UserProfileHeader: UICollectionViewCell {
         return iv
     }()
     
-    let gridButton: UIButton = {
+    lazy var gridButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("For sale", for: .normal)
         //button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
         return button
     }()
     
-    let listButton: UIButton = {
+    lazy var messagesButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("messages", for: .normal)
+        button.setTitle("Messages", for: .normal)
         //button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
-        button.tintColor = UIColor(white: 0, alpha: 0.2)
+        //button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
         return button
     }()
     
-    let bookmarkButton: UIButton = {
+    @objc func handleMessages(){
+        delegate?.didTapMessages()
+    }
+    
+    lazy var bookmarkButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
@@ -111,7 +121,7 @@ class UserProfileHeader: UICollectionViewCell {
         let bottomDividerView = UIView()
         bottomDividerView.backgroundColor = UIColor.lightGray
         
-        let stackView = UIStackView(arrangedSubviews: [gridButton, listButton, bookmarkButton])
+        let stackView = UIStackView(arrangedSubviews: [gridButton, messagesButton, bookmarkButton])
         
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually

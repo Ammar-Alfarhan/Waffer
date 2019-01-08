@@ -10,7 +10,11 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 
-class UserProfileController: UICollectionViewController,  UICollectionViewDelegateFlowLayout {
+class UserProfileController: UICollectionViewController,  UICollectionViewDelegateFlowLayout, UserProfileCellDelegate {
+    func didTapMessages() {
+        let messagesController = MessagesController()
+        navigationController?.pushViewController(messagesController, animated: true)
+    }
     
     let cellId = "cellId"
     
@@ -133,6 +137,7 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! UserProfileHeader
 
         header.user = self.user
+        header.delegate = self
         
         return header
     }
