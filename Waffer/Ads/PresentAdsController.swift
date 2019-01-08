@@ -200,9 +200,9 @@ class PresentAdsController: UIViewController {
     }()
     
     
-     let settingsLauncher = SettingsLauncher()
+     let verticalMenuLauncher = VerticalMenuLauncher()
     @objc func verticalMenu() {
-        settingsLauncher.showSettings()
+        verticalMenuLauncher.showSettings()
     }
     
    

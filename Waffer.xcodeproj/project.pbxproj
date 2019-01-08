@@ -27,7 +27,8 @@
 		A4AF9C72218020EF001B527B /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C71218020EF001B527B /* CameraViewController.swift */; };
 		A4AF9C742180FDF4001B527B /* AdPostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */; };
 		A4B1D5C521A5269800D26042 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1D5C421A5269800D26042 /* User.swift */; };
-		C52AD45F21E52E8A00022C72 /* SettingsLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD45E21E52E8A00022C72 /* SettingsLauncher.swift */; };
+		C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */; };
+		C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD46221E5425900022C72 /* VerticalMenuCell.swift */; };
 		C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B79217EA48B002E3A19 /* AppDelegate.swift */; };
 		C5595B7C217EA48B002E3A19 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B7B217EA48B002E3A19 /* HomeController.swift */; };
 		C5595B7F217EA48B002E3A19 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5595B7D217EA48B002E3A19 /* Main.storyboard */; };
@@ -61,7 +62,8 @@
 		A4AF9C71218020EF001B527B /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPostingViewController.swift; sourceTree = "<group>"; };
 		A4B1D5C421A5269800D26042 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		C52AD45E21E52E8A00022C72 /* SettingsLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLauncher.swift; sourceTree = "<group>"; };
+		C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuLauncher.swift; sourceTree = "<group>"; };
+		C52AD46221E5425900022C72 /* VerticalMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuCell.swift; sourceTree = "<group>"; };
 		C5595B76217EA48A002E3A19 /* Waffer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waffer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5595B79217EA48B002E3A19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5595B7B217EA48B002E3A19 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -143,8 +145,9 @@
 		C52AD45D21E519CF00022C72 /* Ads */ = {
 			isa = PBXGroup;
 			children = (
-				C52AD45E21E52E8A00022C72 /* SettingsLauncher.swift */,
+				C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */,
 				A417FFC621AA4A6400C588B0 /* PresentAdsController.swift */,
+				C52AD46221E5425900022C72 /* VerticalMenuCell.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -370,9 +373,10 @@
 				A445E361218A138700125F69 /* PreviewPhotoContainerView.swift in Sources */,
 				C5595B932184DDBE002E3A19 /* UserProfileController.swift in Sources */,
 				A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */,
-				C52AD45F21E52E8A00022C72 /* SettingsLauncher.swift in Sources */,
+				C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */,
 				A4141367219763FC0051A469 /* HomePostCell.swift in Sources */,
 				A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */,
+				C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */,
 				A40D069521E30EB50035B28E /* Message.swift in Sources */,
 				A417FFC721AA4A6400C588B0 /* PresentAdsController.swift in Sources */,
 				A40D069321E306080035B28E /* ChatLogCell.swift in Sources */,

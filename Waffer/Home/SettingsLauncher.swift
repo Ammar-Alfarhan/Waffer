@@ -33,9 +33,7 @@ class SettingsLauncher: NSObject {
             window.addSubview(collectionView)
             
             let height: CGFloat = 200
-            //let y = window.frame.height - height
-            let width = window.frame.width/2
-            
+            let y = window.frame.height - height
             collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
             
             blackView.frame = window.frame
@@ -45,7 +43,7 @@ class SettingsLauncher: NSObject {
                 
                 self.blackView.alpha = 1
                 
-                self.collectionView.frame = CGRect(x: 0, y: 88, width: width, height: self.collectionView.frame.height)
+                self.collectionView.frame = CGRect(x: 0, y: y, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
                 
             }, completion: nil)
         }
