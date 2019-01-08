@@ -74,7 +74,10 @@ class MessagesController: UITableViewController {
         
             let post = Post(user: user, dictionary: dictionary)
             
-        }, withCancel: <#T##((Error) -> Void)?##((Error) -> Void)?##(Error) -> Void#>)
+        }) { (err) in
+            print(err)
+            return
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
