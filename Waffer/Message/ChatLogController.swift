@@ -38,15 +38,28 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     var messages = [Message]()
     fileprivate func fetchMessages(){
-        guard let postId = post?.id else { return }
-        let ref = Database.database().reference().child("messages").child(postId)
+        //guard let postId = post?.id else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            //print("snapshot1:", snapshot)
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
-            let message = Message(dictionary: dictionary)
-//            print(message.message, message.fromId, message.toId)
-            self.messages.append(message)
-            self.collectionView?.reloadData()
+            //print(dictionaries["messageId"])
+            guard let messageId = dictionaries["messageId"] as? String else { return }
+            
+            let messagesRef = Database.database().reference().child("messages").child(messageId)
+            messagesRef.observe(.value, with: { (snapshot) in
+                //print("snapshot2:", snapshot)
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                
+                let message = Message(dictionary: dictionary)
+                //            print(message.message, message.fromId, message.toId)
+                self.messages.append(message)
+                self.collectionView?.reloadData()
+            }, withCancel: { (err) in
+                print(err)
+            })
         }) { (err) in
             print("Fail to fetch messages", err)
         }
@@ -87,19 +100,29 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         guard let text = inputTextField.text else { return }
         
         guard let postId = post?.id else { return }
-        print("unwraped postId:", postId)
+        //print("unwraped postId:", postId)
         guard let imageUrl = post?.imageUrl else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let userMessageRef = Database.database().reference().child("messages").child(postId)
-        let ref = userMessageRef.childByAutoId()
+        
+        let ref = Database.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        print("childRef:", childRef)
         guard let toId = post?.user.uid else { return }
         let timestamp = NSDate().timeIntervalSince1970
         let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp, "imageUrl": imageUrl] as [String : Any]
-        ref.updateChildValues(values) { (err, ref) in
-            if let err = err {
-                print("Faild to save message to DB:", err)
+        childRef.updateChildValues(values) { (error, ref) in
+            if error != nil {
+                print(error ?? "")
                 return
             }
+            
+            guard let messageId = childRef.key else { return }
+            print("messageId:", messageId)
+            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(postId)//.child(messageId)
+            userMessagesRef.updateChildValues(["messageId": messageId])
+            
+            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(postId)//.child()
+            recipientUserMessagesRef.updateChildValues(["messageId": messageId])
             print("Successfully saved message to DB")
         }
         inputTextField.text = ""

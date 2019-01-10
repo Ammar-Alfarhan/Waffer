@@ -19,12 +19,62 @@ class MessagesController: UITableViewController {
         
         tableView.register(MessagesCell.self, forCellReuseIdentifier: cellId)
         
-        observeMessages()
+//        observeMessages()
         
+        observeUserMessages()
     }
     
     var messages = [Message]()
     var messagesDictionary = [String: Message]()
+    
+    func observeUserMessages(){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("user-messages").child(uid)
+        ref.observe(.childAdded, with: { (snapshot) in
+            print(snapshot)
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            
+            //print(dictionaries["messageId"])
+            guard let messageId = dictionaries["messageId"] as? String else { return }
+            print("messageId", messageId)
+            let messagesRef = Database.database().reference().child("messages").child(messageId)
+            messagesRef.observe(.value, with: { (snapshot) in
+                print("snapshot2:", snapshot)
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                
+                let message = Message(dictionary: dictionary)
+//                self.messagesDictionary[key] = message
+//                self.messages = Array(self.messagesDictionary.values)
+                self.messages.append(message)
+                self.messages.sort(by: { (message1, message2) -> Bool in
+                    return message1.timestamp > message2.timestamp
+                    /*
+                dictionaries.forEach({ (key, value) in
+                    print(value)
+                    print(key)
+                    guard let dictionary = value as? [String: Any] else { return }
+                    let message = Message(dictionary: dictionary)
+                    self.messagesDictionary[key] = message
+                    self.messages = Array(self.messagesDictionary.values)
+                    self.messages.sort(by: { (message1, message2) -> Bool in
+                        return message1.timestamp > message2.timestamp
+                    })*/
+                })
+                DispatchQueue.main.async(execute: {
+                    self.tableView.reloadData()
+                })
+            }, withCancel: { (err) in
+                print(err)
+                return
+            })
+            
+        })
+            { (err) in
+            print("Observe user messages faild",err)
+            return
+        }
+    }
+        
     func observeMessages() {
         let ref = Database.database().reference().child("messages")
         ref.observe(.childAdded, with: { (snapshot) in
