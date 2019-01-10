@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class VerticalMenuItem: NSObject {
     let name: String
@@ -20,13 +21,13 @@ class VerticalMenuItem: NSObject {
 
 class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    
+    var post: Post?
     let blackView = UIView()
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = UIColor.white
+        cv.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
         return cv
     }()
     
@@ -42,11 +43,11 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         
         if let window = UIApplication.shared.keyWindow {
             
-            blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+            //blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
             
-            blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
+            //blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
             
-            window.addSubview(blackView)
+            //window.addSubview(blackView)
             
             window.addSubview(collectionView)
             
@@ -55,21 +56,26 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
             let height: CGFloat = CGFloat(verticalMenuItems.count) * cellHeight
             //let y = window.frame.height - height
             let width = window.frame.width/3
+            let yheight = window.frame.height / 4
+            let y = yheight / 2.4
             let x = width * 2
             collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
         
+            
             blackView.frame = window.frame
             blackView.alpha = 0
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 
-                self.blackView.alpha = 1
+                //self.blackView.alpha = 1
                 
-                self.collectionView.frame = CGRect(x: x, y: 62, width: width, height: self.collectionView.frame.height)
+                self.collectionView.frame = CGRect(x: x, y: y, width: width, height: self.collectionView.frame.height)
                 
             }, completion: nil)
         }
     }
+    
+    
     
     @objc func handleDismiss() {
         UIView.animate(withDuration: 0.5) {
@@ -90,6 +96,36 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
+        print(verticalMenuItems[indexPath.item].name)
+        if (verticalMenuItems[indexPath.item].name == "Edit Post")
+        {
+            print("edit edit")
+        }
+        if (verticalMenuItems[indexPath.item].name == "Delete Post")
+        {
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            guard let postId = post?.id else { return }
+            
+            let ref = Database.database().reference().child("posts").child(uid).child(postId)
+            ref.removeValue { (err, ref) in
+                if let err = err {
+                    print("Failed to access post into db:", err)
+                    return
+                }
+                
+//                let userProfileLayout = UICollectionViewFlowLayout()
+//                let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
+//                let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
+                //navigationController.pushViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+                //present(thirdNavigationController, animated: true, completion: nil)
+            }
+            //ref.removeValue(postId)
+            
+           // print("delete\(post?.titleCaption ?? "")")
+            
+            
+            
+        }
         if ( (verticalMenuItems.count-1) == (indexPath.item))
         {
             handleDismiss()
@@ -126,7 +162,6 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         super.init()
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         collectionView.register(VerticalMenuCell.self, forCellWithReuseIdentifier: cellId)
     }
     

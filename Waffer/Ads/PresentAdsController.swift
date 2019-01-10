@@ -7,7 +7,10 @@
 //
 
 import UIKit
-
+import Firebase
+import FirebaseAuth
+import FirebaseStorage
+import FirebaseDatabase
 class PresentAdsController: UIViewController {
 
     
@@ -15,9 +18,6 @@ class PresentAdsController: UIViewController {
     
     var imageUrl = ""
     
- 
-
-//    var button = dropDownBtn()
     
     override func viewDidLoad() {
         
@@ -163,30 +163,7 @@ class PresentAdsController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Dot-More-Vertical-Menu").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(verticalMenu))
     }
     
-//    let blackView = UIView()
-//    @objc func showFilter(){
-//        if let window = UIApplication.shared.keyWindow{
-//            blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-////            blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDissmis)))
-////
-////            window.addSubview(blackView)
-////            window.addSubview(collectionView)
-////
-////            let hight: CGFloat = 300
-////            let y = window.frame.height - hight
-////            collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: hight)
-////
-////            blackView.frame = window.frame
-////            blackView.alpha = 0
-////
-////            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-////                self.blackView.alpha = 1
-////
-////                self.collectionView.frame = CGRect(x: 0, y: y, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
-////            }, completion: nil)
-//
-//        }
-//    }
+
     
     @objc func handleCancel() {
         let homeController = CustomTabBarController()
@@ -204,6 +181,7 @@ class PresentAdsController: UIViewController {
     
      let verticalMenuLauncher = VerticalMenuLauncher()
     @objc func verticalMenu() {
+        verticalMenuLauncher.post = caption
         verticalMenuLauncher.showSettings()
     }
     

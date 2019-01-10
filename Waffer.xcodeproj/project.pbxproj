@@ -145,8 +145,8 @@
 		C52AD45D21E519CF00022C72 /* Ads */ = {
 			isa = PBXGroup;
 			children = (
-				C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */,
 				A417FFC621AA4A6400C588B0 /* PresentAdsController.swift */,
+				C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */,
 				C52AD46221E5425900022C72 /* VerticalMenuCell.swift */,
 			);
 			path = Ads;

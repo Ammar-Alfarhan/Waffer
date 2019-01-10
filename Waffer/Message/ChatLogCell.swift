@@ -12,7 +12,7 @@ class ChatLogCell: UICollectionViewCell {
     
     var message: Message? {
         didSet{
-            print(message?.message)
+            //print(message?.message)
             txtLable.text = message?.message
         }
     }
