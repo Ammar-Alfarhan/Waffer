@@ -11,15 +11,15 @@ import UIKit
 
 class VerticalMenuCell: UICollectionViewCell {
     
-//    override var isHighlighted: Bool {
-//        didSet {
-//            backgroundColor = isHighlighted ? UIColor.darkGray : UIColor.white
-//
-//            nameLable.textColor = isHighlighted ? UIColor.white : UIColor.black
-//
-//            //iconImageView.tintColor = highlighted ? UIColor.whiteColor() : UIColor.darkGrayColor()
-//        }
-//    }
+    override var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted ? UIColor.darkGray : UIColor.white
+
+            nameLable.textColor = isHighlighted ? UIColor.white : UIColor.black
+
+            //iconImageView.tintColor = highlighted ? UIColor.whiteColor() : UIColor.darkGrayColor()
+        }
+    }
     
     var verticalMenuItem: VerticalMenuItem? {
         didSet {

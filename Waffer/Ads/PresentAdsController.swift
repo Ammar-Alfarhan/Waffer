@@ -14,6 +14,8 @@ class PresentAdsController: UIViewController {
     var caption: Post?
     
     var imageUrl = ""
+    
+ 
 
 //    var button = dropDownBtn()
     

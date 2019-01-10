@@ -65,7 +65,7 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
                 
                 self.blackView.alpha = 1
                 
-                self.collectionView.frame = CGRect(x: x, y: 88, width: width, height: self.collectionView.frame.height)
+                self.collectionView.frame = CGRect(x: x, y: 62, width: width, height: self.collectionView.frame.height)
                 
             }, completion: nil)
         }
@@ -81,13 +81,21 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         }
     }
     
+    
+    
+    
+    
+    
 
     
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//
-//        let setting = self.verticalMenuItems[indexPath.item]
-//        handleDismiss(verticalMenuItems: VerticalMenuItem)
-//    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        if ( (verticalMenuItems.count-1) == (indexPath.item))
+        {
+            handleDismiss()
+        }
+       
+    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return verticalMenuItems.count
@@ -120,6 +128,10 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         collectionView.delegate = self
         
         collectionView.register(VerticalMenuCell.self, forCellWithReuseIdentifier: cellId)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }
