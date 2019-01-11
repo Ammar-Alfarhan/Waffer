@@ -23,7 +23,7 @@ class PresentAdsController: UIViewController {
         
         view.backgroundColor = .white
         
-        print("caption=", caption ?? "default value")
+        //print("caption=", caption?.user.uid ?? "default value")
         
         setupView()
         setupNavigationButtons()
@@ -160,7 +160,11 @@ class PresentAdsController: UIViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "cancel_shadow").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCancel))
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Dot-More-Vertical-Menu").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(verticalMenu))
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        if (caption?.user.uid == uid)
+        {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "Dot-More-Vertical-Menu").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(verticalMenu))
+        }
     }
     
 

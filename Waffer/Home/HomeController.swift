@@ -27,12 +27,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         collectionView.refreshControl = refreshController
         setupTopNavigationBarItems()
         
-        //        // user is not logged in
-        //        if Auth.auth().currentUser?.uid == nil {
-        //            perform(#selector(handlesignOut), with: nil, afterDelay: 0)
-        //            handlesignOut()
-        //        }
-        
         fetchAllPost()
         
         collectionView?.alwaysBounceVertical = true
@@ -54,7 +48,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var filteredPost = [Post]()
     var posts = [Post]()
-    //    var users = [User]()
     fileprivate func fetchPosts() {
         
         let ref = Database.database().reference().child("users")
@@ -86,7 +79,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
             dictionaries.forEach({ (key, value) in
-                //                print("Key \(key), Value: \(value)")
+                 //               print("Key \(key), Value: \(value)")
                 //                print("Post=",dictionaries.values.count)
                 
                 guard let dictionary = value as? [String: Any] else { return }
@@ -220,6 +213,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         chatLogController.post = post
         searchBar.isHidden = true
+        
         navigationController?.pushViewController(chatLogController, animated: true)
         
     }

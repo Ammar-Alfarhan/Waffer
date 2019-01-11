@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 protocol HomePostCellDelegate {
     func didTapContact(post: Post)
@@ -36,8 +37,20 @@ class HomePostCell: UICollectionViewCell {
     }
     
     
+    
      fileprivate func setupAttributedCaption() {
         guard let post = self.post else { return }
+        
+        print ("post \(post.user.username)")
+        print ("post uid \(post.user.uid)")
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        print ("uid \(uid)")
+        if ( (post.user.uid) != uid)
+        {
+            print("not equal to each other")
+            contactButton.isHidden = false
+        }
+        
         
         let attributedText = NSMutableAttributedString(string: post.titleCaption, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
         attributedText.append(NSAttributedString(string: " \(post.priceCaption)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
@@ -96,6 +109,7 @@ class HomePostCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "comment").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleContact), for: .touchUpInside)
+        button.isHidden = true
         return button
     }()
     
@@ -132,20 +146,34 @@ class HomePostCell: UICollectionViewCell {
         addSubview(userProfileImage)
         addSubview(usernameLable)
         
+       
         
         userProfileImage.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 8, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
         userProfileImage.layer.cornerRadius = 40 / 2
         photoImageView.anchor(top: userProfileImage.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 8, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
         photoImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1).isActive = true
         usernameLable.anchor(top: topAnchor, left: userProfileImage.rightAnchor, bottom: photoImageView.topAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+//        guard let post = self.post else { return }
+//        guard let uid = Auth.auth().currentUser?.uid else { return }
+//        print("id of the user posted \(post.user.uid)")
+//        print("id of the user loggd \(uid)")
+        
+//        if (post.user.uid != uid)
+//        {
+//            contactButton.isHidden = false
+//            print("id of the user posted \(post.user.uid)")
+//        }
         
         setupActionButtons()
         
         addSubview(captionLabel)
-        captionLabel.anchor(top: contactButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
+        captionLabel.anchor(top: bookmarkButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
+        
     }
     
     fileprivate func setupActionButtons() {
+        
+        
         let stackView = UIStackView(arrangedSubviews: [contactButton, bookmarkButton])
         
         stackView.distribution = .fillEqually
