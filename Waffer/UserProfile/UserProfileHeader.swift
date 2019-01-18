@@ -20,21 +20,31 @@ class UserProfileHeader: UICollectionViewCell {
     var user: User? {
         didSet {
             guard let profileImageUrl = user?.profileImageUrl else { return }
-            profileImageView.loadImage(urlString: profileImageUrl)
-            //setupProfileImage()
+            print("profileImageUrl", profileImageUrl)
+            if(user?.profileImageUrl == "")
+            {
+                profileImageView.image = UIImage(named:"plus_photo-1")
+            }
+            else
+            {
+               profileImageView.loadImage(urlString: profileImageUrl)
+            }
+            
             usernameLabel.text = user?.username
         }
     }
     
+    
+
     let profileImageView: CustomImageView = {
         let iv = CustomImageView()
-        iv.image = UIImage(named:"plus_photo-1")
         return iv
     }()
     
     lazy var gridButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("For sale", for: .normal)
+        //button.tintColor = UIColor(white: 0, alpha: 0.2)
         //button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
         return button
     }()
@@ -42,8 +52,7 @@ class UserProfileHeader: UICollectionViewCell {
     lazy var messagesButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Messages", for: .normal)
-        //button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
-        //button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
         return button
     }()
@@ -69,7 +78,7 @@ class UserProfileHeader: UICollectionViewCell {
     let postsLabel: UILabel = {
         let label = UILabel()
         
-        let attributedText = NSMutableAttributedString(string: "(numberOfPosts)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+        let attributedText = NSMutableAttributedString(string: "0\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
         
         attributedText.append(NSAttributedString(string: "posts", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
         

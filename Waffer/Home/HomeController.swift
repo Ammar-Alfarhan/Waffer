@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+
+
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, HomePostCellDelegate {
     
     let cellId = "cellId"
@@ -26,12 +28,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         refreshController.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         collectionView.refreshControl = refreshController
         setupTopNavigationBarItems()
-        
-        //        // user is not logged in
-        //        if Auth.auth().currentUser?.uid == nil {
-        //            perform(#selector(handlesignOut), with: nil, afterDelay: 0)
-        //            handlesignOut()
-        //        }
         
         fetchAllPost()
         
@@ -54,7 +50,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var filteredPost = [Post]()
     var posts = [Post]()
-    //    var users = [User]()
     fileprivate func fetchPosts() {
         
         let ref = Database.database().reference().child("users")
@@ -86,7 +81,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
             dictionaries.forEach({ (key, value) in
-                //                print("Key \(key), Value: \(value)")
+                 //               print("Key \(key), Value: \(value)")
                 //                print("Post=",dictionaries.values.count)
                 
                 guard let dictionary = value as? [String: Any] else { return }
@@ -219,14 +214,18 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         chatLogController.post = post
         chatLogController.user = post.user
         searchBar.isHidden = true
+        
         navigationController?.pushViewController(chatLogController, animated: true)
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        searchBar.isHidden = false
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        searchBar.isHidden = false
+//        
+////        posts.removeAll()
+////        fetchAllPost()
+//    }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let presentAdController = PresentAdsController()
