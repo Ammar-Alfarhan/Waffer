@@ -215,10 +215,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func didTapContact(post: Post) {
-        print("From home")
-        print(post.descriptionCaption)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         chatLogController.post = post
+        chatLogController.user = post.user
         searchBar.isHidden = true
         navigationController?.pushViewController(chatLogController, animated: true)
         

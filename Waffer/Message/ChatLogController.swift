@@ -12,18 +12,17 @@ import FirebaseDatabase
 
 class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout {
     
-    var post: Post? {
+    var post: Post?
+    var user: User? {
         didSet{
-            navigationItem.title = post?.user.username
+            navigationItem.title = user?.username
         }
     }
     
     let cellId = "cellId"
     
-    
     override func viewDidLoad() {
-        print(123)
-        collectionView.backgroundColor = .red
+        collectionView.backgroundColor = .white
         
         collectionView?.register(ChatLogCell.self, forCellWithReuseIdentifier: cellId)
         
@@ -32,37 +31,107 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         collectionView?.alwaysBounceVertical = true
         collectionView?.keyboardDismissMode = .interactive
         
-        //setupInputComponents()
         fetchMessages()
+        //setupInputComponents()
     }
     
     var messages = [Message]()
     fileprivate func fetchMessages(){
-        //guard let postId = post?.id else { return }
+        guard let postId = post?.id else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let ref = Database.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
-            //print("snapshot1:", snapshot)
+            //print("snapshot1:", snapshot.key)
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
+
+            dictionaries.keys.forEach({ (key) in
+                print("key=", key)
+                let messagesRef = Database.database().reference().child("messages").child(key)
+                messagesRef.observe(.value, with: { (snapshot) in
+                    print("snapshot2:", snapshot)
+                    guard let dictionary = snapshot.value as? [String: Any] else { return }
+                    
+                    let message = Message(dictionary: dictionary)
+                    //                print("Messages info",message.message, message.fromId, message.toId)
+                    
+                    print(dictionary)
+                    
+                    //                print("Message chatPartnerId=", message.chatPartnerId())
+                    print("postId=", self.post?.id)
+                    print("Message.postId", message.postId)
+                    //                print("user.uid= \(self.user?.uid)")
+                    if message.postId == postId {
+                        if message.chatPartnerId() == self.user?.uid{
+                            self.messages.append(message)
+                            DispatchQueue.main.async(execute: {
+                                self.collectionView?.reloadData()
+                            })
+                        }
+                    }
+                    
+                    //                self.messages.append(message)
+                    //                self.collectionView?.reloadData()
+                }) { (err) in
+                    print("Fail to fetch messages",err)
+                    return
+                }
+            })
+            print(dictionaries.keys)
+            guard let messageId = dictionaries[""] as? String else { return }
+            print("MessageId=", messageId)
             
-            //print(dictionaries["messageId"])
-            guard let messageId = dictionaries["messageId"] as? String else { return }
-            
-            let messagesRef = Database.database().reference().child("messages").child(messageId)
+        }) { (err) in
+            print("Fail to fetch user messages", err)
+            return
+        }
+        
+        
+        /*
+        let ref = Database.database().reference().child("user-messages").child(uid)
+        ref.observe(.childAdded, with: { (snapshot) in
+            print(snapshot.value)
+        }) { (err) in
+            print("Fail to fetch messages for a user\(uid)", err)
+        }*/
+        
+        
+        /*
+        let ref = Database.database().reference().child("user-messages").child(uid)
+        ref.observe(.childAdded, with: { (snapshot) in
+            print("snapshot: ", snapshot)
+            print("key=",snapshot.key)
+//            guard let dictionaries = snapshot.key as? [String: Any] else { return }
+            let postId = snapshot.key
+            //print("dictionaries", dictionaries)
+        
+            print("postId=", postId)
+            let messagesRef = Database.database().reference().child("messages").child(postId)
             messagesRef.observe(.value, with: { (snapshot) in
-                //print("snapshot2:", snapshot)
+                print("Messages snapshot=", snapshot)
                 guard let dictionary = snapshot.value as? [String: Any] else { return }
                 
                 let message = Message(dictionary: dictionary)
-                //            print(message.message, message.fromId, message.toId)
+                
+//                if message.chatPartnerId() == uid  && message.postId == postId {
+//                    self.messages.append(message)
+//                    DispatchQueue.main.async(execute: {
+//                        self.collectionView?.reloadData()
+//                    })
+//                }
                 self.messages.append(message)
-                self.collectionView?.reloadData()
-            }, withCancel: { (err) in
-                print(err)
-            })
+                DispatchQueue.main.async(execute: {
+                    self.collectionView?.reloadData()
+                })
+//            }, withCancel: { (err) in
+//                print(err)
+            }) { (err) in
+                print("Fail to fetch messages",err)
+                return
+            }
         }) { (err) in
-            print("Fail to fetch messages", err)
-        }
+            print("Fail to fetch messages for postId", err)
+            return
+        }*/
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -72,7 +141,9 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ChatLogCell
         
-        cell.message = self.messages[indexPath.item]
+        let message = messages[indexPath.item]
+        cell.textView.text = message.message
+        
         return cell
     }
     
@@ -106,10 +177,9 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         
         let ref = Database.database().reference().child("messages")
         let childRef = ref.childByAutoId()
-        print("childRef:", childRef)
         guard let toId = post?.user.uid else { return }
         let timestamp = NSDate().timeIntervalSince1970
-        let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp, "imageUrl": imageUrl] as [String : Any]
+        let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp, "imageUrl": imageUrl, "postId": postId] as [String : Any]
         childRef.updateChildValues(values) { (error, ref) in
             if error != nil {
                 print(error ?? "")
@@ -117,12 +187,11 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             }
             
             guard let messageId = childRef.key else { return }
-            print("messageId:", messageId)
-            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(postId)//.child(messageId)
-            userMessagesRef.updateChildValues(["messageId": messageId])
+            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(postId).child(messageId)
+            userMessagesRef.setValue(1)
             
-            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(postId)//.child()
-            recipientUserMessagesRef.updateChildValues(["messageId": messageId])
+            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(postId).child(messageId)
+            recipientUserMessagesRef.setValue(1)
             print("Successfully saved message to DB")
         }
         inputTextField.text = ""

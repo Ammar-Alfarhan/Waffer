@@ -7,11 +7,14 @@
 //
 
 import Foundation
+import Firebase
 
 struct Message {
+    
     let message: String
     let fromId: String
     let toId: String
+    let postId: String
     let timestamp: Date
     let imageUrl: String
     
@@ -19,9 +22,14 @@ struct Message {
         self.message = dictionary["message"] as? String ?? ""
         self.fromId = dictionary["fromId"] as? String ?? ""
         self.toId = dictionary["toId"] as? String ?? ""
+        self.postId = dictionary["postId"] as? String ?? ""
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""
         
         let secondsFrom1970 = dictionary["timestamp"] as? Double ?? 0
         self.timestamp = Date(timeIntervalSince1970: secondsFrom1970)
+    }
+    
+    func chatPartnerId() -> String? {
+        return fromId == Auth.auth().currentUser?.uid ? toId : fromId
     }
 }

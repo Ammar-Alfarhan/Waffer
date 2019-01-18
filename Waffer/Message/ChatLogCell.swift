@@ -10,27 +10,27 @@ import UIKit
 
 class ChatLogCell: UICollectionViewCell {
     
-    var message: Message? {
-        didSet{
-            //print(message?.message)
-            txtLable.text = message?.message
-        }
-    }
+//    var message: Message? {
+//        didSet{
+//            //print(message?.message)
+//            txtLable.text = message?.message
+//        }
+//    }
     
-    let txtLable: UILabel = {
-        let lable = UILabel()
-        //lable.font = UIFont.systemFontSize(//(CGFloat: 14)
-        lable.numberOfLines = 0
-        return lable
+    let textView: UITextView = {
+        let tv = UITextView()
+        tv.font = UIFont.systemFont(ofSize: 15)
+        //lable.numberOfLines = 0
+        return tv
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .blue
         
-        addSubview(txtLable)
+        addSubview(textView)
         
-        txtLable.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
+        textView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {
