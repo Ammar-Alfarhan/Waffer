@@ -11,23 +11,33 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
-class PresentAdsController: UIViewController {
+class PresentAdsController: UIViewController, DeletePostDelegate {
+    
+    
 
     
     var caption: Post?
     
     var imageUrl = ""
     
+    var postId = ""
+    
+    
+    var myView: UIView!
     
     override func viewDidLoad() {
         
         view.backgroundColor = .white
+        
+        
+        print("caption", caption ?? "default value")
         
         //print("caption=", caption?.user.uid ?? "default value")
         
         setupView()
         setupNavigationButtons()
         setupDescriptionItems()
+        
         //setupDropDownBtn()
         
     }
@@ -185,7 +195,9 @@ class PresentAdsController: UIViewController {
     
      let verticalMenuLauncher = VerticalMenuLauncher()
     @objc func verticalMenu() {
+        print("caption", caption ?? "default value")
         verticalMenuLauncher.post = caption
+        verticalMenuLauncher.delegate = self
         verticalMenuLauncher.showSettings()
     }
     
@@ -204,6 +216,54 @@ class PresentAdsController: UIViewController {
         
         return lbl
     }()
+    
+    
+    func didTapDelete() {
+        print("caption", caption ?? "default value")
+        print("Moved to view controller")
+//        let userProfileLayout = UICollectionViewFlowLayout()
+//        let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
+//        let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
+//        //navigationController.pushViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+//        present(thirdNavigationController, animated: true, completion: nil)
+        
+//        guard let uid = self.caption?.user.uid else { return }
+//        guard let postId = self.caption?.id else { return }
+//
+//        print("uid ",uid)
+//        print("postId ",postId)
+//        let ref = Database.database().reference().child("posts").child(uid).child(postId)
+//        ref.removeValue { (err, ref) in
+//            if let err = err {
+//                print("Failed to access post into db:", err)
+//                return
+//            }
+//
+//        }
+        
+        //DispatchQueue.main.sync(execute: {
+            guard let uid = caption?.user.uid else { return }
+            guard let postId = caption?.id else { return }
+            print("uid ",uid)
+            print("postId ",postId)
+            
+            let ref = Database.database().reference().child("posts").child(uid).child(postId)
+            ref.removeValue { (err, ref) in
+                if let err = err {
+                    print("Failed to access post into db:", err)
+                    return
+                }
+                
+                print(ref)
+                
+            }
+        //})
+
+        let homeController = CustomTabBarController()
+        present(homeController, animated: true, completion: nil)
+        //dismiss(animated: true, completion: nil)
+
+    }
     
     
 }

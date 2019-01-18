@@ -8,7 +8,12 @@
 
 import UIKit
 import Firebase
-
+import FirebaseAuth
+import FirebaseStorage
+import FirebaseDatabase
+protocol DeletePostDelegate {
+    func didTapDelete()
+}
 class VerticalMenuItem: NSObject {
     let name: String
     
@@ -23,6 +28,8 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
 
     var post: Post?
     let blackView = UIView()
+    
+    var delegate : DeletePostDelegate?
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -97,33 +104,39 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         print(verticalMenuItems[indexPath.item].name)
+        
+        print ("delegate",delegate ?? "nil")
         if (verticalMenuItems[indexPath.item].name == "Edit Post")
         {
             print("edit edit")
         }
         if (verticalMenuItems[indexPath.item].name == "Delete Post")
         {
-            guard let uid = Auth.auth().currentUser?.uid else { return }
-            guard let postId = post?.id else { return }
+
             
-            let ref = Database.database().reference().child("posts").child(uid).child(postId)
-            ref.removeValue { (err, ref) in
-                if let err = err {
-                    print("Failed to access post into db:", err)
-                    return
-                }
-                
-//                let userProfileLayout = UICollectionViewFlowLayout()
-//                let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
-//                let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
-                //navigationController.pushViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
-                //present(thirdNavigationController, animated: true, completion: nil)
-            }
+//            DispatchQueue.main.async(execute: {
+////                guard let uid = self.post?.user.uid else { return }
+////                guard let postId = self.post?.id else { return }
+////                
+////                            let ref = Database.database().reference().child("posts").child(uid).child(postId)
+////                            ref.removeValue { (err, ref) in
+////                                if let err = err {
+////                                    print("Failed to access post into db:", err)
+////                                    return
+////                                }
+////            
+////                           }
+//            })
+            print("inside delete")
+            
+           // print (delegate)
+            self.delegate?.didTapDelete()
             //ref.removeValue(postId)
             
+            
+            
            // print("delete\(post?.titleCaption ?? "")")
-            
-            
+           
             
         }
         if ( (verticalMenuItems.count-1) == (indexPath.item))

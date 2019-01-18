@@ -27,14 +27,6 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         
         collectionView?.backgroundColor = .white
         
-        // user is not logged in
-        if Auth.auth().currentUser?.uid == nil {
-            perform(#selector(handleLogOut), with: nil, afterDelay: 0)
-            handleLogOut()
-        }
-        
-       //navigationItem.title = Auth.auth().currentUser?.uid
-        fetchOrderedPosts()
         fetchUser()
         
         collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
@@ -45,17 +37,71 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         
     }
     
+    var isFinishedPaging = false
     var posts = [Post]()
     
-    fileprivate func fetchOrderedPosts() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        print("Here:uid=", uid)
+    fileprivate func paginatePosts() {
+        print("Start paging for more posts")
+        
+        guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
         
-        //perhaps later on we'll implement some pagination of data
+        
+        var query = ref.queryOrdered(byChild: "creationDate")
+        
+        if posts.count > 0 {
+            //            let value = posts.last?.id
+            let value = posts.last?.creationDate.timeIntervalSince1970
+            query = query.queryEnding(atValue: value)
+        }
+        
+        query.queryLimited(toLast: 4).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            guard var allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            
+            allObjects.reverse()
+            
+            if allObjects.count < 4 {
+                self.isFinishedPaging = true
+            }
+            
+            if self.posts.count > 0 && allObjects.count > 0 {
+                allObjects.removeFirst()
+            }
+            
+            guard let user = self.user else { return }
+            
+            allObjects.forEach({ (snapshot) in
+                
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = snapshot.key
+                
+                self.posts.append(post)
+                
+                //                print(snapshot.key)
+            })
+            
+            self.posts.forEach({ (post) in
+                print(post.id ?? "")
+            })
+            
+            self.collectionView?.reloadData()
+            
+            
+        }) { (err) in
+            print("Failed to paginate for posts:", err)
+        }
+    }
+    
+    fileprivate func fetchOrderedPosts() {
+        
+        guard let uid = self.user?.uid else { return }
+        let ref = Database.database().reference().child("posts").child(uid)
+        
         ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             
-            //print("Here= ",snapshot.value)
+           
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             
             guard let user = self.user else { return }
@@ -83,7 +129,6 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
             do {
                 try Auth.auth().signOut()
                 
-                //what happens? we need to present some kind of login controller
                 let loginController = LoginController()
                 let navController = UINavigationController(rootViewController: loginController)
                 self.present(navController, animated: true, completion: nil)
@@ -105,19 +150,27 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if indexPath.item == self.posts.count - 1 && !isFinishedPaging {
+            print("Paginating for posts")
+            paginatePosts()
+        }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
-        
         cell.post = posts[indexPath.item]
-        
         return cell
+       
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         let presentAdController = PresentAdsController()
         let ad = UINavigationController(rootViewController: presentAdController)
         presentAdController.imageUrl = posts[indexPath.row].imageUrl
-        presentAdController.caption = posts[indexPath.row]
+        
+        presentAdController.caption = posts[indexPath.item]
         present(ad, animated: true, completion: nil)
+        
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
@@ -151,13 +204,11 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         
         let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
         
-        //guard let uid = Auth.auth().currentUser?.uid else { return }
-        
         Database.fetchUserWithUID(uid: uid) { (user) in
             self.user = user
             self.navigationItem.title = self.user?.username
             self.collectionView?.reloadData()
-            self.fetchOrderedPosts()
+            self.paginatePosts()
         }
     }
  

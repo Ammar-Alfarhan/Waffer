@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+
+
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, HomePostCellDelegate {
     
     let cellId = "cellId"
@@ -218,10 +220,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        searchBar.isHidden = false
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        searchBar.isHidden = false
+//        
+////        posts.removeAll()
+////        fetchAllPost()
+//    }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let presentAdController = PresentAdsController()
