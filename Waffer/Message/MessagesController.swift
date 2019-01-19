@@ -48,7 +48,6 @@ class MessagesController: UITableViewController {
                     print("Observe messages faild",err)
                     return
                 }
-                
             })
         }) { (err) in
             print("Observe user messages faild",err)
@@ -67,63 +66,54 @@ class MessagesController: UITableViewController {
         if (checkFromIdOrToId(userId: fromId, postId: postId)) {
             
             Database.fetchUserWithUID(uid: fromId) { (user) in
-                let postRef = Database.database().reference().child("posts").child(user.uid)
-                postRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                    print("post",snapshot)
-                    guard let dictionary = snapshot.value as? [String: Any] else { return }
-                    
-                    dictionary.forEach({ (key, value) in
-                        if (key == postId){
-                            guard let postDetails = value as? [String: Any] else { return }
-                            var post = Post(user: user, dictionary: postDetails)
-                            
-                            print("postDetails", postDetails)
-                            
-                            post.id = postId
-                            self.showChatControllerForUser(post)
-                        }
-                    })
-                }) { (err) in
-                    print("Fail to fetch posts",err)
-                    return
-                }
+                Database.fetchPostsWithUser(user: user, completion: { (post) in
+                    if (post.id == postId){
+                        self.showChatControllerForUser(post)
+                    }
+                })
             }
         } else {
             Database.fetchUserWithUID(uid: toId) { (user) in
-                let postRef = Database.database().reference().child("posts").child(user.uid)
-                postRef.observeSingleEvent(of: .value, with: { (snapshot) in
-                    print("post",snapshot)
-                    guard let dictionary = snapshot.value as? [String: Any] else { return }
-                    
-                    dictionary.forEach({ (key, value) in
-                        if (key == postId){
-                            guard let postDetails = value as? [String: Any] else { return }
-                            var post = Post(user: user, dictionary: postDetails)
-                            
-                            print("postDetails", postDetails)
-                            
-                            post.id = postId
-                            self.showChatControllerForUser(post)
-                        }
-                    })
-                }) { (err) in
-                    print("Fail to fetch posts",err)
-                    return
-                }
+                Database.fetchPostsWithUser(user: user, completion: { (post) in
+                    if (post.id == postId){
+                        self.showChatControllerForUser(post)
+                    }
+                })
             }
         }
     }
+    
+//    fileprivate func fetchPosts(_ user: User, _ postId: String) {
+//
+//        let postRef = Database.database().reference().child("posts").child(user.uid)
+//        postRef.observeSingleEvent(of: .value, with: { (snapshot) in
+//            print("post",snapshot)
+//            guard let dictionary = snapshot.value as? [String: Any] else { return }
+//
+//            dictionary.forEach({ (key, value) in
+//                if (key == postId){
+//                    guard let postDetails = value as? [String: Any] else { return }
+//                    var post = Post(user: user, dictionary: postDetails)
+//
+//                    print("postDetails", postDetails)
+//
+//                    post.id = postId
+//                    self.showChatControllerForUser(post)
+//                }
+//            })
+//        }) { (err) in
+//            print("Fail to fetch posts",err)
+//            return
+//        }
+//    }
     
     fileprivate func checkFromIdOrToId(userId: String, postId: String) -> Bool{
         var postDic = [String]()
         let postRef = Database.database().reference().child("posts").child(userId)
         postRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            print("post",snapshot)
             guard let dictionary = snapshot.value as? [String: Any] else { return }
             dictionary.keys.forEach({ (key) in
-                guard let id = key as? String else { return }
-                print("id = ",id)
-                postDic.append(id)
+                postDic.append(key)
             })
         }) { (err) in
             print("Fail to fetch posts",err)
@@ -136,7 +126,6 @@ class MessagesController: UITableViewController {
     }
     
     func showChatControllerForUser(_ post: Post) {
-        //print("Post.user",post.user, "post.id", post.id)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         chatLogController.post = post
         chatLogController.user = post.user

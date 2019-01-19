@@ -12,7 +12,11 @@ import FirebaseDatabase
 
 class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout {
     
-    var post: Post?
+    var post: Post? {
+        didSet{
+            fetchMessages()
+        }
+    }
     var user: User? {
         didSet{
             navigationItem.title = user?.username
@@ -26,13 +30,15 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         
         collectionView?.register(ChatLogCell.self, forCellWithReuseIdentifier: cellId)
         
-        collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         collectionView?.alwaysBounceVertical = true
-        collectionView?.keyboardDismissMode = .interactive
         
-        fetchMessages()
-        //setupInputComponents()
+        collectionView?.keyboardDismissMode = .interactive
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView?.collectionViewLayout.invalidateLayout()
     }
     
     var messages = [Message]()
@@ -41,97 +47,32 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let ref = Database.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
-            //print("snapshot1:", snapshot.key)
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
-
             dictionaries.keys.forEach({ (key) in
-                print("key=", key)
                 let messagesRef = Database.database().reference().child("messages").child(key)
                 messagesRef.observe(.value, with: { (snapshot) in
-                    print("snapshot2:", snapshot)
                     guard let dictionary = snapshot.value as? [String: Any] else { return }
                     
                     let message = Message(dictionary: dictionary)
-                    //                print("Messages info",message.message, message.fromId, message.toId)
-                    
-                    print(dictionary)
-                    
-                    //                print("Message chatPartnerId=", message.chatPartnerId())
-                    print("postId=", self.post?.id)
-                    print("Message.postId", message.postId)
-                    //                print("user.uid= \(self.user?.uid)")
                     if message.postId == postId {
-                        if message.chatPartnerId() == self.user?.uid{
-                            self.messages.append(message)
-                            DispatchQueue.main.async(execute: {
-                                self.collectionView?.reloadData()
-                            })
-                        }
+                        self.messages.append(message)
+                        self.messages.sort(by: { (message1, message2) -> Bool in
+                            return message1.timestamp < message2.timestamp
+                        })
+//                        self.collectionView?.reloadData()
+                        DispatchQueue.main.async(execute: {
+                            self.collectionView?.reloadData()
+                        })
                     }
-                    
-                    //                self.messages.append(message)
-                    //                self.collectionView?.reloadData()
                 }) { (err) in
                     print("Fail to fetch messages",err)
                     return
                 }
             })
-            print(dictionaries.keys)
-            guard let messageId = dictionaries[""] as? String else { return }
-            print("MessageId=", messageId)
-            
         }) { (err) in
             print("Fail to fetch user messages", err)
             return
         }
-        
-        
-        /*
-        let ref = Database.database().reference().child("user-messages").child(uid)
-        ref.observe(.childAdded, with: { (snapshot) in
-            print(snapshot.value)
-        }) { (err) in
-            print("Fail to fetch messages for a user\(uid)", err)
-        }*/
-        
-        
-        /*
-        let ref = Database.database().reference().child("user-messages").child(uid)
-        ref.observe(.childAdded, with: { (snapshot) in
-            print("snapshot: ", snapshot)
-            print("key=",snapshot.key)
-//            guard let dictionaries = snapshot.key as? [String: Any] else { return }
-            let postId = snapshot.key
-            //print("dictionaries", dictionaries)
-        
-            print("postId=", postId)
-            let messagesRef = Database.database().reference().child("messages").child(postId)
-            messagesRef.observe(.value, with: { (snapshot) in
-                print("Messages snapshot=", snapshot)
-                guard let dictionary = snapshot.value as? [String: Any] else { return }
-                
-                let message = Message(dictionary: dictionary)
-                
-//                if message.chatPartnerId() == uid  && message.postId == postId {
-//                    self.messages.append(message)
-//                    DispatchQueue.main.async(execute: {
-//                        self.collectionView?.reloadData()
-//                    })
-//                }
-                self.messages.append(message)
-                DispatchQueue.main.async(execute: {
-                    self.collectionView?.reloadData()
-                })
-//            }, withCancel: { (err) in
-//                print(err)
-            }) { (err) in
-                print("Fail to fetch messages",err)
-                return
-            }
-        }) { (err) in
-            print("Fail to fetch messages for postId", err)
-            return
-        }*/
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -144,11 +85,24 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         let message = messages[indexPath.item]
         cell.textView.text = message.message
         
+        cell.bubbleWidthAnchor?.constant = estimateFrameForText(message.message).width + 32
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 50)
+        var height: CGFloat = 80
+        
+        //get estimated height somehow????
+        let text = messages[indexPath.item].message
+        height = estimateFrameForText(text).height + 20
+        
+        return CGSize(width: view.frame.width, height: height)
+    }
+    
+    fileprivate func estimateFrameForText(_ text: String) -> CGRect {
+        let size = CGSize(width: 200, height: 1000)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        return NSString(string: text).boundingRect(with: size, options: options, attributes: convertToOptionalNSAttributedStringKeyDictionary([convertFromNSAttributedStringKey(NSAttributedString.Key.font): UIFont.systemFont(ofSize: 16)]), context: nil)
     }
     
     lazy var inputTextField: UITextField = {
@@ -171,7 +125,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         guard let text = inputTextField.text else { return }
         
         guard let postId = post?.id else { return }
-        //print("unwraped postId:", postId)
         guard let imageUrl = post?.imageUrl else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -192,6 +145,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             
             let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(postId).child(messageId)
             recipientUserMessagesRef.setValue(1)
+            self.collectionView.reloadData()
             print("Successfully saved message to DB")
         }
         inputTextField.text = ""
@@ -242,27 +196,16 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
-//    func setupInputComponents(){
-//        let containerView = UIView()
-//        containerView.backgroundColor = .white
-//
-//        containerView.autoresizingMask = .flexibleHeight
-//
-//        view.addSubview(containerView)
-//
-//        containerView.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
-//
-//        containerView.addSubview(sendButton)
-//        containerView.addSubview(inputTextField)
-//
-//        sendButton.anchor(top: containerView.topAnchor, left: nil, bottom: containerView.safeAreaLayoutGuide.bottomAnchor, right: containerView.rightAnchor, paddingTop: 15, paddingLeft: 0, paddingBottom: 0, paddingRight: 8, width: 50, height: 50)
-//
-//        inputTextField.anchor(top: containerView.topAnchor, left: containerView.leftAnchor, bottom: containerView.safeAreaLayoutGuide.bottomAnchor, right: sendButton.leftAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 0, width: 0, height: 0)
-//
-//        let lineSeparatorView = UIView()
-//        lineSeparatorView.backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230)
-//        containerView.addSubview(lineSeparatorView)
-//        lineSeparatorView.anchor(top: containerView.topAnchor, left: containerView.leftAnchor, bottom: nil, right: containerView.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0.5)
-//    }
+}
+
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+    guard let input = input else { return nil }
+    return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+    return input.rawValue
 }
