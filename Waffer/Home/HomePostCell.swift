@@ -167,14 +167,14 @@ class HomePostCell: UICollectionViewCell {
         setupActionButtons()
         
         addSubview(captionLabel)
-        captionLabel.anchor(top: bookmarkButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
+        captionLabel.anchor(top: contactButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
         
     }
     
     fileprivate func setupActionButtons() {
         
         
-        let stackView = UIStackView(arrangedSubviews: [contactButton, bookmarkButton])
+        let stackView = UIStackView(arrangedSubviews: [bookmarkButton, contactButton])
         
         stackView.distribution = .fillEqually
         

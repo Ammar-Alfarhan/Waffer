@@ -15,115 +15,122 @@ class MessagesController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Messages Controller")
         
         tableView.register(MessagesCell.self, forCellReuseIdentifier: cellId)
-        
-//        observeMessages()
         
         observeUserMessages()
     }
     
     var messages = [Message]()
-    var messagesDictionary = [String: Message]()
-    
+    var messagesDictionary = [String:Message]()
     func observeUserMessages(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let ref = Database.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
-            print(snapshot)
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
-            
-            //print(dictionaries["messageId"])
-            guard let messageId = dictionaries["messageId"] as? String else { return }
-            print("messageId", messageId)
-            let messagesRef = Database.database().reference().child("messages").child(messageId)
-            messagesRef.observe(.value, with: { (snapshot) in
-                print("snapshot2:", snapshot)
-                guard let dictionary = snapshot.value as? [String: Any] else { return }
-                
-                let message = Message(dictionary: dictionary)
-//                self.messagesDictionary[key] = message
-//                self.messages = Array(self.messagesDictionary.values)
-                self.messages.append(message)
-                self.messages.sort(by: { (message1, message2) -> Bool in
-                    return message1.timestamp > message2.timestamp
-                    /*
-                dictionaries.forEach({ (key, value) in
-                    print(value)
-                    print(key)
-                    guard let dictionary = value as? [String: Any] else { return }
+            dictionaries.keys.forEach({ (key) in
+                let messagesRef = Database.database().reference().child("messages").child(key)
+                messagesRef.observe(.value, with: { (snapshot) in
+                    guard let dictionary = snapshot.value as? [String: Any] else { return }
+                    
                     let message = Message(dictionary: dictionary)
-                    self.messagesDictionary[key] = message
+
+                    let postId = message.postId
+                    self.messagesDictionary[postId] = message
                     self.messages = Array(self.messagesDictionary.values)
                     self.messages.sort(by: { (message1, message2) -> Bool in
                         return message1.timestamp > message2.timestamp
-                    })*/
-                })
-                DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
-                })
-            }, withCancel: { (err) in
-                print(err)
-                return
+                    })
+                    DispatchQueue.main.async(execute: {
+                        self.tableView.reloadData()
+                    })
+                }) { (err) in
+                    print("Observe messages faild",err)
+                    return
+                }
             })
-            
-        })
-            { (err) in
+        }) { (err) in
             print("Observe user messages faild",err)
             return
         }
     }
+ 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-    func observeMessages() {
-        let ref = Database.database().reference().child("messages")
-        ref.observe(.childAdded, with: { (snapshot) in
-            //print(snapshot)
-            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+        let message = messages[indexPath.row]
+        
+        let postId = message.postId
+        let fromId = message.fromId
+        let toId = message.toId
+        print("result=",checkFromIdOrToId(userId: fromId, postId: postId))
+        if (checkFromIdOrToId(userId: fromId, postId: postId)) {
             
-            dictionaries.forEach({ (key, value) in
-                guard let dictionary = value as? [String: Any] else { return }
-                let message = Message(dictionary: dictionary)
-                //self.messages.append(message)
-//                let toId = message.toId
-//
-//                self.messagesDictionary[toId] = message
-                self.messagesDictionary[key] = message
-                
-                self.messages = Array(self.messagesDictionary.values)
-                self.messages.sort(by: { (message1, message2) -> Bool in
-                    return message1.timestamp > message2.timestamp
+            Database.fetchUserWithUID(uid: fromId) { (user) in
+                Database.fetchPostsWithUser(user: user, completion: { (post) in
+                    if (post.id == postId){
+                        self.showChatControllerForUser(post)
+                    }
                 })
-                
-                //self.postId = key
-//                let postId = key
-//                let toId = message.toId
-//                Database.fetchUserWithUID(uid: toId, completion: { (user) in
-//                    self.fetchPost(postId: postId, user: user)
-//                })
-                
-                DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
+            }
+        } else {
+            Database.fetchUserWithUID(uid: toId) { (user) in
+                Database.fetchPostsWithUser(user: user, completion: { (post) in
+                    if (post.id == postId){
+                        self.showChatControllerForUser(post)
+                    }
                 })
-            })
-        }, withCancel: nil)
+            }
+        }
     }
     
-//    var posts = [Post]()
-//    //All of this is to load the post image that the to go contacted at
-//    func fetchPost(postId: String, user: User){
-//        let ref = Database.database().reference().child("posts").child(postId)
-//        ref.observe(.childAdded, with: { (snapshot) in
-//            print(snapshot)
+//    fileprivate func fetchPosts(_ user: User, _ postId: String) {
+//
+//        let postRef = Database.database().reference().child("posts").child(user.uid)
+//        postRef.observeSingleEvent(of: .value, with: { (snapshot) in
+//            print("post",snapshot)
 //            guard let dictionary = snapshot.value as? [String: Any] else { return }
 //
-//            let post = Post(user: user, dictionary: dictionary)
-//            self.posts.append(post)
+//            dictionary.forEach({ (key, value) in
+//                if (key == postId){
+//                    guard let postDetails = value as? [String: Any] else { return }
+//                    var post = Post(user: user, dictionary: postDetails)
+//
+//                    print("postDetails", postDetails)
+//
+//                    post.id = postId
+//                    self.showChatControllerForUser(post)
+//                }
+//            })
 //        }) { (err) in
-//            print(err)
+//            print("Fail to fetch posts",err)
 //            return
 //        }
 //    }
+    
+    fileprivate func checkFromIdOrToId(userId: String, postId: String) -> Bool{
+        var postDic = [String]()
+        let postRef = Database.database().reference().child("posts").child(userId)
+        postRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            dictionary.keys.forEach({ (key) in
+                postDic.append(key)
+            })
+        }) { (err) in
+            print("Fail to fetch posts",err)
+            return
+        }
+        if (postDic.contains(postId)) {
+            return true
+        }
+        return false
+    }
+    
+    func showChatControllerForUser(_ post: Post) {
+        let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
+        chatLogController.post = post
+        chatLogController.user = post.user
+        navigationController?.pushViewController(chatLogController, animated: true)
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
@@ -133,8 +140,6 @@ class MessagesController: UITableViewController {
         
         let message = messages[indexPath.row]
         cell.message = message
-        //let post = posts[indexPath.row]
-        //cell.post = post
         return cell
     }
     

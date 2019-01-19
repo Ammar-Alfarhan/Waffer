@@ -210,23 +210,22 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func didTapContact(post: Post) {
-        print("From home")
-        print(post.descriptionCaption)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         chatLogController.post = post
+        chatLogController.user = post.user
         searchBar.isHidden = true
         
         navigationController?.pushViewController(chatLogController, animated: true)
         
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        searchBar.isHidden = false
-//        
-////        posts.removeAll()
-////        fetchAllPost()
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchBar.isHidden = false
+        
+//        posts.removeAll()
+//        fetchAllPost()
+    }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let presentAdController = PresentAdsController()

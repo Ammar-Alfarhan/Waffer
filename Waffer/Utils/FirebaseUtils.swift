@@ -20,4 +20,19 @@ extension Database {
             print("Failed to fetch user for posts:", err)
         }
     }
+    
+    static func fetchPostsWithUser(user: User, completion: @escaping (Post) -> ()) {
+        Database.database().reference().child("posts").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            dictionaries.forEach({ (key, value) in
+                guard let dictionary = value as? [String: Any] else { return }
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = key
+                completion(post)
+            })
+        }) { (err) in
+            print("Fail to fetch posts",err)
+            return
+        }
+    }
 }

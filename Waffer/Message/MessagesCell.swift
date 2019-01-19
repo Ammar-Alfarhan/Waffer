@@ -13,8 +13,8 @@ class MessagesCell: UITableViewCell {
     
     var message: Message? {
         didSet {
-            if let toId = message?.toId {
-                let ref = Database.database().reference().child("users").child(toId)
+            if let id = message?.chatPartnerId() {
+                let ref = Database.database().reference().child("users").child(id)
                 ref.observeSingleEvent(of: .value, with: { (snapshot) in
                     
                     if let dictionary = snapshot.value as? [String: AnyObject] {
