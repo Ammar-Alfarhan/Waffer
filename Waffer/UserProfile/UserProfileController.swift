@@ -10,7 +10,10 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 
+
 class UserProfileController: UICollectionViewController,  UICollectionViewDelegateFlowLayout, UserProfileCellDelegate {
+    
+    
     func didTapMessages() {
         let messagesController = MessagesController()
         navigationController?.pushViewController(messagesController, animated: true)
@@ -35,13 +38,17 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         
         setupLogOutButton()
         
+        
+        
+        
     }
     
     var isFinishedPaging = false
     var posts = [Post]()
     
+    
     fileprivate func paginatePosts() {
-        print("Start paging for more posts")
+        //print("Start paging for more posts")
         
         guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
@@ -83,7 +90,7 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
             })
             
             self.posts.forEach({ (post) in
-                print(post.id ?? "")
+                //print(post.id ?? "")
             })
             
             self.collectionView?.reloadData()
@@ -151,7 +158,7 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.item == self.posts.count - 1 && !isFinishedPaging {
-            print("Paginating for posts")
+            //print("Paginating for posts")
             paginatePosts()
         }
         
@@ -162,14 +169,10 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let presentAdController = PresentAdsController()
-        let ad = UINavigationController(rootViewController: presentAdController)
         presentAdController.imageUrl = posts[indexPath.row].imageUrl
-        
-        presentAdController.caption = posts[indexPath.item]
-        present(ad, animated: true, completion: nil)
-        
+        presentAdController.caption = posts[indexPath.row]
+        navigationController?.pushViewController(presentAdController, animated: true)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
@@ -190,6 +193,8 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
 
         header.user = self.user
         header.delegate = self
+        header.numberOfPosts = self.posts.count
+//        print("header.numberOfPosts",header.numberOfPosts)
         
         return header
     }

@@ -11,10 +11,15 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
-class PresentAdsController: UIViewController, DeletePostDelegate {
-    
-    
 
+//protocol EditPostDelegate {
+//    
+//    func moveToAdPosting(caption: Post)
+//    
+//}
+class PresentAdsController: UIViewController, PostDelegate {
+    
+    
     
     var caption: Post?
     
@@ -42,12 +47,12 @@ class PresentAdsController: UIViewController, DeletePostDelegate {
         
     }
         
-    let dismissButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "cancel_shadow"), for: .normal)
-        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
-        return button
-    }()
+//    let dismissButton: UIButton = {
+//        let button = UIButton(type: .system)
+//        button.setImage(#imageLiteral(resourceName: "cancel_shadow"), for: .normal)
+//        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+//        return button
+//    }()
     
     let photoImageView: CustomImageView = {
         let iv = CustomImageView()
@@ -139,36 +144,30 @@ class PresentAdsController: UIViewController, DeletePostDelegate {
         
     }
     
-//    func setupDropDownBtn()
-//    {
-//        button = dropDownBtn.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-//        button.setTitle("Colors", for: .normal)
-//        button.setImage(#imageLiteral(resourceName: "Dot-More-Vertical-Menu").withRenderingMode(.alwaysOriginal), for: .normal)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//
-//        //Add Button to the View Controller
-//        self.view.addSubview(button)
-//
-//        //button Constraints
-//        button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-//        button.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-//        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-//        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
-//
-//        //Set the drop down menu's options
-//        button.dropView.dropDownOptions = ["Blue", "Green", "Magenta", "White", "Black", "Pink"]
-//    }
+
     
     @objc func handleDismiss() {
         let homeController = CustomTabBarController()
         present(homeController, animated: true, completion: nil)
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
+    
     fileprivate func setupNavigationButtons() {
         navigationController?.navigationBar.tintColor = .black
         //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "cancel_shadow").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCancel))
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "cancel_shadow").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleCancel))
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
         if (caption?.user.uid == uid)
@@ -221,48 +220,48 @@ class PresentAdsController: UIViewController, DeletePostDelegate {
     func didTapDelete() {
         print("caption", caption ?? "default value")
         print("Moved to view controller")
-//        let userProfileLayout = UICollectionViewFlowLayout()
-//        let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
-//        let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
-//        //navigationController.pushViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
-//        present(thirdNavigationController, animated: true, completion: nil)
+        guard let uid = caption?.user.uid else { return }
+        guard let postId = caption?.id else { return }
+        print("uid ",uid)
+        print("postId ",postId)
         
-//        guard let uid = self.caption?.user.uid else { return }
-//        guard let postId = self.caption?.id else { return }
-//
-//        print("uid ",uid)
-//        print("postId ",postId)
-//        let ref = Database.database().reference().child("posts").child(uid).child(postId)
-//        ref.removeValue { (err, ref) in
-//            if let err = err {
-//                print("Failed to access post into db:", err)
-//                return
-//            }
-//
-//        }
-        
-        //DispatchQueue.main.sync(execute: {
-            guard let uid = caption?.user.uid else { return }
-            guard let postId = caption?.id else { return }
-            print("uid ",uid)
-            print("postId ",postId)
-            
-            let ref = Database.database().reference().child("posts").child(uid).child(postId)
-            ref.removeValue { (err, ref) in
-                if let err = err {
-                    print("Failed to access post into db:", err)
-                    return
-                }
-                
-                print(ref)
-                
+        let ref = Database.database().reference().child("posts").child(uid).child(postId)
+        ref.removeValue { (err, ref) in
+            if let err = err {
+                print("Failed to access post into db:", err)
+                return
             }
-        //})
+            
+            print(ref)
+            
+        }
 
         let homeController = CustomTabBarController()
         present(homeController, animated: true, completion: nil)
         //dismiss(animated: true, completion: nil)
 
+    }
+    
+    func didTapEdit() {
+    
+        guard let uid = caption?.user.uid else { return }
+        guard let postId = caption?.id else { return }
+        let ref = Database.database().reference().child("posts").child(uid).child(postId)
+        ref.removeValue { (err, ref) in
+            if let err = err {
+                print("Failed to access post into db:", err)
+                return
+            }
+            
+            print(ref)
+            
+        }
+        
+        let AdPostingController = AdPostingViewController()
+        AdPostingController.post = caption
+        let ad = UINavigationController(rootViewController: AdPostingController)
+        present(ad, animated: true, completion: nil)
+        
     }
     
     

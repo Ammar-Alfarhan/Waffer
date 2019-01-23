@@ -13,13 +13,10 @@ import FirebaseStorage
 import FirebaseDatabase
 class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    //    var selectedImage: UIImage? {
-    //        didSet {
-    //            self.adsImageView.image = postedImage
-    //        }
-    //    }
-    
+   
+    var post: Post?
     var categorySelected = Int()
+    var postIndex = 0
     let category = ["Cars","Electronics","Baby and Child","Housing", "Home and Garden", "Movies, Books, and Music", "Services", "Other"]
     
     
@@ -59,6 +56,43 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         setupInputContainerView()
         setupDescriptionItems()
         
+        setupPageForEdit()
+        
+       // print ("post detalis in ad posting ",post ?? "")
+        if (postIndex != -1)
+        {
+            picker.selectRow(postIndex, inComponent: 0, animated: true)
+        }
+        
+        
+    }
+    
+    fileprivate func setupPageForEdit(){
+        if (post?.titleCaption != "")
+        {
+          titleTextField.text = post?.titleCaption
+        }
+        else {titleTextField.placeholder="Title"}
+        
+        if (post?.descriptionCaption != "")
+        {
+            textView.text = post?.descriptionCaption
+        }
+       
+        if (post?.priceCaption != "")
+        {
+            priceTextField.text = post?.priceCaption
+        }
+        else {priceTextField.placeholder="Price"}
+       
+        if (post?.categoryCaption != "")
+        {
+            //let filtered = category.filter { $0 == post?.categoryCaption  }
+            let index = category.index(of: post?.categoryCaption ?? "")
+            print ("index",index ?? -1)
+            postIndex = index ?? -1
+            //print("filtered",filtered)
+        }
         
     }
     
@@ -84,7 +118,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     let titleTextField : UITextField = {
         let tf = UITextField()
-        tf.placeholder="Title"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
@@ -111,7 +144,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     let priceTextField : UITextField = {
         let tf = UITextField()
-        tf.placeholder="Price"
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.layer.cornerRadius = 5
@@ -204,39 +236,59 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     @objc func handlePost() {
         print("handling post..")
-        
-        let image = postedImage
-        guard let uploadData = image.jpegData(compressionQuality: 0.5) else { return }
-        
-        // navigationItem.rightBarButtonItem?.isEnabled = false
-        
-        let filename = NSUUID().uuidString
-        let storageRef = Storage.storage().reference().child("posts").child(filename)
-        storageRef.putData(uploadData, metadata: nil) { (metadata, err) in
+////        if (postIndex != -1)
+////        {
+////            let image = post?.imageUrl
+////        }
+////        else {
+//        let imageq = post?.imageUrl
+//        //imageq?.isEmpty
+//        print("imageq?.isEmpty", imageq?.isEmpty ?? "")
+////        if(postedImage.images == )
+        if((post?.imageUrl.isEmpty)!)
+        {
+            let image = postedImage
+            guard let uploadData = image.jpegData(compressionQuality: 0.5) else { return }
             
-            if let err = err {
-                // self.navigationItem.rightBarButtonItem?.isEnabled = true
-                print("Failed to upload post image:", err)
-                return
-            }
+            // navigationItem.rightBarButtonItem?.isEnabled = false
             
-            storageRef.downloadURL(completion: { (downloadURL, err) in
+            let filename = NSUUID().uuidString
+            let storageRef = Storage.storage().reference().child("posts").child(filename)
+            storageRef.putData(uploadData, metadata: nil) { (metadata, err) in
+                
                 if let err = err {
-                    print("Failed to fetch downloadURL:", err)
+                    // self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    print("Failed to upload post image:", err)
                     return
                 }
-                guard let imageUrl = downloadURL?.absoluteString else { return }
                 
-                print("Successfully uploaded post image:", imageUrl)
-                
-                self.saveToDatabaseWithImageUrl(imageUrl: imageUrl)
-            })
+                storageRef.downloadURL(completion: { (downloadURL, err) in
+                    if let err = err {
+                        print("Failed to fetch downloadURL:", err)
+                        return
+                    }
+                    guard let imageUrl = downloadURL?.absoluteString else { return }
+                    
+                    print("Successfully uploaded post image:", imageUrl)
+                    
+                    self.saveToDatabaseWithImageUrl(imageUrl: imageUrl)
+                })
+            }
         }
+        else {
+            print("!(post?.imageUrl.isEmpty)")
+            self.saveToDatabaseWithImageUrl(imageUrl: post?.imageUrl ?? "")
+        }
+        
     }
     
     static let notificationNameForUpdateFeed = NSNotification.Name(rawValue: "UpdateFeed")
     fileprivate func saveToDatabaseWithImageUrl(imageUrl: String) {
         // guard let postImage = selectedImage else { return }
+//        if let data = try? Data(contentsOf: post?.imageUrl)
+//        {
+//            let image: UIImage = UIImage(data: data)
+//        }
         let postImage = postedImage
         guard let descriptionCaption = textView.text else { return }
         guard let titleCaption = titleTextField.text else { return }
@@ -272,3 +324,5 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
 }
+
+
