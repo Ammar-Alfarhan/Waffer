@@ -259,7 +259,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             
             print("Successfully saved post to DB")
             
-            
             NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
             
             let homeController = CustomTabBarController()

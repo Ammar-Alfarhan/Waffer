@@ -22,8 +22,10 @@ class MessagesController: UITableViewController {
     }
     
     var messages = [Message]()
+    var ids = [String:[String:Message]]()
     var messagesDictionary = [String:Message]()
     func observeUserMessages(){
+        
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let ref = Database.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
@@ -36,14 +38,18 @@ class MessagesController: UITableViewController {
                     let message = Message(dictionary: dictionary)
 
                     let postId = message.postId
+                    guard let userId = message.chatPartnerId() else { return }
                     self.messagesDictionary[postId] = message
+                    self.ids[userId] = self.messagesDictionary
+                    print("values",self.messagesDictionary.values)
                     self.messages = Array(self.messagesDictionary.values)
                     self.messages.sort(by: { (message1, message2) -> Bool in
                         return message1.timestamp > message2.timestamp
                     })
-                    DispatchQueue.main.async(execute: {
-                        self.tableView.reloadData()
-                    })
+                    self.timer?.invalidate()
+                    
+                    self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+
                 }) { (err) in
                     print("Observe messages faild",err)
                     return
@@ -55,6 +61,16 @@ class MessagesController: UITableViewController {
         }
     }
  
+    var timer: Timer?
+    
+    @objc func handleReloadTable() {
+        //this will crash because of background thread, so lets call this on dispatch_async main thread
+        DispatchQueue.main.async(execute: {
+            print("we reloaded the table")
+            self.tableView.reloadData()
+        })
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let message = messages[indexPath.row]
@@ -67,6 +83,7 @@ class MessagesController: UITableViewController {
             
             Database.fetchUserWithUID(uid: fromId) { (user) in
                 Database.fetchPostsWithUser(user: user, completion: { (post) in
+                    print("post1",post)
                     if (post.id == postId){
                         self.showChatControllerForUser(post)
                     }
@@ -76,6 +93,7 @@ class MessagesController: UITableViewController {
             Database.fetchUserWithUID(uid: toId) { (user) in
                 Database.fetchPostsWithUser(user: user, completion: { (post) in
                     if (post.id == postId){
+                        print("post2",post)
                         self.showChatControllerForUser(post)
                     }
                 })
@@ -126,6 +144,7 @@ class MessagesController: UITableViewController {
     }
     
     func showChatControllerForUser(_ post: Post) {
+        print("post3",post)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         chatLogController.post = post
         chatLogController.user = post.user

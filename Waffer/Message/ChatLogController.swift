@@ -14,12 +14,13 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     var post: Post? {
         didSet{
-            fetchMessages()
+            
         }
     }
     var user: User? {
         didSet{
             navigationItem.title = user?.username
+            fetchMessages()
         }
     }
     
@@ -44,6 +45,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     var messages = [Message]()
     fileprivate func fetchMessages(){
         guard let postId = post?.id else { return }
+        guard let toId = post?.user.uid else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let ref = Database.database().reference().child("user-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
@@ -54,12 +56,13 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
                     guard let dictionary = snapshot.value as? [String: Any] else { return }
                     
                     let message = Message(dictionary: dictionary)
+                    
                     if message.postId == postId {
                         self.messages.append(message)
                         self.messages.sort(by: { (message1, message2) -> Bool in
                             return message1.timestamp < message2.timestamp
                         })
-//                        self.collectionView?.reloadData()
+                        //                        self.collectionView?.reloadData()
                         DispatchQueue.main.async(execute: {
                             self.collectionView?.reloadData()
                         })
@@ -85,8 +88,37 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         let message = messages[indexPath.item]
         cell.textView.text = message.message
         
+        setupCell(cell,message)
+        
         cell.bubbleWidthAnchor?.constant = estimateFrameForText(message.message).width + 32
         return cell
+    }
+    
+    fileprivate func setupCell(_ cell: ChatLogCell,_ message: Message) {
+        
+//        guard let image = user?.profileImageUrl else { return }
+//        cell.profileImageView.loadImage(urlString: image)
+        
+        if (message.fromId == Auth.auth().currentUser?.uid){
+            cell.bubbleView.backgroundColor = ChatLogCell.blueColor
+            cell.textView.textColor = .white
+            cell.profileImageView.isHidden = true
+            
+            cell.bubbleViewRightAnchor?.isActive = true
+            cell.bubbleViewLeftAnchor?.isActive = false
+        } else {
+            cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
+            cell.textView.textColor = .black
+            print("toid=", message.toId)
+            Database.fetchUserWithUID(uid: message.fromId) { (user) in
+                print("image=",user.profileImageUrl)
+                cell.profileImageView.loadImage(urlString: user.profileImageUrl)
+            }
+            cell.profileImageView.isHidden = false
+            
+            cell.bubbleViewRightAnchor?.isActive = false
+            cell.bubbleViewLeftAnchor?.isActive = true
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -140,12 +172,12 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             }
             
             guard let messageId = childRef.key else { return }
-            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(postId).child(messageId)
+            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(postId).child(toId).child(messageId)
             userMessagesRef.setValue(1)
             
-            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(postId).child(messageId)
+            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(postId).child(uid).child(messageId)
             recipientUserMessagesRef.setValue(1)
-            self.collectionView.reloadData()
+//            self.collectionView.reloadData()
             print("Successfully saved message to DB")
         }
         inputTextField.text = ""
