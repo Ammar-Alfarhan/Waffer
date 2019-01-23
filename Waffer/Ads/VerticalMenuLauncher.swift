@@ -11,8 +11,10 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
-protocol DeletePostDelegate {
+protocol PostDelegate {
     func didTapDelete()
+    func didTapEdit()
+    
 }
 class VerticalMenuItem: NSObject {
     let name: String
@@ -29,7 +31,7 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
     var post: Post?
     let blackView = UIView()
     
-    var delegate : DeletePostDelegate?
+    var delegate : PostDelegate?
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -108,36 +110,12 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         print ("delegate",delegate ?? "nil")
         if (verticalMenuItems[indexPath.item].name == "Edit Post")
         {
-            print("edit edit")
+            self.delegate?.didTapEdit()
+            handleDismiss()
         }
         if (verticalMenuItems[indexPath.item].name == "Delete Post")
         {
-
-            
-//            DispatchQueue.main.async(execute: {
-////                guard let uid = self.post?.user.uid else { return }
-////                guard let postId = self.post?.id else { return }
-////                
-////                            let ref = Database.database().reference().child("posts").child(uid).child(postId)
-////                            ref.removeValue { (err, ref) in
-////                                if let err = err {
-////                                    print("Failed to access post into db:", err)
-////                                    return
-////                                }
-////            
-////                           }
-//            })
-            print("inside delete")
-            
-           // print (delegate)
             self.delegate?.didTapDelete()
-            //ref.removeValue(postId)
-            
-            
-            
-           // print("delete\(post?.titleCaption ?? "")")
-           
-            
         }
         if ( (verticalMenuItems.count-1) == (indexPath.item))
         {

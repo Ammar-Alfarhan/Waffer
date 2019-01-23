@@ -229,10 +229,11 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let presentAdController = PresentAdsController()
-        let ad = UINavigationController(rootViewController: presentAdController)
         presentAdController.imageUrl = filteredPost[indexPath.row].imageUrl
         presentAdController.caption = filteredPost[indexPath.row]
-        present(ad, animated: true, completion: nil)
+        searchBar.isHidden = true
+        navigationController?.pushViewController(presentAdController, animated: true)
+
     }
     
     //    @objc func handlesignOut()

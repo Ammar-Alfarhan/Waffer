@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
-class PresentAdsControllerForUserProfile: UIViewController, DeletePostDelegate {
+class PresentAdsControllerForUserProfile: UIViewController, PostDelegate {
     
     
     

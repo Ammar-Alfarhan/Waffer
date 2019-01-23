@@ -40,16 +40,17 @@ class HomePostCell: UICollectionViewCell {
     
      fileprivate func setupAttributedCaption() {
         guard let post = self.post else { return }
-        
-        print ("post \(post.user.username)")
-        print ("post uid \(post.user.uid)")
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        print ("uid \(uid)")
-        if ( (post.user.uid) != uid)
-        {
-            print("not equal to each other")
-            contactButton.isHidden = false
-        }
+//
+//        print ("post \(post.user.username)")
+//        print ("post uid \(post.user.uid)")
+//        guard let uid = Auth.auth().currentUser?.uid else { return }
+//        print ("uid \(uid)")
+//        if ( (post.user.uid) != uid)
+//        {
+//            print("not equal to each other")
+//            contactButton.isHidden = false
+//            bookmarkButton.isHidden = false
+//        }
         
         
         let attributedText = NSMutableAttributedString(string: post.titleCaption, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
@@ -109,7 +110,7 @@ class HomePostCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "comment").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleContact), for: .touchUpInside)
-        button.isHidden = true
+        //button.isHidden = true
         return button
     }()
     
@@ -122,6 +123,7 @@ class HomePostCell: UICollectionViewCell {
     let bookmarkButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "ribbon").withRenderingMode(.alwaysOriginal), for: .normal)
+        //button.isHidden = true
         return button
     }()
     
@@ -155,9 +157,7 @@ class HomePostCell: UICollectionViewCell {
         usernameLable.anchor(top: topAnchor, left: userProfileImage.rightAnchor, bottom: photoImageView.topAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
 //        guard let post = self.post else { return }
 //        guard let uid = Auth.auth().currentUser?.uid else { return }
-//        print("id of the user posted \(post.user.uid)")
-//        print("id of the user loggd \(uid)")
-        
+//        
 //        if (post.user.uid != uid)
 //        {
 //            contactButton.isHidden = false
