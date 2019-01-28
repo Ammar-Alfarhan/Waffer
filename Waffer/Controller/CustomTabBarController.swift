@@ -54,24 +54,31 @@ class CustomTabBarController: UITabBarController{
         
         let userProfileLayout = UICollectionViewFlowLayout()
         let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
-        let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
-        thirdNavigationController.title = "User Profile"
-        thirdNavigationController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
-        thirdNavigationController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
+        let userProfile = UINavigationController(rootViewController: userProfileController)
+        userProfile.title = "User Profile"
+        userProfile.tabBarItem.image = #imageLiteral(resourceName: "profile")
+        userProfile.tabBarItem.selectedImage = #imageLiteral(resourceName: "selectedProfile")
+        
+        let messageController = MessagesController()
+        let messages = UINavigationController(rootViewController: messageController)
+        messages.title = "Messages"
+        messages.tabBarItem.image = #imageLiteral(resourceName: "messages")
+        messages.tabBarItem.selectedImage = #imageLiteral(resourceName: "tabbedmessages")
+        
         
         let homeLayout = UICollectionViewFlowLayout()
         let homeController = HomeController(collectionViewLayout: homeLayout)
-        let navigationController = UINavigationController(rootViewController: homeController)
-        navigationController.title = "Home"
-        navigationController.tabBarItem.image = UIImage(named: "home")
+        let home = UINavigationController(rootViewController: homeController)
+        home.title = "Home"
+        home.tabBarItem.image = #imageLiteral(resourceName: "home")
         
         let cameraController = CameraTabView()
-        let secondNavigationController = UINavigationController(rootViewController: cameraController)
-        secondNavigationController.title = "Camera"
-        secondNavigationController.tabBarItem.image = UIImage(named: "camera")
+        let camera = UINavigationController(rootViewController: cameraController)
+        camera.title = "Camera"
+        camera.tabBarItem.image = #imageLiteral(resourceName: "camera")
     
         tabBar.tintColor = .black
         
-         viewControllers = [navigationController, secondNavigationController, thirdNavigationController]
+         viewControllers = [home, camera, messages, userProfile]
     }
 }

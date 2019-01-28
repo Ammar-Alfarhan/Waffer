@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		896F0AC683E47CEE0800C7AD /* Pods_Waffer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C16380B7A05A43BEE9E643 /* Pods_Waffer.framework */; };
+		A40AB01B21FD5A6700733912 /* NewMessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40AB01A21FD5A6600733912 /* NewMessagesController.swift */; };
 		A40D069121E0639A0035B28E /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D069021E0639A0035B28E /* ChatLogController.swift */; };
 		A40D069321E306080035B28E /* ChatLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D069221E306080035B28E /* ChatLogCell.swift */; };
 		A40D069521E30EB50035B28E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40D069421E30EB50035B28E /* Message.swift */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		6090E237292391A518ED78E6 /* Pods-Waffer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Waffer.release.xcconfig"; path = "Pods/Target Support Files/Pods-Waffer/Pods-Waffer.release.xcconfig"; sourceTree = "<group>"; };
+		A40AB01A21FD5A6600733912 /* NewMessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMessagesController.swift; sourceTree = "<group>"; };
 		A40D069021E0639A0035B28E /* ChatLogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 		A40D069221E306080035B28E /* ChatLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogCell.swift; sourceTree = "<group>"; };
 		A40D069421E30EB50035B28E /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 				A40D069221E306080035B28E /* ChatLogCell.swift */,
 				A40D069621E46A4A0035B28E /* MessagesController.swift */,
 				A40D069821E471990035B28E /* MessagesCell.swift */,
+				A40AB01A21FD5A6600733912 /* NewMessagesController.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				A445E361218A138700125F69 /* PreviewPhotoContainerView.swift in Sources */,
 				C5595B932184DDBE002E3A19 /* UserProfileController.swift in Sources */,
 				A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */,
+				A40AB01B21FD5A6700733912 /* NewMessagesController.swift in Sources */,
 				C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */,
 				A4141367219763FC0051A469 /* HomePostCell.swift in Sources */,
 				A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */,

@@ -10,13 +10,14 @@ import UIKit
 import Firebase
 
 protocol HomePostCellDelegate {
-    func didTapContact(post: Post)
+    func didTapContact(_ post: Post)
+//    func didTapContact()
 }
 
 class HomePostCell: UICollectionViewCell {
     
     var delegate: HomePostCellDelegate?
-    
+//    var user: User?
     var post: Post? {
         didSet{
             
@@ -82,30 +83,6 @@ class HomePostCell: UICollectionViewCell {
         return iv
     }()
     
-//    func imageSizeToContainer(image: UIImage) -> UIImage{
-//        let ratio = image.size.width / image.size.height
-//        if frame.width > frame.height {
-//            let newHeight = frame.width / ratio
-//            photoImageView.frame.size = CGSize(width: frame.width, height: newHeight)
-//        }
-//        else{
-//            let newWidth = frame.height * ratio
-//            photoImageView.frame.size = CGSize(width: newWidth, height: frame.height)
-//        }
-//    }
-    
-//    lazy var showAdButton: UIButton = {
-//        let button = UIButton(type: .system)
-//        button.setImage(#imageLiteral(resourceName: "send2").withRenderingMode(.alwaysOriginal), for: .normal)
-//        button.addTarget(self, action: #selector(showAdController), for:.touchUpInside)
-//        //button.addGestureRecognizer(UIGestureRecognizer(target: self, action: #selector(showAdController)))
-//        return button
-//    }()
-//
-//    @objc func showAdController() {
-//        print("Hello", 123)
-//    }
-    
     lazy var contactButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "comment").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -115,9 +92,9 @@ class HomePostCell: UICollectionViewCell {
     }()
     
     @objc func handleContact(){
-        print("Go to chat..")
         guard let post = post else { return }
-        delegate?.didTapContact(post: post)
+        delegate?.didTapContact(post)
+//        delegate?.didTapContact()
     }
     
     let bookmarkButton: UIButton = {

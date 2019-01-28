@@ -13,18 +13,13 @@ class MessagesCell: UITableViewCell {
     
     var message: Message? {
         didSet {
-            if let id = message?.chatPartnerId() {
-                let ref = Database.database().reference().child("users").child(id)
-                ref.observeSingleEvent(of: .value, with: { (snapshot) in
-                    
-                    if let dictionary = snapshot.value as? [String: AnyObject] {
-                        self.textLabel?.text = dictionary["name"] as? String
-                    }
-                    
-                }, withCancel: nil)
+            
+            guard let userId = message?.chatPartnerId() else { return }
+            Database.fetchUserWithUID(uid: userId) { (user) in
+                let imageUrl = user.profileImageUrl
+                self.textLabel?.text = user.username
+                self.itemImageView.loadImage(urlString: imageUrl)
             }
-            guard let imageUrl = message?.imageUrl else { return }
-            itemImageView.loadImage(urlString: imageUrl)
             
             detailTextLabel?.text = message?.message
             
@@ -43,6 +38,7 @@ class MessagesCell: UITableViewCell {
     
     let itemImageView: CustomImageView = {
         let imageView = CustomImageView()
+        imageView.backgroundColor = .gray
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 24
         imageView.layer.masksToBounds = true
@@ -52,7 +48,7 @@ class MessagesCell: UITableViewCell {
     
     let timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "HH:MM:SS"
+//        label.text = "HH:MM:SS"
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.lightGray
         //label.translatesAutoresizingMaskIntoConstraints = false

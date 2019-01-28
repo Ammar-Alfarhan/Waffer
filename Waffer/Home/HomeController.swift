@@ -14,6 +14,8 @@ import FirebaseDatabase
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, HomePostCellDelegate {
     
+    
+    
     let cellId = "cellId"
     
     override func viewDidLoad() {
@@ -209,14 +211,22 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return cell
     }
     
-    func didTapContact(post: Post) {
+//    func didTapContact(post: Post) {
+//        let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
+//        chatLogController.post = post
+//        chatLogController.user = post.user
+//        searchBar.isHidden = true
+//        
+//        navigationController?.pushViewController(chatLogController, animated: true)
+//        
+//    }
+    
+    func didTapContact(_ post: Post) {
+        print(post.user)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
-        chatLogController.post = post
         chatLogController.user = post.user
         searchBar.isHidden = true
-        
         navigationController?.pushViewController(chatLogController, animated: true)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

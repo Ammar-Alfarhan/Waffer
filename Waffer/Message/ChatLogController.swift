@@ -12,11 +12,6 @@ import FirebaseDatabase
 
 class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout {
     
-    var post: Post? {
-        didSet{
-            
-        }
-    }
     var user: User? {
         didSet{
             navigationItem.title = user?.username
@@ -44,34 +39,29 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     var messages = [Message]()
     fileprivate func fetchMessages(){
-        guard let postId = post?.id else { return }
-        guard let toId = post?.user.uid else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let ref = Database.database().reference().child("user-messages").child(uid)
+        guard let toId = user?.uid else { return }
+        print("toId", toId)
+        let ref = Database.database().reference().child("user-messages").child(uid).child(toId)
         ref.observe(.childAdded, with: { (snapshot) in
-            guard let dictionaries = snapshot.value as? [String: Any] else { return }
-            dictionaries.keys.forEach({ (key) in
-                let messagesRef = Database.database().reference().child("messages").child(key)
-                messagesRef.observe(.value, with: { (snapshot) in
-                    guard let dictionary = snapshot.value as? [String: Any] else { return }
-                    
-                    let message = Message(dictionary: dictionary)
-                    
-                    if message.postId == postId {
-                        self.messages.append(message)
-                        self.messages.sort(by: { (message1, message2) -> Bool in
-                            return message1.timestamp < message2.timestamp
-                        })
-                        //                        self.collectionView?.reloadData()
-                        DispatchQueue.main.async(execute: {
-                            self.collectionView?.reloadData()
-                        })
-                    }
-                }) { (err) in
-                    print("Fail to fetch messages",err)
-                    return
-                }
-            })
+            let messageId = snapshot.key
+            let messagesRef = Database.database().reference().child("messages").child(messageId)
+            messagesRef.observe(.value, with: { (snapshot) in
+                guard let dictionary = snapshot.value as? [String: Any] else { return }
+                
+                let message = Message(dictionary: dictionary)
+                
+                self.messages.append(message)
+                self.messages.sort(by: { (message1, message2) -> Bool in
+                    return message1.timestamp < message2.timestamp
+                })
+                DispatchQueue.main.async(execute: {
+                    self.collectionView?.reloadData()
+                })
+            }) { (err) in
+                print("Fail to fetch messages",err)
+                return
+            }
         }) { (err) in
             print("Fail to fetch user messages", err)
             return
@@ -109,7 +99,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         } else {
             cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             cell.textView.textColor = .black
-            print("toid=", message.toId)
+            //print("toid=", message.toId)
             Database.fetchUserWithUID(uid: message.fromId) { (user) in
                 print("image=",user.profileImageUrl)
                 cell.profileImageView.loadImage(urlString: user.profileImageUrl)
@@ -155,16 +145,13 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     @objc func handleSend(){
         guard let text = inputTextField.text else { return }
-        
-        guard let postId = post?.id else { return }
-        guard let imageUrl = post?.imageUrl else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let ref = Database.database().reference().child("messages")
         let childRef = ref.childByAutoId()
-        guard let toId = post?.user.uid else { return }
+        guard let toId = user?.uid else { return }
         let timestamp = NSDate().timeIntervalSince1970
-        let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp, "imageUrl": imageUrl, "postId": postId] as [String : Any]
+        let values = ["message": text, "toId": toId, "fromId": uid, "timestamp": timestamp] as [String : Any]
         childRef.updateChildValues(values) { (error, ref) in
             if error != nil {
                 print(error ?? "")
@@ -172,12 +159,11 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             }
             
             guard let messageId = childRef.key else { return }
-            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(postId).child(toId).child(messageId)
+            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(toId).child(messageId)
             userMessagesRef.setValue(1)
             
-            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(postId).child(uid).child(messageId)
+            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(uid).child(messageId)
             recipientUserMessagesRef.setValue(1)
-//            self.collectionView.reloadData()
             print("Successfully saved message to DB")
         }
         inputTextField.text = ""
