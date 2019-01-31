@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol FillterDelegate {
+    func didTapFillterByItem(name : String)
+    
+    
+}
+
 class Setting: NSObject {
     let name: String
     //let imageName: String
@@ -19,7 +25,9 @@ class Setting: NSObject {
 }
 
 class CategoryFilter: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-   
+    
+    var delegate : FillterDelegate?
+    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -28,9 +36,10 @@ class CategoryFilter: NSObject, UICollectionViewDelegate, UICollectionViewDataSo
     }()
     
     let cellId = "cellId"
+    let cellHeight: CGFloat = 50
     
     let settings: [Setting] = {
-        return [Setting(name: "Cars"), Setting(name: "Electronics"), Setting(name: "Baby and Child"), Setting(name: "Housing"), Setting(name: "Movies, Books, and Music"), Setting(name: "Services"), Setting(name: "Home and Garden"), Setting(name: "Other")]
+        return [Setting(name: "Cars"), Setting(name: "Electronics"), Setting(name: "Baby and Child"), Setting(name: "Housing"), Setting(name: "Movies, Books, and Music"), Setting(name: "Services"), Setting(name: "Home and Garden"), Setting(name: "Other"), Setting(name: "Clear Filter")]
     }()
     
     let blackView = UIView()
@@ -42,7 +51,7 @@ class CategoryFilter: NSObject, UICollectionViewDelegate, UICollectionViewDataSo
             window.addSubview(blackView)
             window.addSubview(collectionView)
             
-            let hight: CGFloat = 300
+            let hight: CGFloat = CGFloat(settings.count) * cellHeight
             let y = window.frame.height - hight
             collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: hight)
             
@@ -54,7 +63,7 @@ class CategoryFilter: NSObject, UICollectionViewDelegate, UICollectionViewDataSo
                 
                 self.collectionView.frame = CGRect(x: 0, y: y, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
             }, completion: nil)
-
+            
         }
     }
     
@@ -67,7 +76,12 @@ class CategoryFilter: NSObject, UICollectionViewDelegate, UICollectionViewDataSo
             }
         }
     }
-    
+    var settingName : String = ""
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        settingName = settings[indexPath.item].name
+        self.delegate?.didTapFillterByItem(name: settingName)
+        handleDissmis()
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return settings.count
     }

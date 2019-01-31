@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, HomePostCellDelegate {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, HomePostCellDelegate, FillterDelegate {
     
     
     
@@ -138,6 +138,19 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     let categoryFilter = CategoryFilter()
     @objc func handleFilterButton(){
         categoryFilter.showFilter()
+    }
+    
+    func didTapFillterByItem(name : String) {
+        if (name != "Clear Filter")
+        {
+            filteredPost = self.posts.filter { (post) -> Bool in
+                return post.categoryCaption.lowercased().contains(name.lowercased())
+            }
+        }
+        else{
+            filteredPost = posts
+        }
+        self.collectionView?.reloadData()
     }
     
     lazy var searchBar: UISearchBar = {
