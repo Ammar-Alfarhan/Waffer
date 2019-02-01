@@ -137,6 +137,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     let categoryFilter = CategoryFilter()
     @objc func handleFilterButton(){
+        categoryFilter.delegate = self
         categoryFilter.showFilter()
     }
     

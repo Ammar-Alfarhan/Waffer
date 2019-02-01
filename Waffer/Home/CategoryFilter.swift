@@ -10,8 +10,6 @@ import UIKit
 
 protocol FillterDelegate {
     func didTapFillterByItem(name : String)
-    
-    
 }
 
 class Setting: NSObject {
