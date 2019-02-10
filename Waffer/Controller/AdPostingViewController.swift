@@ -15,6 +15,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
    
     var post: Post?
+    var didTapEdit = false
     var categorySelected = Int()
     var postIndex = 0
     let category = ["Cars","Electronics","Baby and Child","Housing", "Home and Garden", "Movies, Books, and Music", "Services", "Other"]
@@ -45,6 +46,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         setupNavigationButtons()
         
+        
         picker = UIPickerView()
         picker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100)
         picker.delegate = self
@@ -58,7 +60,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         setupPageForEdit()
         
-       // print ("post detalis in ad posting ",post ?? "")
+       
         if (postIndex != -1)
         {
             picker.selectRow(postIndex, inComponent: 0, animated: true)
@@ -68,31 +70,45 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     fileprivate func setupPageForEdit(){
-        if (post?.titleCaption != "")
-        {
-          titleTextField.text = post?.titleCaption
-        }
-        else {titleTextField.placeholder="Title"}
         
-        if (post?.descriptionCaption != "")
+        if(didTapEdit == true)
         {
+            titleTextField.text = post?.titleCaption
             textView.text = post?.descriptionCaption
-        }
-       
-        if (post?.priceCaption != "")
-        {
             priceTextField.text = post?.priceCaption
-        }
-        else {priceTextField.placeholder="Price"}
-       
-        if (post?.categoryCaption != "")
-        {
-            //let filtered = category.filter { $0 == post?.categoryCaption  }
             let index = category.index(of: post?.categoryCaption ?? "")
-            print ("index",index ?? -1)
             postIndex = index ?? -1
-            //print("filtered",filtered)
+            categorySelected = postIndex 
         }
+        else
+        {
+            titleTextField.placeholder="Title"
+            priceTextField.placeholder="Price"
+        }
+        
+//        if (post?.titleCaption != "")
+//        {
+//          titleTextField.text = post?.titleCaption
+//        }
+//        else {titleTextField.placeholder="Title"}
+//
+//        if (post?.descriptionCaption != "")
+//        {
+//            textView.text = post?.descriptionCaption
+//        }
+//
+//        if (post?.priceCaption != "")
+//        {
+//            priceTextField.text = post?.priceCaption
+//        }
+//        else {priceTextField.placeholder="Price"}
+//
+//        if (post?.categoryCaption != "")
+//        {
+//            //let filtered = category.filter { $0 == post?.categoryCaption  }
+//
+//            //print("filtered",filtered)
+//        }
         
     }
     
@@ -236,16 +252,14 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     @objc func handlePost() {
         print("handling post..")
-////        if (postIndex != -1)
-////        {
-////            let image = post?.imageUrl
-////        }
-////        else {
-//        let imageq = post?.imageUrl
-//        //imageq?.isEmpty
-//        print("imageq?.isEmpty", imageq?.isEmpty ?? "")
-////        if(postedImage.images == )
-        if((post?.imageUrl.isEmpty)!)
+        print ("postedImage ",postedImage)
+        print ("post ",post ?? "default value")
+        
+        if(didTapEdit == true)
+        {
+            self.saveToDatabaseWithImageUrl(imageUrl: post?.imageUrl ?? "default value")
+        }
+        else
         {
             let image = postedImage
             guard let uploadData = image.jpegData(compressionQuality: 0.5) else { return }
@@ -257,7 +271,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             storageRef.putData(uploadData, metadata: nil) { (metadata, err) in
                 
                 if let err = err {
-                    // self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    // self.navigationIem.rightBarButtonItem?.isEnabled = true
                     print("Failed to upload post image:", err)
                     return
                 }
@@ -275,10 +289,24 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                 })
             }
         }
-        else {
-            print("!(post?.imageUrl.isEmpty)")
-            self.saveToDatabaseWithImageUrl(imageUrl: post?.imageUrl ?? "")
-        }
+////        if (postIndex != -1)
+////        {
+////            let image = post?.imageUrl
+////        }
+////        else {
+//        let imageq = post?.imageUrl
+//        //imageq?.isEmpty
+        //print("imageq?.isEmpty", post?.imageUrl.isEmpty ?? "")
+////        if(postedImage.images == )
+       // if((post?.imageUrl.isEmpty)!)
+        
+        //{
+        
+        //}
+//        else {
+//            print("!(post?.imageUrl.isEmpty)")
+//            self.saveToDatabaseWithImageUrl(imageUrl: post?.imageUrl ?? "")
+//        }
         
     }
     
@@ -297,25 +325,56 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let userPostRef = Database.database().reference().child("posts").child(uid)
-        let ref = userPostRef.childByAutoId()
-        
-        let values = ["imageUrl": imageUrl, "descriptionCaption": descriptionCaption, "titleCaption": titleCaption, "priceCaption": priceCaption, "categoryCaption": categoryCaption, "imageWidth": postImage.size.width, "imageHeight": postImage.size.height, "creationDate": Date().timeIntervalSince1970] as [String : Any]
-        
-        ref.updateChildValues(values) { (err, ref) in
-            if let err = err {
-                self.navigationItem.rightBarButtonItem?.isEnabled = true
-                print("Failed to save post to DB", err)
-                return
+        if(didTapEdit == true)
+        {
+            print("didTapEdit == true Hi this is Batool")
+            print ("post id: ", post?.id ?? "default value")
+            print ("post catogory: ", categoryCaption)
+  
+            let userPostRef = Database.database().reference().child("posts").child(uid)
+            let ref = userPostRef.child(post?.id ?? "default value")
+            
+            let values = ["imageUrl": imageUrl, "descriptionCaption": descriptionCaption, "titleCaption": titleCaption, "priceCaption": priceCaption, "categoryCaption": categoryCaption, "imageWidth": postImage.size.width, "imageHeight": postImage.size.height, "creationDate": Date().timeIntervalSince1970] as [String : Any]
+            print("values",values)
+            ref.updateChildValues(values) { (err, ref) in
+                if let err = err {
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    print("Failed to save post to DB", err)
+                    return
+                }
+                
+                print("Successfully saved post to DB")
+                
+                NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
+                
+                let homeController = CustomTabBarController()
+                self.present(homeController, animated: true, completion: nil)
             }
             
-            print("Successfully saved post to DB")
-            
-            NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
-            
-            let homeController = CustomTabBarController()
-            self.present(homeController, animated: true, completion: nil)
         }
+        else
+        {
+            let userPostRef = Database.database().reference().child("posts").child(uid)
+            let ref = userPostRef.childByAutoId()
+            
+            let values = ["imageUrl": imageUrl, "descriptionCaption": descriptionCaption, "titleCaption": titleCaption, "priceCaption": priceCaption, "categoryCaption": categoryCaption, "imageWidth": postImage.size.width, "imageHeight": postImage.size.height, "creationDate": Date().timeIntervalSince1970] as [String : Any]
+            
+            ref.updateChildValues(values) { (err, ref) in
+                if let err = err {
+                    self.navigationItem.rightBarButtonItem?.isEnabled = true
+                    print("Failed to save post to DB", err)
+                    return
+                }
+                
+                print("Successfully saved post to DB")
+                
+                NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
+                
+                let homeController = CustomTabBarController()
+                self.present(homeController, animated: true, completion: nil)
+            }
+        }
+        
     }
     
     override var prefersStatusBarHidden: Bool {

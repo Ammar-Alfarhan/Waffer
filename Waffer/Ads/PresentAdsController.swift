@@ -242,23 +242,27 @@ class PresentAdsController: UIViewController, PostDelegate {
 
     }
     
+    
+
+    
     func didTapEdit() {
     
-        guard let uid = caption?.user.uid else { return }
-        guard let postId = caption?.id else { return }
-        let ref = Database.database().reference().child("posts").child(uid).child(postId)
-        ref.removeValue { (err, ref) in
-            if let err = err {
-                print("Failed to access post into db:", err)
-                return
-            }
-            
-            print(ref)
-            
-        }
+//        guard let uid = caption?.user.uid else { return }
+//        guard let postId = caption?.id else { return }
+//        let ref = Database.database().reference().child("posts").child(uid).child(postId)
+//        ref.removeValue { (err, ref) in
+//            if let err = err {
+//                print("Failed to access post into db:", err)
+//                return
+//            }
+//
+//            print(ref)
+//
+//        }
         
         let AdPostingController = AdPostingViewController()
         AdPostingController.post = caption
+        AdPostingController.didTapEdit =  true
         let ad = UINavigationController(rootViewController: AdPostingController)
         present(ad, animated: true, completion: nil)
         
