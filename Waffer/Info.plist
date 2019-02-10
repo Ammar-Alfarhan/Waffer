@@ -42,8 +42,10 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Please allow the application to use your camera</string>
+	<string>Please allow &quot;Waffer&quot; to use your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Please allow the application to store the photo in the library</string>
+	<string>Please allow &quot;Waffer&quot; to store the photo in the library</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please allow &quot;Waffer&quot; to use your current location to show ads in your area and to show your ads in your area</string>
 </dict>
 </plist>

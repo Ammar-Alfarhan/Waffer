@@ -11,8 +11,11 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 import FirebaseDatabase
-class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+import CoreLocation
+
+class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, CLLocationManagerDelegate {
     
+    var image: UIImage?
    
     var post: Post?
     var categorySelected = Int()
@@ -21,7 +24,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     
     var  picker : UIPickerView!
-    
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -40,10 +42,29 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         categorySelected = row
     }
     
+    var locationManager: CLLocationManager!
+    
+    var lat: Double!
+    var long: Double!
+    
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        guard let currentLocation: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+//        print("lat:",currentLocation.latitude," long:", currentLocation.longitude)
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("ad posting")
+        
         setupNavigationButtons()
+        
+//        self.locationManager.requestWhenInUseAuthorization()
+//        if CLLocationManager.locationServicesEnabled() {
+//            locationManager.delegate = self
+//            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+//            locationManager.startUpdatingLocation()
+//        }
         
         picker = UIPickerView()
         picker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100)
@@ -63,8 +84,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         {
             picker.selectRow(postIndex, inComponent: 0, animated: true)
         }
-        
-        
     }
     
     fileprivate func setupPageForEdit(){
@@ -235,7 +254,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     }
     
     @objc func handlePost() {
-        print("handling post..")
 ////        if (postIndex != -1)
 ////        {
 ////            let image = post?.imageUrl
@@ -289,6 +307,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
 //        {
 //            let image: UIImage = UIImage(data: data)
 //        }
+//        guard let postImage = image else { return }
         let postImage = postedImage
         guard let descriptionCaption = textView.text else { return }
         guard let titleCaption = titleTextField.text else { return }

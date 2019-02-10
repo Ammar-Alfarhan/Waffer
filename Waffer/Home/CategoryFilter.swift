@@ -37,7 +37,7 @@ class CategoryFilter: NSObject, UICollectionViewDelegate, UICollectionViewDataSo
     let cellHeight: CGFloat = 50
     
     let settings: [Setting] = {
-        return [Setting(name: "Cars"), Setting(name: "Electronics"), Setting(name: "Baby and Child"), Setting(name: "Housing"), Setting(name: "Movies, Books, and Music"), Setting(name: "Services"), Setting(name: "Home and Garden"), Setting(name: "Other"), Setting(name: "Clear Filter")]
+        return [Setting(name: "Cars"), Setting(name: "Electronics"), Setting(name: "Baby and Child"), Setting(name: "Housing"), Setting(name: "Games ,Movies, Books, and Music"), Setting(name: "Services"), Setting(name: "Home and Garden"), Setting(name: "Other"), Setting(name: "Clear Filter")]
     }()
     
     let blackView = UIView()

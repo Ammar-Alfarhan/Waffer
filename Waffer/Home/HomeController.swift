@@ -10,16 +10,47 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+import CoreLocation
 
-
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, HomePostCellDelegate, FillterDelegate {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, CLLocationManagerDelegate, HomePostCellDelegate, FillterDelegate {
     
     
+    var locationManager = CLLocationManager()
+    
+    var lat: Double!
+    var long: Double!
     
     let cellId = "cellId"
     
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        guard let currentLocation: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+//        guard let currentCitylocation = manager.location else { return }
+//        print("lat:",currentLocation.latitude," long:", currentLocation.longitude)
+//        let geodecoder = CLGeocoder()
+//        print("location:",currentCitylocation)
+//        geodecoder.reverseGeocodeLocation(currentCitylocation, completionHandler: { (placemakers, error) in
+//            if error != nil {
+//                print("Fail to reverse location")
+//                return
+//            }
+//            guard let placemaker = placemakers?[0] else { return }
+//
+//            print("placemaker:", placemaker ?? "default value")
+//            print("City:", placemaker.subAdministrativeArea ?? "default value")
+//            print("State:", placemaker.administrativeArea ?? "default value")
+//
+//        })
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
         
@@ -225,18 +256,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return cell
     }
     
-//    func didTapContact(post: Post) {
-//        let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
-//        chatLogController.post = post
-//        chatLogController.user = post.user
-//        searchBar.isHidden = true
-//        
-//        navigationController?.pushViewController(chatLogController, animated: true)
-//        
-//    }
-    
     func didTapContact(_ post: Post) {
-        print(post.user)
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
         chatLogController.user = post.user
         searchBar.isHidden = true
@@ -246,9 +266,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         searchBar.isHidden = false
-        
-//        posts.removeAll()
-//        fetchAllPost()
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -259,17 +276,5 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationController?.pushViewController(presentAdController, animated: true)
 
     }
-    
-    //    @objc func handlesignOut()
-    //    {
-    //        do {
-    //            try Auth.auth().signOut()
-    //        } catch let logoutError {
-    //            print(logoutError)
-    //        }
-    //        let loginController = LoginController()
-    //        self.tabBarController?.tabBar.isHidden = true
-    //        present(loginController, animated: true, completion: nil)
-    //    }
 }
 
