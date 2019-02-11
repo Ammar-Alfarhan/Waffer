@@ -20,8 +20,17 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate {
     }()
     
     @objc func handleDismiss() {
-        let homeController = CustomTabBarController()
-        present(homeController, animated: true, completion: nil)
+//        CustomTabBarController()
+//        let homeController = HomeController(collectionViewLayout: UICollectionViewFlowLayout())
+//        let home = UINavigationController(rootViewController: homeController)
+//        homeController.handleRefresh()//.collectionView?.reloadData()
+        let customTabBarController = CustomTabBarController()
+//        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true) {
+//            self.present(homeController, animated: true, completion: nil)
+//        }
+//        navigationController?.pushViewController(homeController, animated: true)
+        present(customTabBarController, animated: true, completion: nil)
     }
     
     let capturePhotoButton: UIButton = {
@@ -36,6 +45,16 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate {
         
         setupCaptureSession()
         setupHUD()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
     }
     
     fileprivate func setupHUD() {

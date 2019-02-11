@@ -72,13 +72,18 @@ class CustomTabBarController: UITabBarController{
         home.title = "Home"
         home.tabBarItem.image = #imageLiteral(resourceName: "home")
         
-        let cameraController = CameraTabView()
-        let camera = UINavigationController(rootViewController: cameraController)
-        camera.title = "Camera"
-        camera.tabBarItem.image = #imageLiteral(resourceName: "camera")
+        let cameraController = CameraViewController()
+        present(cameraController, animated: true, completion: nil)
+//        let camera = UINavigationController(rootViewController: cameraController)
+        cameraController.title = "Camera"
+        cameraController.tabBarItem.image = #imageLiteral(resourceName: "camera")
     
         tabBar.tintColor = .black
         
-         viewControllers = [home, camera, messages, userProfile]
+         viewControllers = [home, cameraController, messages, userProfile]
     }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        setupViewControllers()
+//    }
 }

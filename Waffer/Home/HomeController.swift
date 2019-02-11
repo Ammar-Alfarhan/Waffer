@@ -14,8 +14,6 @@ import FirebaseDatabase
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, HomePostCellDelegate, FillterDelegate {
     
-    
-    
     let cellId = "cellId"
     
     override func viewDidLoad() {
@@ -245,8 +243,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        edgesForExtendedLayout = UIRectEdge.bottom
         searchBar.isHidden = false
-        
 //        posts.removeAll()
 //        fetchAllPost()
     }
