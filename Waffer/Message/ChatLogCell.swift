@@ -39,6 +39,16 @@ class ChatLogCell: UICollectionViewCell {
         iv.backgroundColor = .lightGray
         return iv
     }()
+    
+    let messageImageView: CustomImageView = {
+        let iv = CustomImageView()
+        iv.clipsToBounds = true
+        iv.contentMode = .scaleAspectFill
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.layer.masksToBounds = true
+        iv.backgroundColor = .lightGray
+        return iv
+    }()
 
     var bubbleWidthAnchor: NSLayoutConstraint?
     var bubbleViewRightAnchor: NSLayoutConstraint?
@@ -49,8 +59,13 @@ class ChatLogCell: UICollectionViewCell {
 
         addSubview(bubbleView)
         addSubview(textView)
-
         addSubview(profileImageView)
+        
+        bubbleView.addSubview(messageImageView)
+        
+        
+        
+        
         profileImageView.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
         profileImageView.layer.cornerRadius = 40 / 2
         

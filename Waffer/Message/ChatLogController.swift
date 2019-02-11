@@ -52,9 +52,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
                 let message = Message(dictionary: dictionary)
                 
                 self.messages.append(message)
-                self.messages.sort(by: { (message1, message2) -> Bool in
-                    return message1.timestamp < message2.timestamp
-                })
                 DispatchQueue.main.async(execute: {
                     self.collectionView?.reloadData()
                 })
@@ -218,6 +215,44 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     fileprivate func uploadImageToFirebaseStrorage(_ image: UIImage){
         print("firebase strorage")
+        guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
+        
+        let imageName = NSUUID().uuidString
+        let storageRef = Storage.storage().reference().child("messages_images").child(imageName)
+        storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+            if let error = error{
+                print("Failed to upload message image:", error)
+                return
+            }
+            storageRef.downloadURL(completion: { (url, error) in
+                guard let image = url?.absoluteString else { return }
+                self.sendMessageWitImageUrl(image)
+            })
+        }
+        
+    }
+    
+    fileprivate func sendMessageWitImageUrl(_ image: String) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let ref = Database.database().reference().child("messages")
+        let childRef = ref.childByAutoId()
+        guard let toId = user?.uid else { return }
+        let timestamp = NSDate().timeIntervalSince1970
+        let values = ["imageUrl": image, "toId": toId, "fromId": uid, "timestamp": timestamp] as [String : Any]
+        childRef.updateChildValues(values) { (error, ref) in
+            if error != nil {
+                print(error ?? "")
+                return
+            }
+            
+            guard let messageId = childRef.key else { return }
+            let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(toId).child(messageId)
+            userMessagesRef.setValue(1)
+            
+            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(uid).child(messageId)
+            recipientUserMessagesRef.setValue(1)
+            print("Successfully saved message to DB")
+        }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

@@ -9,9 +9,17 @@
 import UIKit
 import Photos
 
+protocol PreviewPhotoContainerViewDelegate {
+    func didTapUse(_ image: UIImage)
+    func didTapUseButton()
+    
+//     func didTapCancel( didTapCancel: Bool)
+}
+
 class PreviewPhotoContainerView: UIView  {
     
-    var myViewController: AdPostingViewController?
+    var delegate: PreviewPhotoContainerViewDelegate?
+//    var myViewController: AdPostingViewController?
     
     let previewImageView: UIImageView = {
         let iv = UIImageView()
@@ -32,12 +40,7 @@ class PreviewPhotoContainerView: UIView  {
         return button
     }()
     
-    
-    
-    
-    
     @objc func handleSave() {
-        print("Handling save...")
         
         guard let previewImage = previewImageView.image else { return }
        
@@ -95,7 +98,30 @@ class PreviewPhotoContainerView: UIView  {
     }
     
     @objc func handleCancel() {
+//        let tapCancel = true
+//        delegate?.didTapCancel(didTapCancel: tapCancel)
+//        let CameraView = CameraViewController()
+//        CameraView.useButton.isHidden = true
         self.removeFromSuperview()
+    }
+    
+    lazy var useButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("use", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(handlUse), for:.touchUpInside)
+        return button
+    }()
+
+    @objc func handlUse() {
+        print("use")
+        delegate?.didTapUseButton()
+//        guard let image = self.previewImageView.image else {return }
+//        delegate?.didTapUse(image)
+//        let AdPostingController = AdPostingViewController()
+//        let adsController = UINavigationController(rootViewController: AdPostingController)
+//        self.present(adsController, animated: true, completion: nil)
     }
     
     override init(frame: CGRect) {
@@ -110,6 +136,9 @@ class PreviewPhotoContainerView: UIView  {
         
         addSubview(saveButton)
         saveButton.anchor(top: nil, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 24, paddingBottom: -15, paddingRight: 0, width: 50, height: 50)
+        
+        addSubview(useButton)
+        useButton.anchor(top: topAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 12, paddingLeft: 0, paddingBottom: 0, paddingRight: 12, width: 50, height: 50)
         
         
     }

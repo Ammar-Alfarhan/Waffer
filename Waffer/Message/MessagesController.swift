@@ -15,7 +15,7 @@ class MessagesController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationItem.title = "Messages"
         tableView.register(MessagesCell.self, forCellReuseIdentifier: cellId)
         
         observeUserMessages()

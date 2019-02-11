@@ -29,6 +29,7 @@
 		A4AF9C72218020EF001B527B /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C71218020EF001B527B /* CameraViewController.swift */; };
 		A4AF9C742180FDF4001B527B /* AdPostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */; };
 		A4B1D5C521A5269800D26042 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1D5C421A5269800D26042 /* User.swift */; };
+		A4BFB630220B49CD001B4B2D /* CurrentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFB62F220B49CD001B4B2D /* CurrentLocation.swift */; };
 		C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */; };
 		C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD46221E5425900022C72 /* VerticalMenuCell.swift */; };
 		C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B79217EA48B002E3A19 /* AppDelegate.swift */; };
@@ -66,6 +67,7 @@
 		A4AF9C71218020EF001B527B /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPostingViewController.swift; sourceTree = "<group>"; };
 		A4B1D5C421A5269800D26042 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		A4BFB62F220B49CD001B4B2D /* CurrentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocation.swift; sourceTree = "<group>"; };
 		C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuLauncher.swift; sourceTree = "<group>"; };
 		C52AD46221E5425900022C72 /* VerticalMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuCell.swift; sourceTree = "<group>"; };
 		C5595B76217EA48A002E3A19 /* Waffer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waffer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +124,7 @@
 				A414136921976C320051A469 /* CustomImageView.swift */,
 				A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */,
 				A417FFC421AA2B0C00C588B0 /* Extensions.swift */,
+				A4BFB62F220B49CD001B4B2D /* CurrentLocation.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 				A417FFC621AA4A6400C588B0 /* PresentAdsController.swift */,
 				C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */,
 				C52AD46221E5425900022C72 /* VerticalMenuCell.swift */,
+				A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -202,7 +206,6 @@
 			children = (
 				C5595B8E217EAAE6002E3A19 /* LoginController.swift */,
 				A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */,
-				A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -381,6 +384,7 @@
 				A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */,
 				A40AB01B21FD5A6700733912 /* NewMessagesController.swift in Sources */,
 				C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */,
+				A4BFB630220B49CD001B4B2D /* CurrentLocation.swift in Sources */,
 				A4141367219763FC0051A469 /* HomePostCell.swift in Sources */,
 				A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */,
 				C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */,
