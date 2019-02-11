@@ -52,6 +52,7 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate, Pr
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tabBarController?.tabBar.isHidden = true
         setupCaptureSession()
         setupHUD()
     }

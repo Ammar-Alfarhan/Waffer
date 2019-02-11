@@ -65,6 +65,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         fetchAllPost()
         
         collectionView?.alwaysBounceVertical = true
+        
+        // user is not logged in
+        if Auth.auth().currentUser?.uid == nil {
+            let loginController = LoginController()
+            let navController = UINavigationController(rootViewController: loginController)
+            self.present(navController, animated: true, completion: nil)
+        }
     }
     
     @objc func handleUpdateFeed(){
