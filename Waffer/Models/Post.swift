@@ -19,6 +19,7 @@ struct Post {
     let priceCaption: String
     let categoryCaption: String
     let creationDate: Date
+    let city: String
     
     
     init(user: User, dictionary: [String: Any]) {
@@ -28,6 +29,7 @@ struct Post {
         self.titleCaption = dictionary["titleCaption"] as? String ?? ""
         self.priceCaption = dictionary["priceCaption"] as? String ?? ""
         self.categoryCaption = dictionary["categoryCaption"] as? String ?? ""
+        self.city = dictionary["city"] as? String ?? ""
         
         let secondsFrom1970 = dictionary["creationDate"] as? Double ?? 0
         self.creationDate = Date(timeIntervalSince1970: secondsFrom1970)
