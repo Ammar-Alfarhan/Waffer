@@ -21,7 +21,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     var didTapEdit = false
     var categorySelected = Int()
     var postIndex = 0
-    let category = ["Cars","Electronics","Baby and Child","Housing", "Home and Garden", "Movies, Books, and Music", "Services", "Other"]
+    let category = ["Cars","Electronics","Baby and Child","Housing", "Home and Garden", "Games ,Movies, Books, and Music", "Services", "Other"]
     
     
     var  picker : UIPickerView!
@@ -374,23 +374,29 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         {
             let userPostRef = Database.database().reference().child("posts").child(uid)
             let ref = userPostRef.childByAutoId()
+            CurrentLocation.userCurrentLocation(completion: { (location) in
+                print("location=",location)
+                CurrentLocation.getUserGeoLocation(location, completion: { (city) in
+                    print("City=",city)
+                    let values = ["imageUrl": imageUrl, "descriptionCaption": descriptionCaption, "titleCaption": titleCaption, "city": city, "priceCaption": priceCaption, "categoryCaption": categoryCaption, "imageWidth": postImage.size.width, "imageHeight": postImage.size.height, "creationDate": Date().timeIntervalSince1970] as [String : Any]
+                    
+                    ref.updateChildValues(values) { (err, ref) in
+                        if let err = err {
+                            self.navigationItem.rightBarButtonItem?.isEnabled = true
+                            print("Failed to save post to DB", err)
+                            return
+                        }
+                        
+                        print("Successfully saved post to DB")
+                        
+                        NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
+                        
+                        let homeController = CustomTabBarController()
+                        self.present(homeController, animated: true, completion: nil)
+                    }
+                })
+            })
             
-            let values = ["imageUrl": imageUrl, "descriptionCaption": descriptionCaption, "titleCaption": titleCaption, "priceCaption": priceCaption, "categoryCaption": categoryCaption, "imageWidth": postImage.size.width, "imageHeight": postImage.size.height, "creationDate": Date().timeIntervalSince1970] as [String : Any]
-            
-            ref.updateChildValues(values) { (err, ref) in
-                if let err = err {
-                    self.navigationItem.rightBarButtonItem?.isEnabled = true
-                    print("Failed to save post to DB", err)
-                    return
-                }
-                
-                print("Successfully saved post to DB")
-                
-                NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
-                
-                let homeController = CustomTabBarController()
-                self.present(homeController, animated: true, completion: nil)
-            }
         }
         
     }

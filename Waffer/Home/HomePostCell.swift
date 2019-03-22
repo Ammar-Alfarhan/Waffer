@@ -11,6 +11,7 @@ import Firebase
 
 protocol HomePostCellDelegate {
     func didTapContact(_ post: Post)
+    func didBookmark(for cell: HomePostCell)
 //    func didTapContact()
 }
 
@@ -25,6 +26,13 @@ class HomePostCell: UICollectionViewCell {
             
             photoImageView.loadImage(urlString: postImageUrl)
             
+            if (post?.bookmark == true){
+                bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark-selected").withRenderingMode(.alwaysOriginal), for: .normal)
+            } else {
+                bookmarkButton.setImage(#imageLiteral(resourceName: "ribbon").withRenderingMode(.alwaysOriginal), for: .normal)
+            }
+            
+//            bookmarkButton.setImage(post?.bookmark == true ? #imageLiteral(resourceName: "bookmark-selected").withRenderingMode(.alwaysOriginal) : #imageLiteral(resourceName: "ribbon").withRenderingMode(.alwaysOriginal), for: .normal)
             //usernameLable.text = "Test username"
             
             usernameLable.text = post?.user.username
@@ -97,12 +105,17 @@ class HomePostCell: UICollectionViewCell {
 //        delegate?.didTapContact()
     }
     
-    let bookmarkButton: UIButton = {
+    lazy var bookmarkButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "ribbon").withRenderingMode(.alwaysOriginal), for: .normal)
         //button.isHidden = true
+        button.addTarget(self, action: #selector(handleBookmark), for: .touchUpInside)
         return button
     }()
+    
+    @objc func handleBookmark() {
+        delegate?.didBookmark(for: self)
+    }
     
     let usernameLable: UILabel = {
         let lable = UILabel()

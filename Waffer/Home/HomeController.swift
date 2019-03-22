@@ -17,31 +17,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var locationManager = CLLocationManager()
     
-    var lat: Double!
-    var long: Double!
-    
     let cellId = "cellId"
-    
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        guard let currentLocation: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-//        guard let currentCitylocation = manager.location else { return }
-//        print("lat:",currentLocation.latitude," long:", currentLocation.longitude)
-//        let geodecoder = CLGeocoder()
-//        print("location:",currentCitylocation)
-//        geodecoder.reverseGeocodeLocation(currentCitylocation, completionHandler: { (placemakers, error) in
-//            if error != nil {
-//                print("Fail to reverse location")
-//                return
-//            }
-//            guard let placemaker = placemakers?[0] else { return }
-//
-//            print("placemaker:", placemaker ?? "default value")
-//            print("City:", placemaker.subAdministrativeArea ?? "default value")
-//            print("State:", placemaker.administrativeArea ?? "default value")
-//
-//        })
-//    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,8 +27,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
+
         }
         
+        CurrentLocation.userCurrentLocation(completion: { (location) in
+            print("location=",location)
+            CurrentLocation.getUserGeoLocation(location, completion: { (city) in
+                print("City=",city)
+            })
+        })
+        
+
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
         
         collectionView?.backgroundColor = .white
@@ -80,7 +66,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func handleRefresh(){
-        print("Handling refresh...")
+//        print("Handling refresh...")
         posts.removeAll()
         fetchAllPost()
     }
@@ -116,28 +102,44 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     fileprivate func fetchPostsWithUser(user: User){
         let ref = Database.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            //print("valuePosts= ",snapshot.value!)
             
             self.collectionView.refreshControl?.endRefreshing()
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             
             dictionaries.forEach({ (key, value) in
-                 //               print("Key \(key), Value: \(value)")
-                //                print("Post=",dictionaries.values.count)
-                
+
                 guard let dictionary = value as? [String: Any] else { return }
                 
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = key
-                
-                self.posts.append(post)
+
+                guard let uid = Auth.auth().currentUser?.uid else { return }
+                Database.database().reference().child("bookmarks").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    if let value = snapshot.value as? Int, value == 1 {
+                        post.bookmark = true
+                    } else {
+                        post.bookmark = false
+                    }
+                    CurrentLocation.userCurrentLocation(completion: { (location) in
+                        CurrentLocation.getUserGeoLocation(location, completion: { (city) in
+                            if (city == post.city) {
+                                
+                                self.posts.append(post)
+                                self.posts.sort(by: { (p1, p2) -> Bool in
+                                    return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                                })
+                                self.filteredPost = self.posts
+                                self.collectionView?.reloadData()
+                            }
+                        })
+                    })
+
+                }, withCancel: { (error) in
+                    print("Failed to fetch bookmark info for post:", error)
+                })
             })
-            self.posts.sort(by: { (p1, p2) -> Bool in
-                return p1.creationDate.compare(p2.creationDate) == .orderedDescending
-            })
-            self.filteredPost = self.posts
-            self.collectionView?.reloadData()
-            
+       
         }) { (err) in
             print("Faild to fatch posts:", err)
         }
@@ -181,14 +183,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func didTapFillterByItem(name : String) {
-        if (name != "Clear Filter")
-        {
+        if (name != "Clear Filter") {
             filteredPost = self.posts.filter { (post) -> Bool in
                 return post.categoryCaption.lowercased().contains(name.lowercased())
             }
-        }
-        else{
-            filteredPost = posts
+        } else {
+            self.filteredPost = self.posts
         }
         self.collectionView?.reloadData()
     }
@@ -269,6 +269,41 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         chatLogController.user = post.user
         searchBar.isHidden = true
         navigationController?.pushViewController(chatLogController, animated: true)
+    }
+    
+    func didBookmark(for cell: HomePostCell) {
+        guard let indexPath = collectionView?.indexPath(for: cell) else { return }
+        
+        var post = self.posts[indexPath.item]
+        
+        guard let postId = post.id else { return }
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        var values = [String: Any]()
+        
+        if (post.bookmark == true) {
+            values = [uid: 0]
+        } else {
+            values = [uid: 1]
+        }
+        print(values)
+        Database.database().reference().child("bookmarks").child(postId).updateChildValues(values) { (err, _) in
+            
+            if let err = err {
+                print("Failed to bookmark post:", err)
+                return
+            }
+            
+            print("Successfully bookmark post.")
+            
+            post.bookmark = !post.bookmark
+            
+            self.posts[indexPath.item] = post
+            self.filteredPost = self.posts
+            self.collectionView?.reloadItems(at: [indexPath])
+//            self.collectionView.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

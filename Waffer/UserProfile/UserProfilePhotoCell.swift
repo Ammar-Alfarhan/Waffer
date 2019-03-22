@@ -14,7 +14,6 @@ class UserProfilePhotoCell: UICollectionViewCell {
         didSet{
             guard let imageUrl = post?.imageUrl else { return }
             photoImageView.loadImage(urlString: imageUrl)
-            print(post ?? "default value")
         }
     }
     

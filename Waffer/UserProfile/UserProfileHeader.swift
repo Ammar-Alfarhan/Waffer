@@ -62,14 +62,14 @@ class UserProfileHeader: UICollectionViewCell {
     
     lazy var messagesButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Messages", for: .normal)
-//      button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.setTitle("Sold", for: .normal)
+        button.tintColor = UIColor(white: 0, alpha: 0.2)
         button.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
         return button
     }()
     
     @objc func handleMessages(){
-        delegate?.didTapMessages()
+//        delegate?.didTapMessages()
     }
     
     lazy var bookmarkButton: UIButton = {

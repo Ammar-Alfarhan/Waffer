@@ -35,7 +35,7 @@ class PresentAdsController: UIViewController, PostDelegate {
         view.backgroundColor = .white
         
         
-        print("caption", caption ?? "default value")
+//        print("caption", caption ?? "default value")
         
         //print("caption=", caption?.user.uid ?? "default value")
         
@@ -194,7 +194,7 @@ class PresentAdsController: UIViewController, PostDelegate {
     
      let verticalMenuLauncher = VerticalMenuLauncher()
     @objc func verticalMenu() {
-        print("caption", caption ?? "default value")
+//        print("caption", caption ?? "default value")
         verticalMenuLauncher.post = caption
         verticalMenuLauncher.delegate = self
         verticalMenuLauncher.showSettings()
@@ -218,12 +218,12 @@ class PresentAdsController: UIViewController, PostDelegate {
     
     
     func didTapDelete() {
-        print("caption", caption ?? "default value")
+//        print("caption", caption ?? "default value")
         print("Moved to view controller")
         guard let uid = caption?.user.uid else { return }
         guard let postId = caption?.id else { return }
-        print("uid ",uid)
-        print("postId ",postId)
+//        print("uid ",uid)
+//        print("postId ",postId)
         
         let ref = Database.database().reference().child("posts").child(uid).child(postId)
         ref.removeValue { (err, ref) in
