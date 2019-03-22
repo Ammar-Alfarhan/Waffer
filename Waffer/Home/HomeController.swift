@@ -111,28 +111,34 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = key
-                CurrentLocation.userCurrentLocation(completion: { (location) in
-                    CurrentLocation.getUserGeoLocation(location, completion: { (city) in
-                        if (city == post.city) {
-                            self.posts.append(post)
-                            print("posts=",self.posts)
-                            self.posts.sort(by: { (p1, p2) -> Bool in
-                                return p1.creationDate.compare(p2.creationDate) == .orderedDescending
-                            })
-                            self.filteredPost = self.posts
-                            print("filteredpost=", self.filteredPost)
-                            self.collectionView?.reloadData()
-                        }
+
+                guard let uid = Auth.auth().currentUser?.uid else { return }
+                Database.database().reference().child("bookmarks").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    if let value = snapshot.value as? Int, value == 1 {
+                        post.bookmark = true
+                    } else {
+                        post.bookmark = false
+                    }
+                    CurrentLocation.userCurrentLocation(completion: { (location) in
+                        CurrentLocation.getUserGeoLocation(location, completion: { (city) in
+                            if (city == post.city) {
+                                
+                                self.posts.append(post)
+                                self.posts.sort(by: { (p1, p2) -> Bool in
+                                    return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                                })
+                                self.filteredPost = self.posts
+                                self.collectionView?.reloadData()
+                            }
+                        })
                     })
+
+                }, withCancel: { (error) in
+                    print("Failed to fetch bookmark info for post:", error)
                 })
-//                self.posts.append(post)
             })
-//            print("posts2=",self.posts)
-//
-//            self.filteredPost = self.posts
-//            print("filteredpost=", self.filteredPost)
-//            self.collectionView?.reloadData()
-            
+       
         }) { (err) in
             print("Faild to fatch posts:", err)
         }
@@ -262,6 +268,41 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         chatLogController.user = post.user
         searchBar.isHidden = true
         navigationController?.pushViewController(chatLogController, animated: true)
+    }
+    
+    func didBookmark(for cell: HomePostCell) {
+        guard let indexPath = collectionView?.indexPath(for: cell) else { return }
+        
+        var post = self.posts[indexPath.item]
+        
+        guard let postId = post.id else { return }
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        var values = [String: Any]()
+        
+        if (post.bookmark == true) {
+            values = [uid: 0]
+        } else {
+            values = [uid: 1]
+        }
+        print(values)
+        Database.database().reference().child("bookmarks").child(postId).updateChildValues(values) { (err, _) in
+            
+            if let err = err {
+                print("Failed to bookmark post:", err)
+                return
+            }
+            
+            print("Successfully bookmark post.")
+            
+            post.bookmark = !post.bookmark
+            
+            self.posts[indexPath.item] = post
+            self.filteredPost = self.posts
+            self.collectionView?.reloadItems(at: [indexPath])
+//            self.collectionView.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

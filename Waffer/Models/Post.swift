@@ -21,6 +21,7 @@ struct Post {
     let creationDate: Date
     let city: String
     
+    var bookmark = false
     
     init(user: User, dictionary: [String: Any]) {
         self.user = user
