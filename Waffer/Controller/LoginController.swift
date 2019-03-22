@@ -35,6 +35,7 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
         return button
     }()
     
+    
     @objc func handleLoginRegister() {
         if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
             handleLogin()
@@ -276,14 +277,17 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
         setupPlusimageButton()
         setupLoginRegisterSegmentedControl()
         
-        //tabBarController?.tabBar.isHidden = true
+        self.hidesBottomBarWhenPushed = true
+        // Hide the tabBar
+        tabBarController?.tabBar.isHidden = true
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.hidesBottomBarWhenPushed = true
         // Hide the tabBar
-        //tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
         // Hide the Navigation Bar
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }

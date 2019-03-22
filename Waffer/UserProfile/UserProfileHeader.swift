@@ -11,6 +11,7 @@ import Firebase
 
 protocol UserProfileCellDelegate {
     func didTapMessages()
+    func didTapEdit()
 }
 
 class UserProfileHeader: UICollectionViewCell {
@@ -93,7 +94,7 @@ class UserProfileHeader: UICollectionViewCell {
         return label
     }()
     
-    let editProfileButton: UIButton = {
+    lazy var editProfileButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Edit Profile", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -101,8 +102,16 @@ class UserProfileHeader: UICollectionViewCell {
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 3
+        button.addTarget(self, action: #selector(handleEditProfile), for: .touchUpInside)
         return button
     }()
+    
+     @objc func handleEditProfile() {
+        
+        print ("handleEditProfile")
+        
+        delegate?.didTapEdit()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -70,6 +70,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         if Auth.auth().currentUser?.uid == nil {
             let loginController = LoginController()
             let navController = UINavigationController(rootViewController: loginController)
+//            self.tabBarController!.tabBar.isHidden =  true
             self.present(navController, animated: true, completion: nil)
         }
     }

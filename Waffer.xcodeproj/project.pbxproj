@@ -42,6 +42,7 @@
 		C5595B932184DDBE002E3A19 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B922184DDBE002E3A19 /* UserProfileController.swift */; };
 		C5595B972184FF2E002E3A19 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B962184FF2E002E3A19 /* UserProfileHeader.swift */; };
 		C5595B9A21892C4D002E3A19 /* CameraTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B9921892C4C002E3A19 /* CameraTabView.swift */; };
+		C55BE47622265FC9009A0790 /* EditUserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55BE47522265FC9009A0790 /* EditUserProfileController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +83,7 @@
 		C5595B922184DDBE002E3A19 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		C5595B962184FF2E002E3A19 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		C5595B9921892C4C002E3A19 /* CameraTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTabView.swift; sourceTree = "<group>"; };
+		C55BE47522265FC9009A0790 /* EditUserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserProfileController.swift; sourceTree = "<group>"; };
 		C8EB3AC35FE4B06E875C7471 /* Pods-Waffer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Waffer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Waffer/Pods-Waffer.debug.xcconfig"; sourceTree = "<group>"; };
 		D3C16380B7A05A43BEE9E643 /* Pods_Waffer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Waffer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -216,6 +218,7 @@
 				C5595B922184DDBE002E3A19 /* UserProfileController.swift */,
 				C5595B962184FF2E002E3A19 /* UserProfileHeader.swift */,
 				A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */,
+				C55BE47522265FC9009A0790 /* EditUserProfileController.swift */,
 			);
 			path = UserProfile;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				A417FFC521AA2B0C00C588B0 /* Extensions.swift in Sources */,
 				C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */,
 				A4387D21219542DD008FE9BC /* UserProfilePhotoCell.swift in Sources */,
+				C55BE47622265FC9009A0790 /* EditUserProfileController.swift in Sources */,
 				A40D069721E46A4A0035B28E /* MessagesController.swift in Sources */,
 				A40AB01D2204C31300733912 /* SettingsLauncher.swift in Sources */,
 			);

@@ -19,6 +19,13 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         navigationController?.pushViewController(messagesController, animated: true)
     }
     
+    
+    func didTapEdit() {
+        let editController =  EditUserProfileController()
+        editController.user = self.user
+        //editController.profileImageView = 
+        navigationController?.pushViewController(editController, animated: true)
+    }
     let cellId = "cellId"
     
     let headerId = "headerId"
@@ -43,6 +50,11 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
+        
+    }
     var isFinishedPaging = false
     var posts = [Post]()
     

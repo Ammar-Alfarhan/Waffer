@@ -13,6 +13,7 @@ import Firebase
 class CustomTabBarController: UITabBarController{
     override func viewDidLoad() {
         
+        self.tabBarController?.tabBar.isHidden = false
 //        if Auth.auth().currentUser == nil {
 //            //show if not logged in
 //            DispatchQueue.main.async {
@@ -48,6 +49,8 @@ class CustomTabBarController: UITabBarController{
 //        
        setupViewControllers()
     }
+    
+    
     
     
     func setupViewControllers(){
