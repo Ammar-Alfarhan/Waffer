@@ -26,6 +26,8 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
             }
             
             usernameTextField.text = user?.username
+            emailTextField.text = user?.username
+            passwordTextField.text = user?.username
         }
     }
     override func viewDidLoad() {
@@ -97,7 +99,7 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         inputContainerView.addSubview(emailSeparatorView)
         inputContainerView.addSubview(passwordLabel)
         inputContainerView.addSubview(passwordTextField)
-        /////passwordTextField.text = user?.
+        //passwordTextField.text = user?.email
         
         //need x, y, width, height constraints
         usernameLabel.leftAnchor.constraint(equalTo: inputContainerView.leftAnchor, constant: 12).isActive = true
@@ -149,7 +151,7 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         passwordLabel.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 1/3).isActive = true
         
         //need x, y, width, height constraints
-        passwordTextField.leftAnchor.constraint(equalTo: passwordLabel.leftAnchor, constant: 90).isActive = true
+        passwordTextField.leftAnchor.constraint(equalTo: passwordLabel.leftAnchor, constant: 150).isActive = true
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
         
         passwordTextField.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive = true
@@ -177,8 +179,8 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         profileImageView.layer.cornerRadius = 150 / 2
         profileImageView.clipsToBounds = true
         profileImageView.layer.masksToBounds = true
-        profileImageView.layer.borderColor = UIColor.black.cgColor
-        profileImageView.layer.borderWidth = 1
+//        profileImageView.layer.borderColor = UIColor.black.cgColor
+//        profileImageView.layer.borderWidth = 1
 
     }
     
@@ -246,15 +248,16 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
     
     let emailLabel : UILabel = {
         let l = UILabel()
-        l.text="Email:"
+        l.text="Password:"
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
     
     let emailTextField : UITextField = {
         let tf = UITextField()
-        tf.placeholder="Email"
+        tf.placeholder="Password"
         tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.isSecureTextEntry = true
         return tf
     }()
     
@@ -269,14 +272,14 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
     
     let passwordLabel : UILabel = {
         let l = UILabel()
-        l.text="Password:"
+        l.text="Confirm Password:"
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
     
     let passwordTextField : UITextField = {
         let tf = UITextField()
-        tf.placeholder="Password"
+        tf.placeholder="Confirm Password"
         tf.isSecureTextEntry = true
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
@@ -292,7 +295,7 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         button.titleLabel?.font=UIFont.boldSystemFont(ofSize: 16)
         
         button.addTarget(self, action: #selector(handleUpdate), for: .touchUpInside)
-        
+         
         return button
     }()
     
@@ -300,143 +303,99 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
     @objc func handleUpdate() {
         print(" handleUpdate() ")
         
-        guard let image = self.profileImageView.image else { return }
-        
-        guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
-        
-        let filename = NSUUID().uuidString
-        
-        let storageRef = Storage.storage().reference().child("profile_images").child(filename)
-        storageRef.putData(uploadData, metadata: nil, completion: { (metadata, err) in
+        if( self.emailTextField.text != self.passwordTextField.text)
+        {
+            let alertController = UIAlertController(title: "Password fields must match", message: nil, preferredStyle: .actionSheet)
             
-            if let err = err {
-                print("Failed to upload profile image:", err)
-                return
+            
+            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            
+            present(alertController, animated: true, completion: nil)
+        }
+        else
+        {
+            if(self.user?.username != self.emailTextField.text)
+            {
+                print("helloooooooo this is batool !=")
+                
+//                var user = firebase.auth().currentUser;
+//                var newPassword = getASecureRandomPassword();
+//
+//                user.updatePassword(newPassword).then(function() {
+//                    // Update successful.
+//                }).catch(function(error) {
+//                    // An error happened.
+//                });
+                
+//                var user = Auth.auth().createUser;
+//                var newPassword = self.emailTextField.text
+//                user.
+
+            }
+            else{
+                print("Hi this is batool ==")
             }
             
-            // Firebase 5 Update: Must now retrieve downloadURL
-            storageRef.downloadURL(completion: { (downloadURL, err) in
-                guard let profileImageUrl = downloadURL?.absoluteString else { return }
+            guard let image = self.profileImageView.image else { return }
+            
+            guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
+            
+            let filename = NSUUID().uuidString
+            
+            let storageRef = Storage.storage().reference().child("profile_images").child(filename)
+            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, err) in
                 
-                print("Successfully uploaded profile image:", profileImageUrl)
+                if let err = err {
+                    print("Failed to upload profile image:", err)
+                    return
+                }
                 
-                let uid = self.user?.uid
-                
-                //guard let fcmToken = Messaging.messaging().fcmToken else { return }
-                
-                
-                let dictionaryValues = ["name": self.usernameTextField.text ?? "default value", "profileImageUrl": profileImageUrl] as [String : Any]
-                let values = [uid: dictionaryValues]
-                
-                Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+                // Firebase 5 Update: Must now retrieve downloadURL
+                storageRef.downloadURL(completion: { (downloadURL, err) in
+                    guard let profileImageUrl = downloadURL?.absoluteString else { return }
                     
-                    if let err = err {
-                        print("Failed to save user info into db:", err)
-                        return
-                    }
+                    print("Successfully uploaded profile image:", profileImageUrl)
                     
-                    print("Successfully saved user info to db")
+                    let uid = self.user?.uid
                     
-                    //guard let customTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
+                    //guard let fcmToken = Messaging.messaging().fcmToken else { return }
                     
-                    //customTabBarController.setupViewControllers()
                     
-                    //self.dismiss(animated: true, completion: nil)
-//                    let customTabBar = CustomTabBarController()
-//                    self.present(customTabBar, animated: true, completion: nil)
+                    let dictionaryValues = ["name": self.usernameTextField.text ?? "default value", "profileImageUrl": profileImageUrl] as [String : Any]
+                    let values = [uid: dictionaryValues]
                     
-                    guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
-                    
-                    mainTabBarController.setupViewControllers()
-                    self.tabBarController?.tabBar.isHidden = false
-                    
-                    self.dismiss(animated: true, completion: nil)
-
-//                    let customTabBar = CustomTabBarController()
-//                    self.present(customTabBar, animated: true, completion: nil)
-                    
-//                    guard let customTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
-//                    customTabBarController.setupViewControllers()
-//                    self.present(customTabBarController, animated: true, completion: nil)
-//                   self.dismiss(animated: true, completion: nil)
-                    
+                    Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
+                        
+                        if let err = err {
+                            print("Failed to save user info into db:", err)
+                            return
+                        }
+                        
+                        print("Successfully saved user info to db")
+                        
+                        
+                        
+                        
+                        guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
+                        
+                        mainTabBarController.setupViewControllers()
+                        self.tabBarController?.tabBar.isHidden = false
+                        
+                        self.dismiss(animated: true, completion: nil)
+                        
+                        
+                    })
                 })
             })
-        })
+        }
+        
+        
+        
+        
 
         
         
-//        guard let image = self.plusPhotoButton.imageView?.image else { return }
-//
-//        guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
-//
-//        let filename = NSUUID().uuidString
-//
-//        let storageRef = Storage.storage().reference().child("profile_images").child(filename)
-//        storageRef.putData(uploadData, metadata: nil, completion: { (metadata, err) in
-//
-//            if let err = err {
-//                print("Failed to upload profile image:", err)
-//                return
-//            }
-//
-//            // Firebase 5 Update: Must now retrieve downloadURL
-//            storageRef.downloadURL(completion: { (downloadURL, err) in
-//                guard let profileImageUrl = downloadURL?.absoluteString else { return }
-//
-//                print("Successfully uploaded profile image:", profileImageUrl)
-//
-//        let uid = user!.uid
-//        let userPostRef = Database.database().reference().child("users").child(uid)
-//
-//        let dictionaryValues = ["name": usernameLabel.text, "profileImageUrl": profileImageUrl]
-//        let values = [uid: dictionaryValues]
-        
-        
-        
-        
-        //
-        //        let ref = userPostRef.child(post?.id ?? "default value")
-        //
-        //        let values = ["imageUrl": imageUrl, "descriptionCaption": descriptionCaption, "titleCaption": titleCaption, "priceCaption": priceCaption, "categoryCaption": categoryCaption, "imageWidth": postImage.size.width, "imageHeight": postImage.size.height, "creationDate": Date().timeIntervalSince1970] as [String : Any]
-        //        print("values",values)
-        //        ref.updateChildValues(values) { (err, ref) in
-        //            if let err = err {
-        //                self.navigationItem.rightBarButtonItem?.isEnabled = true
-        //                print("Failed to save post to DB", err)
-        //                return
-        //            }
-        //
-        //            print("Successfully saved post to DB")
-        //
-        //            NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
-        //
-        //            let homeController = CustomTabBarController()
-        //            self.present(homeController, animated: true, completion: nil)
-        
-        
-//        guard let uid = user?.user.uid else { return }
-//
-//        //guard let fcmToken = Messaging.messaging().fcmToken else { return }
-//
-//
-//        let dictionaryValues = ["name": name, "profileImageUrl": profileImageUrl]
-//        let values = [uid: dictionaryValues]
-//
-//        Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (err, ref) in
-//
-//            if let err = err {
-//                print("Failed to save user info into db:", err)
-//                return
-//            }
-//
-//            print("Successfully saved user info to db")
-//
-//            guard let customTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
-//
-//            customTabBarController.setupViewControllers()
-//
-//            self.dismiss(animated: true, completion: nil)
+
 
     }
     

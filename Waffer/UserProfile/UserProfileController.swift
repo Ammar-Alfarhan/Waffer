@@ -149,6 +149,7 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
                 
                 let loginController = LoginController()
                 let navController = UINavigationController(rootViewController: loginController)
+                
                 self.present(navController, animated: true, completion: nil)
                 
             } catch let signOutErr {
