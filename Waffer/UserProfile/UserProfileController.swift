@@ -41,7 +41,6 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     func didTapEdit() {
         let editController =  EditUserProfileController()
         editController.user = self.user
-        //editController.profileImageView = 
         navigationController?.pushViewController(editController, animated: true)
     }
     let cellId = "cellId"
@@ -79,7 +78,6 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     var posts = [Post]()
     var sold = [Post]()
     fileprivate func paginatePosts() {
-        //print("Start paging for more posts")
         
         guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
@@ -87,7 +85,6 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         var query = ref.queryOrdered(byChild: "creationDate")
         
         if posts.count > 0 {
-            //            let value = posts.last?.id
             let value = posts.last?.creationDate.timeIntervalSince1970
             query = query.queryEnding(atValue: value)
         }
@@ -140,7 +137,6 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         let ref = Database.database().reference().child("users")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
-            //            print("dictionaries=", dictionaries)
             dictionaries.forEach({ (key, value) in
                 
                 Database.fetchUserWithUID(uid: key, completion: { (user) in
@@ -231,7 +227,6 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.item == self.posts.count - 1 && !isFinishedPaging {
-            //print("Paginating for posts")
 //            paginatePosts()
         }
         

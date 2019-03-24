@@ -14,44 +14,8 @@ class CustomTabBarController: UITabBarController{
     override func viewDidLoad() {
         
         self.tabBarController?.tabBar.isHidden = false
-//        if Auth.auth().currentUser == nil {
-//            //show if not logged in
-//            DispatchQueue.main.async {
-//                let loginController = LoginController()
-//                let navController = UINavigationController(rootViewController: loginController)
-//                self.present(navController, animated: true, completion: nil)
-//            }
-//
-//            return
-//        }
-//        
-//        let userProfileLayout = UICollectionViewFlowLayout()
-//        let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
-//        let thirdNavigationController = UINavigationController(rootViewController: userProfileController)
-//        //thirdNavigationController.title = "User Profile"
-//        thirdNavigationController.tabBarItem.image = #imageLiteral(resourceName: "profile_unselected")
-//        thirdNavigationController.tabBarItem.selectedImage = #imageLiteral(resourceName: "profile_selected")
-//        
-//        let homeLayout = UICollectionViewFlowLayout()
-//        let homeController = HomeController(collectionViewLayout: homeLayout)
-//        let navigationController = UINavigationController(rootViewController: homeController)
-//        navigationController.title = "Home"
-//        navigationController.tabBarItem.image = UIImage(named: "home")
-//        
-//        let cameraController = CameraTabView()
-//        let secondNavigationController = UINavigationController(rootViewController: cameraController)
-//        secondNavigationController.title = "Camera"
-//        secondNavigationController.tabBarItem.image = UIImage(named: "camera")
-//        
-//        tabBar.tintColor = .black
-//        
-//        viewControllers = [navigationController, secondNavigationController, thirdNavigationController]
-//        
        setupViewControllers()
     }
-    
-    
-    
     
     func setupViewControllers(){
         
@@ -59,8 +23,8 @@ class CustomTabBarController: UITabBarController{
         let userProfileController = UserProfileController(collectionViewLayout: userProfileLayout)
         let userProfile = UINavigationController(rootViewController: userProfileController)
         userProfile.title = "User Profile"
-        userProfile.tabBarItem.image = #imageLiteral(resourceName: "profile")
-        userProfile.tabBarItem.selectedImage = #imageLiteral(resourceName: "selectedProfile")
+        userProfile.tabBarItem.image = #imageLiteral(resourceName: "userprofile-unselected")
+        userProfile.tabBarItem.selectedImage = #imageLiteral(resourceName: "userprofile-selected")
         
         let messageController = MessagesController()
         let messages = UINavigationController(rootViewController: messageController)
@@ -76,7 +40,7 @@ class CustomTabBarController: UITabBarController{
         home.tabBarItem.image = #imageLiteral(resourceName: "home")
         
         let cameraController = CameraTabView()
-//        present(cameraController, animated: true, completion: nil)
+
         let camera = UINavigationController(rootViewController: cameraController)
         camera.title = "Camera"
         camera.tabBarItem.image = #imageLiteral(resourceName: "camera")
@@ -85,8 +49,5 @@ class CustomTabBarController: UITabBarController{
         
          viewControllers = [home, camera, messages, userProfile]
     }
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        setupViewControllers()
-//    }
+
 }

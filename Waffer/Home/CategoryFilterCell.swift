@@ -15,22 +15,14 @@ class CategoryFilterCell: UICollectionViewCell {
             backgroundColor = isHighlighted ? UIColor.darkGray : UIColor.white
             
             nameLable.textColor = isHighlighted ? UIColor.white : UIColor.black
-            
-            //iconImageView.tintColor = highlighted ? UIColor.whiteColor() : UIColor.darkGrayColor()
         }
     }
     
     var setting: Setting? {
         didSet {
             nameLable.text = setting?.name
-            
-//            if let imageName = setting?.imageName {
-//                iconImageView.image = UIImage(named: imageName)?.imageWithRenderingMode(.AlwaysTemplate)
-//                iconImageView.tintColor = UIColor.darkGrayColor()
-//            }
         }
     }
-    
     
     let nameLable: UILabel = {
         let lbl = UILabel()
@@ -40,7 +32,6 @@ class CategoryFilterCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        //backgroundColor = .red
         
         addSubview(nameLable)
         

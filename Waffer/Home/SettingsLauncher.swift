@@ -21,7 +21,6 @@ class SettingsLauncher: NSObject {
     
     func showSettings() {
         //show menu
-        
         if let window = UIApplication.shared.keyWindow {
             
             blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
@@ -61,7 +60,6 @@ class SettingsLauncher: NSObject {
     
     override init() {
         super.init()
-        //start doing something here maybe....
     }
     
 }

@@ -12,14 +12,11 @@ import Photos
 protocol PreviewPhotoContainerViewDelegate {
     func didTapUse(_ image: UIImage)
     func didTapUseButton()
-    
-//     func didTapCancel( didTapCancel: Bool)
 }
 
 class PreviewPhotoContainerView: UIView  {
     
     var delegate: PreviewPhotoContainerViewDelegate?
-//    var myViewController: AdPostingViewController?
     
     let previewImageView: UIImageView = {
         let iv = UIImageView()
@@ -98,10 +95,6 @@ class PreviewPhotoContainerView: UIView  {
     }
     
     @objc func handleCancel() {
-//        let tapCancel = true
-//        delegate?.didTapCancel(didTapCancel: tapCancel)
-//        let CameraView = CameraViewController()
-//        CameraView.useButton.isHidden = true
         self.removeFromSuperview()
     }
     
@@ -115,13 +108,7 @@ class PreviewPhotoContainerView: UIView  {
     }()
 
     @objc func handlUse() {
-        print("use")
         delegate?.didTapUseButton()
-//        guard let image = self.previewImageView.image else {return }
-//        delegate?.didTapUse(image)
-//        let AdPostingController = AdPostingViewController()
-//        let adsController = UINavigationController(rootViewController: AdPostingController)
-//        self.present(adsController, animated: true, completion: nil)
     }
     
     override init(frame: CGRect) {
@@ -139,8 +126,6 @@ class PreviewPhotoContainerView: UIView  {
         
         addSubview(useButton)
         useButton.anchor(top: topAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 12, paddingLeft: 0, paddingBottom: 0, paddingRight: 12, width: 50, height: 50)
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

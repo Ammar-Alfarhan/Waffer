@@ -179,9 +179,6 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         profileImageView.layer.cornerRadius = 150 / 2
         profileImageView.clipsToBounds = true
         profileImageView.layer.masksToBounds = true
-//        profileImageView.layer.borderColor = UIColor.black.cgColor
-//        profileImageView.layer.borderWidth = 1
-
     }
     
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -301,7 +298,6 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
     
     
     @objc func handleUpdate() {
-        print(" handleUpdate() ")
         
         if( self.emailTextField.text != self.passwordTextField.text)
         {
@@ -314,27 +310,6 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         }
         else
         {
-            if(self.user?.username != self.emailTextField.text)
-            {
-                print("helloooooooo this is batool !=")
-                
-//                var user = firebase.auth().currentUser;
-//                var newPassword = getASecureRandomPassword();
-//
-//                user.updatePassword(newPassword).then(function() {
-//                    // Update successful.
-//                }).catch(function(error) {
-//                    // An error happened.
-//                });
-                
-//                var user = Auth.auth().createUser;
-//                var newPassword = self.emailTextField.text
-//                user.
-
-            }
-            else{
-                print("Hi this is batool ==")
-            }
             
             guard let image = self.profileImageView.image else { return }
             
@@ -358,9 +333,6 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
                     
                     let uid = self.user?.uid
                     
-                    //guard let fcmToken = Messaging.messaging().fcmToken else { return }
-                    
-                    
                     let dictionaryValues = ["name": self.usernameTextField.text ?? "default value", "profileImageUrl": profileImageUrl] as [String : Any]
                     let values = [uid: dictionaryValues]
                     
@@ -372,9 +344,6 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
                         }
                         
                         print("Successfully saved user info to db")
-                        
-                        
-                        
                         
                         guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
                         
@@ -388,15 +357,6 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
                 })
             })
         }
-        
-        
-        
-        
-
-        
-        
-
-
     }
     
     func setupEditButton()
@@ -407,8 +367,6 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         editButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive=true
         editButton.heightAnchor.constraint(equalToConstant: 50).isActive=true
     }
-
-
 }
 
 

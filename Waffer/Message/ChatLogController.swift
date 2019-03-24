@@ -83,9 +83,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     fileprivate func setupCell(_ cell: ChatLogCell,_ message: Message) {
         
-//        guard let image = user?.profileImageUrl else { return }
-//        cell.profileImageView.loadImage(urlString: image)
-        
         if (message.fromId == Auth.auth().currentUser?.uid){
             cell.bubbleView.backgroundColor = ChatLogCell.blueColor
             cell.textView.textColor = .white
@@ -96,9 +93,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         } else {
             cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
             cell.textView.textColor = .black
-            //print("toid=", message.toId)
             Database.fetchUserWithUID(uid: message.fromId) { (user) in
-                print("image=",user.profileImageUrl)
                 cell.profileImageView.loadImage(urlString: user.profileImageUrl)
             }
             cell.profileImageView.isHidden = false
@@ -185,7 +180,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         let iv = UIImageView()
         iv.image = #imageLiteral(resourceName: "upload_image_icon")
         iv.isUserInteractionEnabled = true
-//        iv.translatesAutoresizingMaskIntoConstraints = false
         iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadImage)))
         return iv
     }()
@@ -214,7 +208,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     }
     
     fileprivate func uploadImageToFirebaseStrorage(_ image: UIImage){
-        print("firebase strorage")
         guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
         
         let imageName = NSUUID().uuidString
@@ -244,7 +237,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
                 print(error ?? "")
                 return
             }
-            
             guard let messageId = childRef.key else { return }
             let userMessagesRef = Database.database().reference().child("user-messages").child(uid).child(toId).child(messageId)
             userMessagesRef.setValue(1)

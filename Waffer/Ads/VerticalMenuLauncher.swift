@@ -52,15 +52,7 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         
         if let window = UIApplication.shared.keyWindow {
             
-            //blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            
-            //blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
-            
-            //window.addSubview(blackView)
-            
             window.addSubview(collectionView)
-            
-            
             
             let height: CGFloat = CGFloat(verticalMenuItems.count) * cellHeight
             //let y = window.frame.height - height
@@ -75,8 +67,6 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
             blackView.alpha = 0
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                
-                //self.blackView.alpha = 1
                 
                 self.collectionView.frame = CGRect(x: x, y: y, width: width, height: self.collectionView.frame.height)
                 
@@ -95,10 +85,7 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-        print(verticalMenuItems[indexPath.item].name)
         
-        print ("delegate",delegate ?? "nil")
         if (verticalMenuItems[indexPath.item].name == "Edit Post"){
             self.delegate?.didTapEdit()
             handleDismiss()
@@ -108,12 +95,10 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         }
         if (verticalMenuItems[indexPath.item].name == "Mark As Sold"){
             self.delegate?.didTapSold()
-            print("sold")
         }
         if ( (verticalMenuItems.count-1) == (indexPath.item)){
             handleDismiss()
         }
-       
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -138,8 +123,6 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
-
     
     override init() {
         super.init()

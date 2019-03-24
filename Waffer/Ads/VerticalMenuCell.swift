@@ -16,18 +16,14 @@ class VerticalMenuCell: UICollectionViewCell {
             backgroundColor = isHighlighted ? UIColor.darkGray : UIColor.white
 
             nameLable.textColor = isHighlighted ? UIColor.white : UIColor.black
-
-            //iconImageView.tintColor = highlighted ? UIColor.whiteColor() : UIColor.darkGrayColor()
         }
     }
     
     var verticalMenuItem: VerticalMenuItem? {
         didSet {
             nameLable.text = verticalMenuItem?.name
-            
         }
     }
-    
     
     let nameLable: UILabel = {
         let lbl = UILabel()

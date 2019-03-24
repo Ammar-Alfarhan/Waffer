@@ -27,9 +27,7 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate, Pr
         
         present(adPostingController, animated: true, completion: nil)
     }
-    
 
-    
     let dismissButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "right_arrow_shadow"), for: .normal)
@@ -56,9 +54,7 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate, Pr
         setupCaptureSession()
         setupHUD()
     }
-    
-
-    
+   
     fileprivate func setupHUD() {
         view.addSubview(capturePhotoButton)
         capturePhotoButton.anchor(top: nil, left: nil, bottom: view.bottomAnchor, right: nil, paddingTop: 0, paddingLeft: 0, paddingBottom: -25, paddingRight: 0, width: 80, height: 80)
@@ -96,8 +92,6 @@ class CameraViewController : UIViewController, AVCapturePhotoCaptureDelegate, Pr
         postedImage = previewImage
         view.addSubview(containerView)
         containerView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 0)
-        
-
     }
     var image: UIImage?
 

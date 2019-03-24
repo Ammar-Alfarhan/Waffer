@@ -22,8 +22,6 @@ class NewMessageController: UITableViewController {
         super.viewDidLoad()
         
         tableView.register(MessagesCell.self, forCellReuseIdentifier: cellId)
-        
-//        fetchUsers()
     }
     var users = [User]()
     var filterUsers = [User]()
@@ -31,15 +29,11 @@ class NewMessageController: UITableViewController {
         
         let ref = Database.database().reference().child("users")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
-//            print(snapshot)
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
-            //            print("dictionaries=", dictionaries)
             dictionaries.forEach({ (key, value) in
-//                print("key \(key) value \(value)")
                 guard let dictionary = value as? [String: Any] else { return }
                 let user = User(uid: key, dictionary: dictionary)
                 self.users.append(user)
-//                self.filterUsers = self.users.
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()
                 })
@@ -47,7 +41,6 @@ class NewMessageController: UITableViewController {
         }) { (err) in
             print("Faild to fatch users:", err)
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,7 +49,6 @@ class NewMessageController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! MessagesCell
         let user = users[indexPath.row]
-//        print("user",user)
         cell.textLabel?.text = user.username
         cell.detailTextLabel?.text = user.email
         let profileImage = user.profileImageUrl
@@ -74,11 +66,5 @@ class NewMessageController: UITableViewController {
         let user = self.users[indexPath.row]
         print(user)
         self.messagesController?.showChatControllerForUser(user)
-//        dismiss(animated: true) {
-//            print("Dismiss completed")
-//            let user = self.users[indexPath.row]
-//            print(user)
-//            //self.messagesController?.showChatControllerForUser(user)
-//        }
     }
 }

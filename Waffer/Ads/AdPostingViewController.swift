@@ -43,34 +43,16 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         categorySelected = row
     }
     
-    var locationManager: CLLocationManager!
-    
-    var lat: Double!
-    var long: Double!
-    
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        guard let currentLocation: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-//        print("lat:",currentLocation.latitude," long:", currentLocation.longitude)
-//    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupNavigationButtons()
-        
-//        self.locationManager.requestWhenInUseAuthorization()
-//        if CLLocationManager.locationServicesEnabled() {
-//            locationManager.delegate = self
-//            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-//            locationManager.startUpdatingLocation()
-//        }
-        
+
         picker = UIPickerView()
         picker.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 100)
         picker.delegate = self
         picker.dataSource = self
         
-        // adsImageView.image = postedImage
         view.backgroundColor = .white
         view.addSubview(inputContainerView)
         setupInputContainerView()
@@ -78,7 +60,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         setupPageForEdit()
         
-       
         if (postIndex != -1)
         {
             picker.selectRow(postIndex, inComponent: 0, animated: true)
@@ -101,31 +82,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             titleTextField.placeholder="Title"
             priceTextField.placeholder="Price"
         }
-        
-//        if (post?.titleCaption != "")
-//        {
-//          titleTextField.text = post?.titleCaption
-//        }
-//        else {titleTextField.placeholder="Title"}
-//
-//        if (post?.descriptionCaption != "")
-//        {
-//            textView.text = post?.descriptionCaption
-//        }
-//
-//        if (post?.priceCaption != "")
-//        {
-//            priceTextField.text = post?.priceCaption
-//        }
-//        else {priceTextField.placeholder="Price"}
-//
-//        if (post?.categoryCaption != "")
-//        {
-//            //let filtered = category.filter { $0 == post?.categoryCaption  }
-//
-//            //print("filtered",filtered)
-//        }
-        
     }
     
     fileprivate func setupNavigationButtons() {
@@ -268,10 +224,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     
     @objc func handlePost() {
 
-        print("handling post..")
-        print ("postedImage ",postedImage)
-        print ("post ",post ?? "default value")
-        
         if(didTapEdit == true)
         {
             self.saveToDatabaseWithImageUrl(imageUrl: post?.imageUrl ?? "default value")
@@ -281,14 +233,11 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             let image = postedImage
             guard let uploadData = image.jpegData(compressionQuality: 0.5) else { return }
             
-            // navigationItem.rightBarButtonItem?.isEnabled = false
-            
             let filename = NSUUID().uuidString
             let storageRef = Storage.storage().reference().child("posts").child(filename)
             storageRef.putData(uploadData, metadata: nil) { (metadata, err) in
                 
                 if let err = err {
-                    // self.navigationIem.rightBarButtonItem?.isEnabled = true
                     print("Failed to upload post image:", err)
                     return
                 }
@@ -306,35 +255,11 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                 })
             }
         }
-////        if (postIndex != -1)
-////        {
-////            let image = post?.imageUrl
-////        }
-////        else {
-//        let imageq = post?.imageUrl
-//        //imageq?.isEmpty
-        //print("imageq?.isEmpty", post?.imageUrl.isEmpty ?? "")
-////        if(postedImage.images == )
-       // if((post?.imageUrl.isEmpty)!)
-        
-        //{
-        
-        //}
-//        else {
-//            print("!(post?.imageUrl.isEmpty)")
-//            self.saveToDatabaseWithImageUrl(imageUrl: post?.imageUrl ?? "")
-//        }
-        
     }
     
     static let notificationNameForUpdateFeed = NSNotification.Name(rawValue: "UpdateFeed")
     fileprivate func saveToDatabaseWithImageUrl(imageUrl: String) {
-        // guard let postImage = selectedImage else { return }
-//        if let data = try? Data(contentsOf: post?.imageUrl)
-//        {
-//            let image: UIImage = UIImage(data: data)
-//        }
-//        guard let postImage = image else { return }
+
         let postImage = postedImage
         guard let descriptionCaption = textView.text else { return }
         guard let titleCaption = titleTextField.text else { return }
@@ -345,9 +270,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         
         if(didTapEdit == true)
         {
-            print("didTapEdit == true Hi this is Batool")
-            print ("post id: ", post?.id ?? "default value")
-            print ("post catogory: ", categoryCaption)
   
             let userPostRef = Database.database().reference().child("posts").child(uid)
             let ref = userPostRef.child(post?.id ?? "default value")
@@ -396,7 +318,6 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                     }
                 })
             })
-            
         }
         
     }

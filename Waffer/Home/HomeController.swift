@@ -14,7 +14,6 @@ import CoreLocation
 
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, CLLocationManagerDelegate, HomePostCellDelegate, FillterDelegate {
     
-    
     var locationManager = CLLocationManager()
     
     let cellId = "cellId"
@@ -27,17 +26,15 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
-
         }
         
-        CurrentLocation.userCurrentLocation(completion: { (location) in
-            print("location=",location)
-            CurrentLocation.getUserGeoLocation(location, completion: { (city) in
-                print("City=",city)
-            })
-        })
+//        CurrentLocation.userCurrentLocation(completion: { (location) in
+//            print("location=",location)
+//            CurrentLocation.getUserGeoLocation(location, completion: { (city) in
+//                print("City=",city)
+//            })
+//        })
         
-
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
         
         collectionView?.backgroundColor = .white
@@ -56,7 +53,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         if Auth.auth().currentUser?.uid == nil {
             let loginController = LoginController()
             let navController = UINavigationController(rootViewController: loginController)
-//            self.tabBarController!.tabBar.isHidden =  true
             self.present(navController, animated: true, completion: nil)
         }
     }
@@ -66,7 +62,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     @objc func handleRefresh(){
-//        print("Handling refresh...")
         posts.removeAll()
         fetchAllPost()
     }
@@ -82,7 +77,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let ref = Database.database().reference().child("users")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
-            //            print("dictionaries=", dictionaries)
             dictionaries.forEach({ (key, value) in
                 
                 Database.fetchUserWithUID(uid: key, completion: { (user) in
@@ -147,16 +141,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func setupTopNavigationBarItems() {
         
-        //        let logoutBarButton = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
-        //        navigationItem.leftBarButtonItem = logoutBarButton
-        
         setupLogOutButton()
-        
-        //let filterButton = UIButton(type: .system)
-        //searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 270, height: 20))
-        
-        //filterButton.frame = CGRect(x: 0, y: 0, width: 10, height: 10)
-        
         navigationController?.navigationBar.addSubview(searchBar)
         
         let navBar = navigationController?.navigationBar
@@ -164,7 +149,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         searchBar.anchor(top: navBar?.topAnchor, left: navBar?.leftAnchor, bottom: navBar?.bottomAnchor, right: navBar?.rightAnchor, paddingTop: 0, paddingLeft: 45, paddingBottom: 0, paddingRight: 50, width: 0, height: 0)
         
         navigationItem.leftBarButtonItems = [UIBarButtonItem(customView: filterButton)]
-        
     }
     
     lazy var filterButton: UIButton = {
@@ -196,8 +180,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     lazy var searchBar: UISearchBar = {
         let sb = UISearchBar()
         sb.placeholder = "Enter Item name"
-        //sb.barTintColor = .gray
-        //UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = UIColor.init(red: 230, green: 230, blue: 230, alpha: 0)//(r: 230, g: 230, b: 230)
         sb.delegate = self
         return sb
     }()
@@ -287,7 +269,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         } else {
             values = [uid: 1]
         }
-        print(values)
         Database.database().reference().child("bookmarks").child(postId).updateChildValues(values) { (err, _) in
             
             if let err = err {
@@ -302,7 +283,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             self.posts[indexPath.item] = post
             self.filteredPost = self.posts
             self.collectionView?.reloadItems(at: [indexPath])
-//            self.collectionView.reloadData()
         }
     }
     

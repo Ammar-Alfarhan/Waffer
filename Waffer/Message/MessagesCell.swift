@@ -69,10 +69,6 @@ class MessagesCell: UITableViewCell {
         itemImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
         
         //need x,y,width,height anchors
-//        timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-//        timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 18).isActive = true
-//        timeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
-//        timeLabel.heightAnchor.constraint(equalTo: textLabel!.heightAnchor).isActive = true
         timeLabel.anchor(top: topAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 18, paddingLeft: 0, paddingBottom: 0, paddingRight: 10, width: 100, height: 0)
     }
     

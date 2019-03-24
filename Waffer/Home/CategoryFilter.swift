@@ -14,11 +14,9 @@ protocol FillterDelegate {
 
 class Setting: NSObject {
     let name: String
-    //let imageName: String
     
     init(name: String) {
         self.name = name
-        //self.imageName = imageName
     }
 }
 
@@ -108,7 +106,6 @@ class CategoryFilter: NSObject, UICollectionViewDelegate, UICollectionViewDataSo
         collectionView.delegate = self
         
         collectionView.register(CategoryFilterCell.self, forCellWithReuseIdentifier: cellId)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
