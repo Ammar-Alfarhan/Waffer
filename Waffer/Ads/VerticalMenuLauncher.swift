@@ -13,6 +13,7 @@ import FirebaseStorage
 import FirebaseDatabase
 protocol PostDelegate {
     func didTapDelete()
+    func didTapSold()
     func didTapEdit()
     
 }
@@ -22,7 +23,6 @@ class VerticalMenuItem: NSObject {
     
     init(name: String) {
         self.name = name
-        
     }
 }
 
@@ -44,7 +44,7 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
     let cellHeight: CGFloat = 50
     
     let verticalMenuItems: [VerticalMenuItem] = {
-        return [VerticalMenuItem(name: "Edit Post"), VerticalMenuItem(name: "Delete Post"), VerticalMenuItem(name: "Cancel")]
+        return [VerticalMenuItem(name: "Edit Post"), VerticalMenuItem(name: "Mark As Sold"), VerticalMenuItem(name: "Delete Post"), VerticalMenuItem(name: "Cancel")]
     }()
 
     func showSettings() {
@@ -84,8 +84,6 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         }
     }
     
-    
-    
     @objc func handleDismiss() {
         UIView.animate(withDuration: 0.5) {
             self.blackView.alpha = 0
@@ -96,29 +94,23 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         }
     }
     
-    
-    
-    
-    
-    
-
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         print(verticalMenuItems[indexPath.item].name)
         
         print ("delegate",delegate ?? "nil")
-        if (verticalMenuItems[indexPath.item].name == "Edit Post")
-        {
+        if (verticalMenuItems[indexPath.item].name == "Edit Post"){
             self.delegate?.didTapEdit()
             handleDismiss()
         }
-        if (verticalMenuItems[indexPath.item].name == "Delete Post")
-        {
+        if (verticalMenuItems[indexPath.item].name == "Delete Post"){
             self.delegate?.didTapDelete()
         }
-        if ( (verticalMenuItems.count-1) == (indexPath.item))
-        {
+        if (verticalMenuItems[indexPath.item].name == "Mark As Sold"){
+            self.delegate?.didTapSold()
+            print("sold")
+        }
+        if ( (verticalMenuItems.count-1) == (indexPath.item)){
             handleDismiss()
         }
        

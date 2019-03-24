@@ -22,6 +22,7 @@ struct Post {
     let city: String
     
     var bookmark = false
+    var sold = false
     
     init(user: User, dictionary: [String: Any]) {
         self.user = user

@@ -310,8 +310,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewWillDisappear(animated)
         edgesForExtendedLayout = UIRectEdge.bottom
         searchBar.isHidden = false
-//        posts.removeAll()
-//        fetchAllPost()
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

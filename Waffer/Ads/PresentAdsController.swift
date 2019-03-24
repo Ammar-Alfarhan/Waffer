@@ -199,10 +199,6 @@ class PresentAdsController: UIViewController, PostDelegate {
         verticalMenuLauncher.delegate = self
         verticalMenuLauncher.showSettings()
     }
-    
-   
-   
-    
 
     fileprivate func setupView() {
         photoImageView.loadImage(urlString: imageUrl)
@@ -242,7 +238,26 @@ class PresentAdsController: UIViewController, PostDelegate {
 
     }
     
-    
+    func didTapSold() {
+        guard let uid = caption?.user.uid else { return }
+        guard let postId = caption?.id else { return }
+        guard let sold = caption?.sold else { return }
+        var values = [String: Any]()
+        
+        if (sold == true) {
+            values = [uid: 0]
+        } else {
+            values = [uid: 1]
+        }
+        Database.database().reference().child("solds").child(postId).updateChildValues(values) { (err, _) in
+            
+            if let err = err {
+                print("Failed to mark as sold:", err)
+                return
+            }
+            print("Successfully mark as sold post.")
+        }
+    }
 
     
     func didTapEdit() {

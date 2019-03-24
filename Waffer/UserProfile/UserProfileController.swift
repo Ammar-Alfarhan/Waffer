@@ -13,12 +13,29 @@ import FirebaseDatabase
 
 class UserProfileController: UICollectionViewController,  UICollectionViewDelegateFlowLayout, UserProfileCellDelegate {
     
+    var isSold = false
+    var isForSale = true
+    var isBookmark = false
     
-    func didTapMessages() {
-        let messagesController = MessagesController()
-        navigationController?.pushViewController(messagesController, animated: true)
+    func didTapSold() {
+        isSold = true
+        isForSale = false
+        isBookmark = false
+        handleSwitching()
     }
     
+    func didTapBookmark() {
+        isSold = false
+        isForSale = false
+        isBookmark = true
+    }
+    
+    func didTapForSale() {
+        isSold = false
+        isForSale = true
+        isBookmark = false
+        handleSwitching()
+    }
     
     func didTapEdit() {
         let editController =  EditUserProfileController()
@@ -44,27 +61,27 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         collectionView?.register(UserProfilePhotoCell.self, forCellWithReuseIdentifier: cellId)
         
         setupLogOutButton()
-        
-        
-        
-        
+    }
+    
+    func handleSwitching(){
+        posts.removeAll()
+        sold.removeAll()
+        paginatePosts()
+        collectionView?.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
-        
     }
     var isFinishedPaging = false
     var posts = [Post]()
-    
-    
+    var sold = [Post]()
     fileprivate func paginatePosts() {
         //print("Start paging for more posts")
         
         guard let uid = self.user?.uid else { return }
         let ref = Database.database().reference().child("posts").child(uid)
-        
         
         var query = ref.queryOrdered(byChild: "creationDate")
         
@@ -96,42 +113,24 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = snapshot.key
                 
-                self.posts.append(post)
-                
-                //                print(snapshot.key)
+                guard let uid = Auth.auth().currentUser?.uid else { return }
+            Database.database().reference().child("solds").child(snapshot.key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let value = snapshot.value as? Int, value == 1 {
+                        post.sold = true
+                        self.sold.append(post)
+                        self.collectionView?.reloadData()
+                    } else {
+                        post.sold = false
+                        self.posts.append(post)
+                        self.collectionView?.reloadData()
+                    }
+                    //reloading data here doublecate
+                }) { (err) in
+                    print("Faild to fetch sold items", err)
+                }
             })
-            
-            self.posts.forEach({ (post) in
-                //print(post.id ?? "")
-            })
-            
-            self.collectionView?.reloadData()
-            
-            
         }) { (err) in
             print("Failed to paginate for posts:", err)
-        }
-    }
-    
-    fileprivate func fetchOrderedPosts() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let ref = Database.database().reference().child("posts").child(uid)
-        
-        ref.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
-            
-           
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
-            
-            guard let user = self.user else { return }
-            
-            let post = Post(user: user, dictionary: dictionary)
-            
-            self.posts.insert(post, at: 0)
-            
-            self.collectionView?.reloadData()
-            
-        }) { (err) in
-            print("Failed to fetch ordered posts:", err)
         }
     }
     
@@ -165,27 +164,50 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return posts.count
+        if (isSold) {
+            return sold.count
+        } else {
+            return posts.count
+        }
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if indexPath.item == self.posts.count - 1 && !isFinishedPaging {
             //print("Paginating for posts")
-            paginatePosts()
+//            paginatePosts()
         }
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
-        cell.post = posts[indexPath.item]
-        return cell
+        if (isForSale) {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
+            cell.post = posts[indexPath.item]
+            return cell
+        }
+        if (isSold) {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
+            let post = sold[indexPath.item]
+            cell.post = post
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
+            cell.post = posts[indexPath.item]
+            return cell
+        }
        
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let presentAdController = PresentAdsController()
-        presentAdController.imageUrl = posts[indexPath.row].imageUrl
-        presentAdController.caption = posts[indexPath.row]
-        navigationController?.pushViewController(presentAdController, animated: true)
+        if (isSold) {
+            presentAdController.imageUrl = sold[indexPath.row].imageUrl
+            presentAdController.caption = sold[indexPath.row]
+            navigationController?.pushViewController(presentAdController, animated: true)
+        } else {
+            presentAdController.imageUrl = posts[indexPath.row].imageUrl
+            presentAdController.caption = posts[indexPath.row]
+            navigationController?.pushViewController(presentAdController, animated: true)
+        }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
@@ -206,9 +228,11 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
 
         header.user = self.user
         header.delegate = self
-        header.numberOfPosts = self.posts.count
-//        print("header.numberOfPosts",header.numberOfPosts)
-        
+        if (isSold) {
+            header.numberOfPosts = self.sold.count
+        } else {
+            header.numberOfPosts = self.posts.count
+        }
         return header
     }
     

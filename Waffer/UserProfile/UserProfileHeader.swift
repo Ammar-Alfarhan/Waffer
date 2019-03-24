@@ -10,8 +10,10 @@ import UIKit
 import Firebase
 
 protocol UserProfileCellDelegate {
-    func didTapMessages()
     func didTapEdit()
+    func didTapSold()
+    func didTapBookmark()
+    func didTapForSale()
 }
 
 class UserProfileHeader: UICollectionViewCell {
@@ -52,32 +54,51 @@ class UserProfileHeader: UICollectionViewCell {
         return iv
     }()
     
-    lazy var gridButton: UIButton = {
+    lazy var forSaleButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("For sale", for: .normal)
         //button.tintColor = UIColor(white: 0, alpha: 0.2)
         //button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
+        button.addTarget(self, action: #selector(handleForSale), for: .touchUpInside)
         return button
     }()
     
-    lazy var messagesButton: UIButton = {
+    @objc func handleForSale () {
+        delegate?.didTapForSale()
+        forSaleButton.tintColor = .mainBlue()
+        soldButton.tintColor = UIColor(white: 0, alpha: 0.2)
+        bookmarkButton.tintColor = UIColor(white: 0, alpha: 0.2)
+    }
+    
+    lazy var soldButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sold", for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
-        button.addTarget(self, action: #selector(handleMessages), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSold), for: .touchUpInside)
         return button
     }()
     
-    @objc func handleMessages(){
-//        delegate?.didTapMessages()
+    @objc func handleSold(){
+        delegate?.didTapSold()
+        soldButton.tintColor = .mainBlue()
+        forSaleButton.tintColor = UIColor(white: 0, alpha: 0.2)
+        bookmarkButton.tintColor = UIColor(white: 0, alpha: 0.2)
     }
     
     lazy var bookmarkButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "ribbon"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.addTarget(self, action: #selector(handleBookmark), for: .touchUpInside)
         return button
     }()
+    
+    @objc func handleBookmark () {
+        delegate?.didTapBookmark()
+        bookmarkButton.tintColor = .mainBlue()
+        forSaleButton.tintColor = UIColor(white: 0, alpha: 0.2)
+        soldButton.tintColor = UIColor(white: 0, alpha: 0.2)
+    }
     
     var usernameLabel: UILabel = {
         let label = UILabel()
@@ -107,9 +128,6 @@ class UserProfileHeader: UICollectionViewCell {
     }()
     
      @objc func handleEditProfile() {
-        
-        print ("handleEditProfile")
-        
         delegate?.didTapEdit()
     }
     
@@ -128,7 +146,7 @@ class UserProfileHeader: UICollectionViewCell {
         setupBottomToolbar()
         
         addSubview(usernameLabel)
-        usernameLabel.anchor(top: profileImageView.bottomAnchor, left: leftAnchor, bottom: gridButton.topAnchor, right: rightAnchor, paddingTop: 1, paddingLeft: 25, paddingBottom: 0, paddingRight: 12, width: 0, height: 0)
+        usernameLabel.anchor(top: profileImageView.bottomAnchor, left: leftAnchor, bottom: forSaleButton.topAnchor, right: rightAnchor, paddingTop: 1, paddingLeft: 25, paddingBottom: 0, paddingRight: 12, width: 0, height: 0)
         
         addSubview(postsLabel)
         postsLabel.anchor(top: topAnchor, left: profileImageView.rightAnchor, bottom: nil, right: rightAnchor, paddingTop: 12, paddingLeft: 12, paddingBottom: 0, paddingRight: 12, width: 0, height: 50)
@@ -145,7 +163,7 @@ class UserProfileHeader: UICollectionViewCell {
         let bottomDividerView = UIView()
         bottomDividerView.backgroundColor = UIColor.lightGray
         
-        let stackView = UIStackView(arrangedSubviews: [gridButton, messagesButton, bookmarkButton])
+        let stackView = UIStackView(arrangedSubviews: [forSaleButton, soldButton, bookmarkButton])
         
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
