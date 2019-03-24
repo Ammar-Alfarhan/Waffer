@@ -28,6 +28,7 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
         isSold = false
         isForSale = false
         isBookmark = true
+        handleSwitching()
     }
     
     func didTapForSale() {
@@ -133,6 +134,59 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
             print("Failed to paginate for posts:", err)
         }
     }
+    var bookmarks = [Post]()
+    fileprivate func fetchPosts() {
+        
+        let ref = Database.database().reference().child("users")
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            //            print("dictionaries=", dictionaries)
+            dictionaries.forEach({ (key, value) in
+                
+                Database.fetchUserWithUID(uid: key, completion: { (user) in
+                    self.fetchPostsWithUser(user: user)
+                })
+            })
+            
+        }) { (err) in
+            print("Faild to fatch posts:", err)
+        }
+    }
+    
+    fileprivate func fetchPostsWithUser(user: User){
+        let ref = Database.database().reference().child("posts").child(user.uid)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            self.collectionView.refreshControl?.endRefreshing()
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            
+            dictionaries.forEach({ (key, value) in
+                
+                guard let dictionary = value as? [String: Any] else { return }
+                
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = key
+                
+                guard let uid = Auth.auth().currentUser?.uid else { return }
+                Database.database().reference().child("bookmarks").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    if let value = snapshot.value as? Int, value == 1 {
+                        post.bookmark = true
+                        self.bookmarks.append(post)
+                        self.bookmarks.sort(by: { (p1, p2) -> Bool in
+                            return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                        })
+                        self.collectionView?.reloadData()
+                    }
+                }, withCancel: { (error) in
+                    print("Failed to fetch bookmark info for post:", error)
+                })
+            })
+            
+        }) { (err) in
+            print("Faild to fatch posts:", err)
+        }
+    }
     
     fileprivate func setupLogOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleLogOut))
@@ -164,7 +218,9 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if (isSold) {
+        if(isBookmark){
+            return bookmarks.count
+        } else if (isSold) {
             return sold.count
         } else {
             return posts.count
@@ -179,12 +235,11 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
 //            paginatePosts()
         }
         
-        if (isForSale) {
+        if (isBookmark) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
-            cell.post = posts[indexPath.item]
+            cell.post = bookmarks[indexPath.item]
             return cell
-        }
-        if (isSold) {
+        } else if (isSold) {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! UserProfilePhotoCell
             let post = sold[indexPath.item]
             cell.post = post
@@ -199,7 +254,11 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let presentAdController = PresentAdsController()
-        if (isSold) {
+        if (isBookmark) {
+            presentAdController.imageUrl = bookmarks[indexPath.row].imageUrl
+            presentAdController.caption = bookmarks[indexPath.row]
+            navigationController?.pushViewController(presentAdController, animated: true)
+        } else if (isSold) {
             presentAdController.imageUrl = sold[indexPath.row].imageUrl
             presentAdController.caption = sold[indexPath.row]
             navigationController?.pushViewController(presentAdController, animated: true)
@@ -228,7 +287,9 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
 
         header.user = self.user
         header.delegate = self
-        if (isSold) {
+        if (isBookmark) {
+            header.numberOfPosts = self.bookmarks.count
+        } else if (isSold) {
             header.numberOfPosts = self.sold.count
         } else {
             header.numberOfPosts = self.posts.count
@@ -250,6 +311,7 @@ class UserProfileController: UICollectionViewController,  UICollectionViewDelega
             self.navigationItem.title = self.user?.username
             self.collectionView?.reloadData()
             self.paginatePosts()
+            self.fetchPosts()
         }
     }
  
