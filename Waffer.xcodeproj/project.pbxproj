@@ -25,11 +25,14 @@
 		A4387D21219542DD008FE9BC /* UserProfilePhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */; };
 		A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */; };
 		A445E361218A138700125F69 /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A445E360218A138700125F69 /* PreviewPhotoContainerView.swift */; };
-		A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */; };
 		A4AF9C72218020EF001B527B /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C71218020EF001B527B /* CameraViewController.swift */; };
 		A4AF9C742180FDF4001B527B /* AdPostingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */; };
 		A4B1D5C521A5269800D26042 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1D5C421A5269800D26042 /* User.swift */; };
 		A4BFB630220B49CD001B4B2D /* CurrentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFB62F220B49CD001B4B2D /* CurrentLocation.swift */; };
+		A4BFEC162259C112000C5E9A /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC142259C112000C5E9A /* LoginController.swift */; };
+		A4BFEC172259C112000C5E9A /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC152259C112000C5E9A /* CustomTabBarController.swift */; };
+		A4BFEC1C2259C25B000C5E9A /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC1A2259C25B000C5E9A /* CustomTabBarController.swift */; };
+		A4BFEC1D2259C25B000C5E9A /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC1B2259C25B000C5E9A /* LoginController.swift */; };
 		C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */; };
 		C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD46221E5425900022C72 /* VerticalMenuCell.swift */; };
 		C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B79217EA48B002E3A19 /* AppDelegate.swift */; };
@@ -38,7 +41,6 @@
 		C5595B81217EA497002E3A19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5595B80217EA497002E3A19 /* Assets.xcassets */; };
 		C5595B84217EA497002E3A19 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5595B82217EA497002E3A19 /* LaunchScreen.storyboard */; };
 		C5595B8C217EA5EB002E3A19 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C5595B8B217EA5EB002E3A19 /* GoogleService-Info.plist */; };
-		C5595B8F217EAAE6002E3A19 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B8E217EAAE6002E3A19 /* LoginController.swift */; };
 		C5595B932184DDBE002E3A19 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B922184DDBE002E3A19 /* UserProfileController.swift */; };
 		C5595B972184FF2E002E3A19 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B962184FF2E002E3A19 /* UserProfileHeader.swift */; };
 		C5595B9A21892C4D002E3A19 /* CameraTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B9921892C4C002E3A19 /* CameraTabView.swift */; };
@@ -66,11 +68,14 @@
 		A4387D20219542DD008FE9BC /* UserProfilePhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePhotoCell.swift; sourceTree = "<group>"; };
 		A43A562A2196AC7800C123E4 /* FirebaseUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUtils.swift; sourceTree = "<group>"; };
 		A445E360218A138700125F69 /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
-		A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		A4AF9C71218020EF001B527B /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPostingViewController.swift; sourceTree = "<group>"; };
 		A4B1D5C421A5269800D26042 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A4BFB62F220B49CD001B4B2D /* CurrentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocation.swift; sourceTree = "<group>"; };
+		A4BFEC142259C112000C5E9A /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		A4BFEC152259C112000C5E9A /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		A4BFEC1A2259C25B000C5E9A /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
+		A4BFEC1B2259C25B000C5E9A /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuLauncher.swift; sourceTree = "<group>"; };
 		C52AD46221E5425900022C72 /* VerticalMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuCell.swift; sourceTree = "<group>"; };
 		C5595B76217EA48A002E3A19 /* Waffer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waffer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,7 +86,6 @@
 		C5595B83217EA497002E3A19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C5595B85217EA497002E3A19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5595B8B217EA5EB002E3A19 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		C5595B8E217EAAE6002E3A19 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		C5595B922184DDBE002E3A19 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		C5595B962184FF2E002E3A19 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		C5595B9921892C4C002E3A19 /* CameraTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTabView.swift; sourceTree = "<group>"; };
@@ -208,8 +212,10 @@
 		C5595B8D217EA9D2002E3A19 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				C5595B8E217EAAE6002E3A19 /* LoginController.swift */,
-				A4AF9C6F218004F1001B527B /* CustomTabBarController.swift */,
+				A4BFEC1A2259C25B000C5E9A /* CustomTabBarController.swift */,
+				A4BFEC1B2259C25B000C5E9A /* LoginController.swift */,
+				A4BFEC152259C112000C5E9A /* CustomTabBarController.swift */,
+				A4BFEC142259C112000C5E9A /* LoginController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -373,6 +379,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C5595B9A21892C4D002E3A19 /* CameraTabView.swift in Sources */,
+				A4BFEC172259C112000C5E9A /* CustomTabBarController.swift in Sources */,
+				A4BFEC1C2259C25B000C5E9A /* CustomTabBarController.swift in Sources */,
 				A4387D1F21953EAC008FE9BC /* Post.swift in Sources */,
 				C5595B7C217EA48B002E3A19 /* HomeController.swift in Sources */,
 				A40D069121E0639A0035B28E /* ChatLogController.swift in Sources */,
@@ -380,11 +388,11 @@
 				A4AF9C72218020EF001B527B /* CameraViewController.swift in Sources */,
 				A41554D521B77FB4000C6471 /* CategoryFilter.swift in Sources */,
 				A4B1D5C521A5269800D26042 /* User.swift in Sources */,
+				A4BFEC162259C112000C5E9A /* LoginController.swift in Sources */,
 				A414136A21976C320051A469 /* CustomImageView.swift in Sources */,
 				A40D069921E471990035B28E /* MessagesCell.swift in Sources */,
 				A4AF9C742180FDF4001B527B /* AdPostingViewController.swift in Sources */,
 				C5595B972184FF2E002E3A19 /* UserProfileHeader.swift in Sources */,
-				C5595B8F217EAAE6002E3A19 /* LoginController.swift in Sources */,
 				A445E361218A138700125F69 /* PreviewPhotoContainerView.swift in Sources */,
 				C5595B932184DDBE002E3A19 /* UserProfileController.swift in Sources */,
 				A43A562B2196AC7900C123E4 /* FirebaseUtils.swift in Sources */,
@@ -392,7 +400,7 @@
 				C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */,
 				A4BFB630220B49CD001B4B2D /* CurrentLocation.swift in Sources */,
 				A4141367219763FC0051A469 /* HomePostCell.swift in Sources */,
-				A4AF9C70218004F1001B527B /* CustomTabBarController.swift in Sources */,
+				A4BFEC1D2259C25B000C5E9A /* LoginController.swift in Sources */,
 				C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */,
 				A40D069521E30EB50035B28E /* Message.swift in Sources */,
 				A417FFC721AA4A6400C588B0 /* PresentAdsController.swift in Sources */,

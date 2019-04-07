@@ -55,8 +55,6 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
                 return
             }
             
-            print("Successfully logged back in with user:", user?.user.uid ?? "")
-            
             guard let customTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
             
             customTabBarController.setupViewControllers()
@@ -81,7 +79,6 @@ class LoginController: UITabBarController, UIImagePickerControllerDelegate, UINa
                 print("error \(error!.localizedDescription)")
                 return
             }
-            
             
             guard let image = self.plusPhotoButton.imageView?.image else { return }
             
