@@ -113,7 +113,6 @@
 		A41413632197554A0051A469 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				A40AB01C2204C31300733912 /* SettingsLauncher.swift */,
 				C5595B7B217EA48B002E3A19 /* HomeController.swift */,
 				A4141366219763FC0051A469 /* HomePostCell.swift */,
 				A41554D421B77FB4000C6471 /* CategoryFilter.swift */,
@@ -159,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				A417FFC621AA4A6400C588B0 /* PresentAdsController.swift */,
+				A40AB01C2204C31300733912 /* SettingsLauncher.swift */,
 				C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */,
 				C52AD46221E5425900022C72 /* VerticalMenuCell.swift */,
 				A4AF9C732180FDF4001B527B /* AdPostingViewController.swift */,

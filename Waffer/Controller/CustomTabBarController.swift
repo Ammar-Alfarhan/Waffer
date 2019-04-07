@@ -12,7 +12,6 @@ import Firebase
 
 class CustomTabBarController: UITabBarController{
     override func viewDidLoad() {
-        
         self.tabBarController?.tabBar.isHidden = false
        setupViewControllers()
     }
@@ -32,7 +31,6 @@ class CustomTabBarController: UITabBarController{
         messages.tabBarItem.image = #imageLiteral(resourceName: "messages")
         messages.tabBarItem.selectedImage = #imageLiteral(resourceName: "tabbedmessages")
         
-        
         let homeLayout = UICollectionViewFlowLayout()
         let homeController = HomeController(collectionViewLayout: homeLayout)
         let home = UINavigationController(rootViewController: homeController)
@@ -40,7 +38,6 @@ class CustomTabBarController: UITabBarController{
         home.tabBarItem.image = #imageLiteral(resourceName: "home")
         
         let cameraController = CameraTabView()
-
         let camera = UINavigationController(rootViewController: cameraController)
         camera.title = "Camera"
         camera.tabBarItem.image = #imageLiteral(resourceName: "camera")
