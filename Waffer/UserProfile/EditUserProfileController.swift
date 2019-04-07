@@ -26,8 +26,8 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
             }
             
             usernameTextField.text = user?.username
-            emailTextField.text = user?.username
-            passwordTextField.text = user?.username
+            emailTextField.text = "123456"
+            passwordTextField.text = "123456"
         }
     }
     override func viewDidLoad() {
@@ -55,6 +55,8 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         imageView.image = UIImage(named: "plus_photo-1")
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
 
         return imageView
     }()
@@ -173,10 +175,10 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
     {
         //need x, y, width, height constraints
         profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        profileImageView.bottomAnchor.constraint(equalTo: changePhotoButton.topAnchor, constant: -12).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        profileImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        profileImageView.layer.cornerRadius = 150 / 2
+        profileImageView.bottomAnchor.constraint(equalTo: changePhotoButton.topAnchor, constant: -5).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        profileImageView.layer.cornerRadius = 130 / 2
         profileImageView.clipsToBounds = true
         profileImageView.layer.masksToBounds = true
     }
@@ -216,7 +218,7 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         changePhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
         changePhotoButton.bottomAnchor.constraint(equalTo: inputContainerView.topAnchor, constant : 2).isActive=true
         changePhotoButton.widthAnchor.constraint(equalTo: inputContainerView.widthAnchor).isActive=true
-        changePhotoButton.heightAnchor.constraint(equalToConstant: 30).isActive=true
+        changePhotoButton.heightAnchor.constraint(equalToConstant: 25).isActive=true
     }
     
     
@@ -296,6 +298,10 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
         return button
     }()
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     
     @objc func handleUpdate() {
         
@@ -345,12 +351,10 @@ class EditUserProfileController: UIViewController, UIImagePickerControllerDelega
                         
                         print("Successfully saved user info to db")
                         
-                        guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
                         
-                        mainTabBarController.setupViewControllers()
-                        self.tabBarController?.tabBar.isHidden = false
-                        
-                        self.dismiss(animated: true, completion: nil)
+                        let homeController = CustomTabBarController()
+                        self.present(homeController, animated: true, completion: nil)
+
                         
                         
                     })

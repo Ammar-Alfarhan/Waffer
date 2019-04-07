@@ -93,6 +93,12 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
     @objc func handleCancel() {
         let homeController = CustomTabBarController()
         present(homeController, animated: true, completion: nil)
+//        guard let customTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
+//
+//        customTabBarController.setupViewControllers()
+//
+//        self.dismiss(animated: true, completion: nil)
+        
     }
     
     let descriptionLabel : UILabel = {
@@ -287,8 +293,14 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
                 
                 NotificationCenter.default.post(name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
                 
-                let homeController = CustomTabBarController()
-                self.present(homeController, animated: true, completion: nil)
+//                let homeController = CustomTabBarController()
+//                self.present(homeController, animated: true, completion: nil)
+                
+                guard let customTabBarController = UIApplication.shared.keyWindow?.rootViewController as? CustomTabBarController else { return }
+                
+                customTabBarController.setupViewControllers()
+                
+                self.dismiss(animated: true, completion: nil)
             }
             
         }

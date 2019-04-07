@@ -30,6 +30,15 @@ class HomePostCell: UICollectionViewCell {
                 bookmarkButton.setImage(#imageLiteral(resourceName: "ribbon").withRenderingMode(.alwaysOriginal), for: .normal)
             }
             
+            if (post?.sold == true) {
+                soldLable.text = "SOLD"
+                soldLable.backgroundColor = .red
+                soldLable.textColor = .white
+                soldLable.textAlignment = .center
+            } else {
+                soldLable.text = ""
+            }
+            
             usernameLable.text = post?.user.username
             
             guard let profileImageUrl = post?.user.profileImageUrl else { return }
@@ -106,6 +115,12 @@ class HomePostCell: UICollectionViewCell {
         return label
     }()
     
+    let soldLable: UILabel = {
+        let lable = UILabel()
+        lable.font = UIFont.boldSystemFont(ofSize: 16)
+        return lable
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -113,8 +128,6 @@ class HomePostCell: UICollectionViewCell {
         addSubview(photoImageView)
         addSubview(userProfileImage)
         addSubview(usernameLable)
-        
-       
         
         userProfileImage.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: nil, paddingTop: 8, paddingLeft: 8, paddingBottom: 0, paddingRight: 0, width: 40, height: 40)
         userProfileImage.layer.cornerRadius = 40 / 2
@@ -125,7 +138,10 @@ class HomePostCell: UICollectionViewCell {
         setupActionButtons()
         
         addSubview(captionLabel)
-        captionLabel.anchor(top: contactButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
+        addSubview(soldLable)
+        captionLabel.anchor(top: contactButton.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right:rightAnchor , paddingTop: 0, paddingLeft: 12, paddingBottom: 0, paddingRight: 8, width: 0, height: 0)
+
+        soldLable.anchor(top: topAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 80, paddingLeft: 81, paddingBottom: 50, paddingRight: 81, width: 0, height: 0)
         
     }
     

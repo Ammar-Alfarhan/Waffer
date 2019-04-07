@@ -44,7 +44,7 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
     let cellHeight: CGFloat = 50
     
     let verticalMenuItems: [VerticalMenuItem] = {
-        return [VerticalMenuItem(name: "Edit Post"), VerticalMenuItem(name: "Mark As Sold"), VerticalMenuItem(name: "Delete Post"), VerticalMenuItem(name: "Cancel")]
+        return [VerticalMenuItem(name: "Edit Post"), VerticalMenuItem(name: "Sold / Unsold"), VerticalMenuItem(name: "Delete Post"), VerticalMenuItem(name: "Cancel")]
     }()
 
     func showSettings() {
@@ -93,8 +93,9 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         if (verticalMenuItems[indexPath.item].name == "Delete Post"){
             self.delegate?.didTapDelete()
         }
-        if (verticalMenuItems[indexPath.item].name == "Mark As Sold"){
+        if (verticalMenuItems[indexPath.item].name == "Sold / Unsold"){
             self.delegate?.didTapSold()
+            handleDismiss()
         }
         if ( (verticalMenuItems.count-1) == (indexPath.item)){
             handleDismiss()

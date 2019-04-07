@@ -28,12 +28,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             locationManager.startUpdatingLocation()
         }
         
-//        CurrentLocation.userCurrentLocation(completion: { (location) in
-//            print("location=",location)
-//            CurrentLocation.getUserGeoLocation(location, completion: { (city) in
-//                print("City=",city)
-//            })
-//        })
+        CurrentLocation.userCurrentLocation(completion: { (location) in
+            print("location=",location)
+            CurrentLocation.getUserGeoLocation(location, completion: { (city) in
+                print("City=",city)
+            })
+        })
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: AdPostingViewController.notificationNameForUpdateFeed, object: nil)
         
@@ -106,7 +106,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = key
-
                 guard let uid = Auth.auth().currentUser?.uid else { return }
                 Database.database().reference().child("bookmarks").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
                     
@@ -128,12 +127,23 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                             }
                         })
                     })
-
+                    Database.database().reference().child("solds").child(key).observeSingleEvent(of: .value, with: { (snapshot) in
+                        guard let dictionary = snapshot.value as? [String: Any] else { return }
+                        dictionary.forEach({ (key, value) in
+                            if (value as? Int == 1) {
+                                post.sold = true
+                            } else {
+                                post.sold = false
+                            }
+                        })
+                    }, withCancel: { (error) in
+                        print("Fail to fetch solds:",error)
+                    })
                 }, withCancel: { (error) in
                     print("Failed to fetch bookmark info for post:", error)
                 })
+
             })
-       
         }) { (err) in
             print("Faild to fatch posts:", err)
         }
