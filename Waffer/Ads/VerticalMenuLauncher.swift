@@ -88,18 +88,14 @@ class VerticalMenuLauncher: NSObject, UICollectionViewDataSource, UICollectionVi
         
         if (verticalMenuItems[indexPath.item].name == "Edit Post"){
             self.delegate?.didTapEdit()
-            handleDismiss()
         }
         if (verticalMenuItems[indexPath.item].name == "Delete Post"){
             self.delegate?.didTapDelete()
         }
         if (verticalMenuItems[indexPath.item].name == "Sold / Unsold"){
             self.delegate?.didTapSold()
-            handleDismiss()
         }
-        if ( (verticalMenuItems.count-1) == (indexPath.item)){
-            handleDismiss()
-        }
+        handleDismiss()
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

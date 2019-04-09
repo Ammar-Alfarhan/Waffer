@@ -184,16 +184,22 @@ class PresentAdsController: UIViewController, PostDelegate {
     func didTapDelete() {
         guard let uid = caption?.user.uid else { return }
         guard let postId = caption?.id else { return }
-
-        let ref = Database.database().reference().child("posts").child(uid).child(postId)
-        ref.removeValue { (err, ref) in
-            if let err = err {
-                print("Failed to access post into db:", err)
-                return
+        let alertController = UIAlertController(title: "Delete", message: "Are you sure you want to delete the post?", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { (_) in
+            let ref = Database.database().reference().child("posts").child(uid).child(postId)
+            ref.removeValue { (err, ref) in
+                if let err = err {
+                    print("Failed to access post into db:", err)
+                    return
+                }
             }
-        }
-        let homeController = CustomTabBarController()
-        present(homeController, animated: true, completion: nil)
+            let homeController = CustomTabBarController()
+            self.present(homeController, animated: true, completion: nil)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     func didTapSold() {

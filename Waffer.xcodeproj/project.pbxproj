@@ -30,9 +30,7 @@
 		A4B1D5C521A5269800D26042 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1D5C421A5269800D26042 /* User.swift */; };
 		A4BFB630220B49CD001B4B2D /* CurrentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFB62F220B49CD001B4B2D /* CurrentLocation.swift */; };
 		A4BFEC162259C112000C5E9A /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC142259C112000C5E9A /* LoginController.swift */; };
-		A4BFEC172259C112000C5E9A /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC152259C112000C5E9A /* CustomTabBarController.swift */; };
 		A4BFEC1C2259C25B000C5E9A /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC1A2259C25B000C5E9A /* CustomTabBarController.swift */; };
-		A4BFEC1D2259C25B000C5E9A /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4BFEC1B2259C25B000C5E9A /* LoginController.swift */; };
 		C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */; };
 		C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52AD46221E5425900022C72 /* VerticalMenuCell.swift */; };
 		C5595B7A217EA48B002E3A19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5595B79217EA48B002E3A19 /* AppDelegate.swift */; };
@@ -73,9 +71,7 @@
 		A4B1D5C421A5269800D26042 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A4BFB62F220B49CD001B4B2D /* CurrentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocation.swift; sourceTree = "<group>"; };
 		A4BFEC142259C112000C5E9A /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
-		A4BFEC152259C112000C5E9A /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		A4BFEC1A2259C25B000C5E9A /* CustomTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
-		A4BFEC1B2259C25B000C5E9A /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		C52AD45E21E52E8A00022C72 /* VerticalMenuLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuLauncher.swift; sourceTree = "<group>"; };
 		C52AD46221E5425900022C72 /* VerticalMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalMenuCell.swift; sourceTree = "<group>"; };
 		C5595B76217EA48A002E3A19 /* Waffer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waffer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,8 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				A4BFEC1A2259C25B000C5E9A /* CustomTabBarController.swift */,
-				A4BFEC1B2259C25B000C5E9A /* LoginController.swift */,
-				A4BFEC152259C112000C5E9A /* CustomTabBarController.swift */,
 				A4BFEC142259C112000C5E9A /* LoginController.swift */,
 			);
 			path = Controller;
@@ -379,7 +373,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C5595B9A21892C4D002E3A19 /* CameraTabView.swift in Sources */,
-				A4BFEC172259C112000C5E9A /* CustomTabBarController.swift in Sources */,
 				A4BFEC1C2259C25B000C5E9A /* CustomTabBarController.swift in Sources */,
 				A4387D1F21953EAC008FE9BC /* Post.swift in Sources */,
 				C5595B7C217EA48B002E3A19 /* HomeController.swift in Sources */,
@@ -400,7 +393,6 @@
 				C52AD45F21E52E8A00022C72 /* VerticalMenuLauncher.swift in Sources */,
 				A4BFB630220B49CD001B4B2D /* CurrentLocation.swift in Sources */,
 				A4141367219763FC0051A469 /* HomePostCell.swift in Sources */,
-				A4BFEC1D2259C25B000C5E9A /* LoginController.swift in Sources */,
 				C52AD46321E5425900022C72 /* VerticalMenuCell.swift in Sources */,
 				A40D069521E30EB50035B28E /* Message.swift in Sources */,
 				A417FFC721AA4A6400C588B0 /* PresentAdsController.swift in Sources */,
