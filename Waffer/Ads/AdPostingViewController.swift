@@ -73,7 +73,7 @@ class AdPostingViewController: UIViewController, UIPickerViewDelegate, UIPickerV
             titleTextField.text = post?.titleCaption
             textView.text = post?.descriptionCaption
             priceTextField.text = post?.priceCaption
-            let index = category.index(of: post?.categoryCaption ?? "")
+            let index = category.firstIndex(of: post?.categoryCaption ?? "")
             postIndex = index ?? -1
             categorySelected = postIndex 
         }
